@@ -3,21 +3,28 @@ package com.project.ecoWater.config;
 import com.project.ecoWater.user.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    private static final SecretKey SECRET_KEY= Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
+    private static final SecretKey SECRET_KEY= Jwts.SIG.HS256.key().build();
+
     private static final long JWT_TIME_REFRESH_VALIDATE = 1000 * 60  * 60 * 24;
     private static final long REFRESH_WINDOW = 1000 * 60 * 60 * 24 * 7;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -41,13 +48,13 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+JWT_TIME_REFRESH_VALIDATE))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(getSignInKey(),Jwts.SIG.HS256)
                 .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public boolean isTokenExpired(String token) {
@@ -74,8 +81,7 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY.getFormat());
-        return Keys.hmacShaKeyFor(keyBytes);
+        return SECRET_KEY;
     }
 
     public boolean canTokenBeRenewed(String token) {

@@ -1,7 +1,12 @@
 package com.project.ecoWater.user.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.ecoWater.device.infrastructure.DeviceEntity;
+import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +37,7 @@ public class UserEntity implements UserDetails {
     private String lastName;
 
     @Column(name = "age")
-    private int age;
+    private Integer age;
 
     @Column(name = "email",unique = true)
     private String email;
@@ -43,6 +48,22 @@ public class UserEntity implements UserDetails {
     @Column(name="created_at")
     private Timestamp created;
 
+    @OneToMany(mappedBy = "user")
+    private List<DeviceEntity> devices;
+
+    @OneToMany(mappedBy = "user")
+    private List<TankEntity> tanks;
+
+
+    /*
+    @JsonCreator
+    public static UserEntity fromUUID(@JsonProperty("userId") UUID userId) {
+        UserEntity user = new UserEntity();
+        user.userId = userId;
+        return user;
+    }
+
+     */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

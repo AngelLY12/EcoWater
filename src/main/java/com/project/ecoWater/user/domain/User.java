@@ -22,7 +22,7 @@ public class User implements UserDetails {
 
     private String last_name;
 
-    private int age;
+    private Integer age;
 
     private String email;
 

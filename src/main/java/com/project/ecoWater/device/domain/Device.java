@@ -1,36 +1,28 @@
 package com.project.ecoWater.device.domain;
 
 
+import com.project.ecoWater.user.app.UserDTO;
+import com.project.ecoWater.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Entity
-@Table(name = "devices")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Builder
 public class Device {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "device_id", columnDefinition = "uuid")
+
     private UUID deviceId;
 
-    @Column(name="user_id")
-    private UUID userId;
+    private UserDTO user;
 
-    @Column(name = "device_name")
     private String deviceName;
 
-    @ManyToOne
-    @JoinColumn(name = "device_type_id", nullable = false)
     private DeviceType deviceType;
 
     private String deviceLocation;
+
     private Timestamp creationRegister;
 }

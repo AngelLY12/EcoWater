@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 public class AuthController {
     private final AuthApplicationService authApplicationService;
 
-
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
         try {

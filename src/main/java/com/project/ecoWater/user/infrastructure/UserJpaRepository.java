@@ -12,10 +12,12 @@ import java.util.UUID;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
-    Optional<UserEntity> findByEmail(String email);
-    boolean existsByEmail(String email);
+    @Query("SELECT u FROM UserEntity u WHERE u.email=:email")
+    Optional<UserEntity> findByEmail(@Param("email") String email);
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM UserEntity u WHERE u.email = :email")
+    boolean existsByEmail(@Param("email") String email);
     @Modifying
     @Transactional
     @Query("DELETE FROM UserEntity u WHERE u.email = :email")
-    boolean deleteByEmail(@Param("email")String email);
+    void deleteByEmail(@Param("email")String email);
 }

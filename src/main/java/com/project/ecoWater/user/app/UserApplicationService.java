@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,10 @@ public class UserApplicationService {
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
+    public Optional<User> findById(UUID userId) {
+        return userRepository.findById(userId);
+    }
+
     public String deleteUserByEmail(String email) {
         if(userRepository.existUserByEmail(email)) {
             userRepository.deleteUserByEmail(email);
@@ -44,15 +49,15 @@ public class UserApplicationService {
         if(userEntityOptional.isPresent()) {
             User user = userEntityOptional.get();
             if(updateUser.getUser_name() != null) {
-                user.setUser_name(user.getUser_name());
+                user.setUser_name(updateUser.getUser_name());
             }
             if(updateUser.getLast_name() != null) {
-                user.setLast_name(user.getLast_name());
+                user.setLast_name(updateUser.getLast_name());
             }
             if(updateUser.getPassword() != null) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
             }
-            if(updateUser.getAge()>18){
+            if(updateUser.getAge()!=null){
                 user.setAge(updateUser.getAge());
             }
             User savedUser = userRepository.saveUser(user);

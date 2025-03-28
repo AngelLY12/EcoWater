@@ -1,8 +1,15 @@
 package com.project.ecoWater.tank.infrastructure;
 
+import com.project.ecoWater.tank.domain.FillingType;
 import com.project.ecoWater.tank.domain.Tank;
+import com.project.ecoWater.user.domain.User;
+import com.project.ecoWater.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "tanks")
@@ -21,7 +28,22 @@ public class TankEntity {
     @Column
     private String tankName;
     @Column
-    private String capacity;
+    private BigDecimal capacity;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "filling_type",
+            nullable = false,
+            columnDefinition = "VARCHAR(20)"
+    )
+    private FillingType fillingType;
     @Column
-    private String typeFilling;
+    private BigDecimal tankHeight;
+    private Timestamp createdAt;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
 }

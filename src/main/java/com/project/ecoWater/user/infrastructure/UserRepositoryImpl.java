@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -29,6 +30,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findUserByEmail(String email) {
         return userJpaRepository.findByEmail(email).map(UserMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return userJpaRepository.findById(userId).map(UserMapper::toDomain);
     }
 
     @Override

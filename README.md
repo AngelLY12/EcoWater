@@ -9,7 +9,6 @@ Antes de ejecutar la aplicación, asegúrate de tener instalados los siguientes 
 - [Docker](https://docs.docker.com/get-docker/)
 
 
->[!INFO]
 ## Pasos para ejecutar el proyecto
 
 ### 1. Clonar el repositorio

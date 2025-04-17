@@ -2,6 +2,7 @@ package com.project.ecoWater.user.app;
 
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,7 @@ public class UserApplicationService {
         return userRepository.findById(userId);
     }
 
+    @Transactional
     public String deleteUserByEmail(String email) {
         if(userRepository.existUserByEmail(email)) {
             userRepository.deleteUserByEmail(email);
@@ -44,8 +46,10 @@ public class UserApplicationService {
         return "User not found";
     }
 
-    public Optional<User> updateUser(User updateUser) {
-        Optional<User> userEntityOptional = userRepository.findUserByEmail(updateUser.getEmail());
+    @Transactional
+
+    public Optional<User> updateUser(User updateUser, String email) {
+        Optional<User> userEntityOptional = userRepository.findUserByEmail(email);
         if(userEntityOptional.isPresent()) {
             User user = userEntityOptional.get();
             if(updateUser.getUser_name() != null) {

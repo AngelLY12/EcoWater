@@ -7,6 +7,7 @@ import com.project.ecoWater.tank.domain.Tank;
 import com.project.ecoWater.user.app.UserApplicationService;
 import com.project.ecoWater.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,26 +31,29 @@ public class WaterTankLevelController {
           return ResponseEntity.ok(result);
       } catch (RuntimeException e) {
           throw new RuntimeException(e);
+          //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
       }
     }
 
     @GetMapping("/getLevels")
-    public ResponseEntity<List<WaterTankLevel>> getAll() {
+    public ResponseEntity<List<WaterTankLevel>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            List<WaterTankLevel> result = waterTankLevelAppService.findAll();
+            List<WaterTankLevel> result = waterTankLevelAppService.findAll(userDetails.getUsername());
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/getLevel/{id}")
-    public ResponseEntity<WaterTankLevel> getById(@PathVariable Long id) {
+    @GetMapping("/getLevel")
+    public ResponseEntity<WaterTankLevel> getByEmail(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            WaterTankLevel level= waterTankLevelAppService.findById(id);
-            return ResponseEntity.ok(level);
+            Optional<WaterTankLevel> level= waterTankLevelAppService.findByEmail(userDetails.getUsername());
+            return level.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.noContent().build());
         }catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

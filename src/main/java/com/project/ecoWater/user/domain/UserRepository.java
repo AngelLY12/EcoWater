@@ -12,6 +12,6 @@ public interface UserRepository {
     List<User> findAllUsers();
     void deleteUserByEmail(String email);
     boolean existUserByEmail(String email);
-    Optional<User> updateUser(User user);
+    Optional<User> updateUser(User user, String email);
 
 }

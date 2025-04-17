@@ -1,4 +1,5 @@
 package com.project.ecoWater;
+import com.project.ecoWater.tank.app.TankDTO;
 import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
@@ -27,4 +28,5 @@ public abstract class BaseService<T, R> {
     protected abstract Object getEntityFromGeneric(T entity);
     protected abstract boolean existsInRepository(Object entity);
     protected abstract void setUserToEntity(Object entity, UserDTO userDTO);
+
 }

@@ -4,11 +4,8 @@ package com.project.ecoWater.tank.domain;
 import com.project.ecoWater.BaseService;
 import com.project.ecoWater.tank.app.TankDTO;
 import com.project.ecoWater.user.app.UserDTO;
-import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
-import com.project.ecoWater.user.infrastructure.UserMapper;
-import lombok.RequiredArgsConstructor;
-import java.util.function.Consumer;
+
 
 public abstract class TankService<T> extends BaseService<T, TankRepository> {
 

@@ -2,6 +2,7 @@ package com.project.ecoWater.sensor.infraestructure;
 
 import com.project.ecoWater.device.app.DeviceDTO;
 import com.project.ecoWater.device.infrastructure.DeviceEntity;
+import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,10 @@ public class SensorDataEntity {
     private DeviceEntity device;
 
     @Column
-    private BigDecimal distance;
+    private Float distance;
     private Timestamp measurementTime;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "tank_id")
+    private TankEntity tank;
 }

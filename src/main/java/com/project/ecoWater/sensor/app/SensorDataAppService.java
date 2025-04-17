@@ -1,13 +1,22 @@
 package com.project.ecoWater.sensor.app;
 
 import com.project.ecoWater.device.app.DeviceDTO;
+import com.project.ecoWater.device.domain.Device;
 import com.project.ecoWater.device.domain.DeviceRepository;
 import com.project.ecoWater.device.domain.DeviceService;
+import com.project.ecoWater.device.infrastructure.DeviceMapper;
+import com.project.ecoWater.filling.domain.TankFilling;
 import com.project.ecoWater.sensor.domain.SensorData;
 import com.project.ecoWater.sensor.domain.SensorDataRepository;
+import com.project.ecoWater.tank.app.TankDTO;
+import com.project.ecoWater.tank.domain.Tank;
+import com.project.ecoWater.tank.domain.TankRepository;
+import com.project.ecoWater.tank.domain.TankService;
+import com.project.ecoWater.tank.infrastructure.TankMapper;
 import com.project.ecoWater.user.domain.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,22 +27,50 @@ import java.util.List;
 public class SensorDataAppService extends DeviceService<SensorData> {
 
     private final SensorDataRepository sensorDataRepository;
+    private final TankRepository tankRepository;
+    private final DeviceRepository deviceRepository;
 
-    public SensorDataAppService(DeviceRepository repository, UserRepository userRepository
-    , SensorDataRepository sensorDataRepository) {
+    public SensorDataAppService(DeviceRepository repository, UserRepository userRepository,
+                                SensorDataRepository sensorDataRepository, TankRepository tankRepository) {
         super(repository, userRepository);
         this.sensorDataRepository = sensorDataRepository;
+        this.tankRepository = tankRepository;
+        this.deviceRepository = repository;
     }
 
     @Transactional
     public SensorData createSensorData(SensorData sensorData, String email) {
-        validateAndAssignUser(sensorData,email,entity->{
-            sensorData.setDevice(entity.getDevice());
-        },"sensorData");
+
+        validateAndAssignUser(
+                sensorData,
+                email,
+                device -> {
+                        DeviceDTO deviceDTO= device.getDevice();
+        if (deviceDTO != null) {
+            Device persistedDevice = deviceRepository.getDevice(deviceDTO.getDeviceId())
+                    .orElseThrow(() -> new IllegalArgumentException("Tank not found"));
+            sensorData.setDevice(DeviceMapper.deviceToDeviceDTO(persistedDevice));
+        }},
+                "device");
+
+        validateAndAssignUser(
+                sensorData,
+                email,
+                tank -> {
+                    TankDTO tankDTO= tank.getTank();
+                    if (tankDTO != null) {
+                        Tank persistedTank=tankRepository.findById(tankDTO.getTankId())
+                                .orElseThrow(() -> new IllegalArgumentException("Tank not found"));
+                        sensorData.setTank(TankMapper.tankToTankDTO(persistedTank));
+                    }
+                },
+                "tank"
+        );
 
         sensorData.setMeasurementTime(Timestamp.valueOf(LocalDateTime.now()));
         return sensorDataRepository.save(sensorData);
     }
+
 
     public SensorData getSensorData(Long id) {
         if(!sensorDataRepository.existsById(id)){
@@ -45,6 +82,7 @@ public class SensorDataAppService extends DeviceService<SensorData> {
     public List<SensorData> getAllSensorData(){
         return sensorDataRepository.findAll();
     }
+
 
     @Override
     protected DeviceDTO getDeviceFromEntity(SensorData entity) {

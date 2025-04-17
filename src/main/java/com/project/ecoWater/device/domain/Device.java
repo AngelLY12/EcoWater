@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Device {
 
 
-    private UUID deviceId;
+    private String deviceId;
 
     private UserDTO user;
 
@@ -25,4 +25,10 @@ public class Device {
     private String deviceLocation;
 
     private Timestamp creationRegister;
+
+    private Boolean connected;
+
+    private Timestamp lastSeen;
+
+    private String ssid;
 }

@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public class DeviceRepositoryImpl implements DeviceRepository {
     private final DeviceJpaRepository deviceJpaRepository;
     @Override
-    public Optional<Device> getDevice(UUID deviceId) {
-        return deviceJpaRepository.findById(deviceId).map(DeviceMapper::deviceEntityToDevice);
+    public Optional<Device> getDevice(String mac) {
+        return deviceJpaRepository.findById(mac).map(DeviceMapper::deviceEntityToDevice);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     }
 
     @Override
-    public void deleteDevice(UUID deviceId) {
-        deviceJpaRepository.deleteById(deviceId);
+    public void deleteDevice(String mac) {
+        deviceJpaRepository.deleteById(mac);
     }
 
     @Override
-    public boolean existsDeviceById(UUID deviceId) {
-        return deviceJpaRepository.existsById(deviceId);
+    public boolean existsDeviceById(String mac) {
+        return deviceJpaRepository.existsById(mac);
     }
 
     @Override

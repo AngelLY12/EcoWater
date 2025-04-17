@@ -10,7 +10,6 @@ public class WaterTankLevelMapper {
                 .tank(TankMapper.tankEntityToTankDTO(waterTankLevelEntity.getTank()))
                 .waterLevel(waterTankLevelEntity.getWaterLevel())
                 .dateMeasurement(waterTankLevelEntity.getDateMeasurement())
-                .sensorDistance(waterTankLevelEntity.getSensorDistance())
                 .fillPercentage(waterTankLevelEntity.getFillPercentage())
                 .build();
     }
@@ -21,7 +20,6 @@ public class WaterTankLevelMapper {
                 .tank(TankMapper.tankDTOToTankEntity(waterTankLevel.getTank()))
                 .waterLevel(waterTankLevel.getWaterLevel())
                 .dateMeasurement(waterTankLevel.getDateMeasurement())
-                .sensorDistance(waterTankLevel.getSensorDistance())
                 .fillPercentage(waterTankLevel.getFillPercentage())
                 .build();
     }

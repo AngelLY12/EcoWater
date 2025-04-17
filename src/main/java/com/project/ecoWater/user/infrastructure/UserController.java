@@ -5,6 +5,8 @@ import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,12 +31,12 @@ public class UserController {
 
     }
 
-    @PatchMapping("/updateUser/{email}")
-    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
-        user.setEmail(email);
-        Optional<User> userOptional= userService.updateUser(user);
+    @PatchMapping("/updateUser")
+    public ResponseEntity<User> updateUser(@RequestBody User user, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> userOptional= userService.updateUser(user,userDetails.getUsername());
         return userOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAllUsers();

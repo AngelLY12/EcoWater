@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Builder
 public class TankFilling {
     private Long fillingId;
-    private BigDecimal totalVolume;
+    private Float totalVolume;
     private Timestamp startedDate;
     private Timestamp finishedDate;
     private TankDTO tank;

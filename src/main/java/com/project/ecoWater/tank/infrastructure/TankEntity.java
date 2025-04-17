@@ -1,5 +1,8 @@
 package com.project.ecoWater.tank.infrastructure;
 
+import com.project.ecoWater.level.infraestrucutre.WaterTankLevelEntity;
+import com.project.ecoWater.sensor.domain.SensorData;
+import com.project.ecoWater.sensor.infraestructure.SensorDataEntity;
 import com.project.ecoWater.tank.domain.FillingType;
 import com.project.ecoWater.tank.domain.Tank;
 import com.project.ecoWater.user.domain.User;
@@ -10,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "tanks")
@@ -28,7 +32,7 @@ public class TankEntity {
     @Column
     private String tankName;
     @Column
-    private BigDecimal capacity;
+    private Float capacity;
 
 
     @Enumerated(EnumType.STRING)
@@ -39,11 +43,16 @@ public class TankEntity {
     )
     private FillingType fillingType;
     @Column
-    private BigDecimal tankHeight;
+    private Float tankHeight;
     private Timestamp createdAt;
+    @Column(nullable = true)
+    private Boolean isMain;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @OneToMany(mappedBy = "tank")
+    private List<WaterTankLevelEntity> tanks;
 
 }

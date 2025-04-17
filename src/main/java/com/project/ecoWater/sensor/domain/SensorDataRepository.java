@@ -9,5 +9,6 @@ public interface SensorDataRepository {
     SensorData findById(Long id);
     List<SensorData> findAll();
     boolean existsById(Long id);
+    float findDistanceByTankFillingId(Long tankFillingId);
 
 }

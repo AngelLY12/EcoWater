@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface DeviceJpaRepository extends JpaRepository<DeviceEntity, UUID> {
+public interface DeviceJpaRepository extends JpaRepository<DeviceEntity, String> {
 
 }

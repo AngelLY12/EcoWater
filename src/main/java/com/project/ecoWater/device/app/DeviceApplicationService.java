@@ -24,11 +24,11 @@ import java.util.UUID;
 public class DeviceApplicationService {
     private final DeviceRepository deviceRepository;
     private final UserRepository userRepository;
-    public Optional<Device> getDevice(UUID deviceId) {
-        if(!deviceRepository.existsDeviceById(deviceId)) {
+    public Optional<Device> getDevice(String mac) {
+        if(!deviceRepository.existsDeviceById(mac)) {
             throw new IllegalArgumentException("Device not found");
         }
-        return deviceRepository.getDevice(deviceId);
+        return deviceRepository.getDevice(mac);
     }
 
     @Transactional
@@ -39,11 +39,13 @@ public class DeviceApplicationService {
         System.out.printf("USUARIO ENCONTRADO: %s\n", user);
 
         Device newDevice = Device.builder()
+                .deviceId(deviceRequest.getDevice_id())
                 .user(userDevice)
                 .deviceType(deviceRequest.getDevice_type())
                 .deviceName(deviceRequest.getDevice_name())
                 .deviceLocation(deviceRequest.getDevice_location())
                 .creationRegister(Timestamp.valueOf(LocalDateTime.now()))
+                .ssid(deviceRequest.getSsid())
                 .build();
 
         return deviceRepository.saveDevice(newDevice);
@@ -71,17 +73,17 @@ public class DeviceApplicationService {
         }
         return Optional.empty();
     }
-    public void deleteDevice(UUID deviceId) {
-        if(!deviceRepository.existsDeviceById(deviceId)) {
+    public void deleteDevice(String mac) {
+        if(!deviceRepository.existsDeviceById(mac)) {
             throw new IllegalArgumentException("Device not found");
         }
-        deviceRepository.deleteDevice(deviceId);
+        deviceRepository.deleteDevice(mac);
     }
     public List<Device> getAllDevices() {
         return deviceRepository.getAllDevices();
     }
-    public boolean existDeviceById(UUID deviceId) {
-        return deviceRepository.existsDeviceById(deviceId);
+    public boolean existDeviceById(String mac) {
+        return deviceRepository.existsDeviceById(mac);
     }
 
 }

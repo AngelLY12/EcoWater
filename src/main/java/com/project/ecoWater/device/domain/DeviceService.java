@@ -3,12 +3,8 @@ package com.project.ecoWater.device.domain;
 import com.project.ecoWater.BaseService;
 import com.project.ecoWater.device.app.DeviceDTO;
 import com.project.ecoWater.user.app.UserDTO;
-import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
-import com.project.ecoWater.user.infrastructure.UserMapper;
-import lombok.RequiredArgsConstructor;
 
-import java.util.function.Consumer;
 
 public abstract class DeviceService<T> extends BaseService<T,DeviceRepository> {
 

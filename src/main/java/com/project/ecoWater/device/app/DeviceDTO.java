@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class DeviceDTO {
-    private UUID deviceId;
+    private String deviceId;
     private UserDTO user;
 
 }

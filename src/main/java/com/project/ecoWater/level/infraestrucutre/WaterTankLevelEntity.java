@@ -25,8 +25,7 @@ public class WaterTankLevelEntity {
     private TankEntity tank;
 
     @Column
-    private BigDecimal waterLevel;
+    private Float waterLevel;
     private Timestamp dateMeasurement;
-    private BigDecimal sensorDistance;
-    private BigDecimal fillPercentage;
+    private Float fillPercentage;
 }

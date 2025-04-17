@@ -17,6 +17,7 @@ public class DeviceMapper {
                 .deviceLocation(deviceEntity.getDeviceLocation())
                 .creationRegister(deviceEntity.getCreationRegister())
                 .user(UserMapper.userEntityToUserDTO(deviceEntity.getUser()))
+                .ssid(deviceEntity.getSsid())
                 .build();
     }
     public static DeviceEntity deviceToDeviceEntity(Device device) {
@@ -27,6 +28,7 @@ public class DeviceMapper {
                 .deviceLocation(device.getDeviceLocation())
                 .creationRegister(device.getCreationRegister())
                 .user(UserMapper.userDTOToUserEntity(device.getUser()))
+                .ssid(device.getSsid())
                 .build();
     }
 
@@ -41,6 +43,12 @@ public class DeviceMapper {
         return DeviceEntity.builder()
                 .deviceId(deviceDTO.getDeviceId())
                 .user(UserMapper.userDTOToUserEntity(deviceDTO.getUser()))
+                .build();
+    }
+    public static DeviceDTO deviceToDeviceDTO(Device device) {
+        return DeviceDTO.builder()
+                .deviceId(device.getDeviceId())
+                .user(device.getUser())
                 .build();
     }
 

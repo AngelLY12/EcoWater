@@ -23,7 +23,7 @@ public class TankFillingEntity {
     private Long fillingId;
 
     @Column
-    private BigDecimal totalVolume;
+    private Float totalVolume;
     private Timestamp startedDate;
     private Timestamp finishedDate;
 

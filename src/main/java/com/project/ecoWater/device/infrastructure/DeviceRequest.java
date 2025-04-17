@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 public class DeviceRequest
 
 {
+    String device_id;
     String device_name;
     DeviceType device_type;
     String device_location;
+    String ssid;
 }

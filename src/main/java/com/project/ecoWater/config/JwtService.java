@@ -22,8 +22,8 @@ public class JwtService {
 
     private static final SecretKey SECRET_KEY= Jwts.SIG.HS256.key().build();
 
-    private static final long JWT_TIME_REFRESH_VALIDATE = 1000 * 60  * 60 * 24;
-    private static final long REFRESH_WINDOW = 1000 * 60 * 60 * 24 * 7;
+    private static final long JWT_TIME_REFRESH_VALIDATE = 1000 * 60 * 10;
+    private static final long REFRESH_WINDOW = 1000 * 60 * 10;
 
 
     public String extractUsername(String token) {

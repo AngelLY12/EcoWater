@@ -2,6 +2,7 @@ package com.project.ecoWater.sensor.domain;
 
 
 import com.project.ecoWater.device.app.DeviceDTO;
+import com.project.ecoWater.tank.app.TankDTO;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.sql.Timestamp;
 public class SensorData {
     private Long sensorId;
     private DeviceDTO device;
-    private BigDecimal distance;
+    private Float distance;
     private Timestamp measurementTime;
-
+    private TankDTO tank;
 }

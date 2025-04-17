@@ -1,6 +1,7 @@
 package com.project.ecoWater.tank.domain;
 
 
+import com.project.ecoWater.sensor.domain.SensorData;
 import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import lombok.Builder;
@@ -14,10 +15,12 @@ import java.sql.Timestamp;
 public class Tank {
     private Long tankId;
     private String tankName;
-    private BigDecimal capacity;
+    private Float capacity;
     private FillingType fillingType;
-    private BigDecimal tankHeight;
+    private Float tankHeight;
     private Timestamp createdAt;
+    private Boolean isMain;
     private UserDTO user;
+    private SensorData sensorData;
 
 }

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class TankApplicationService {
         return tankRepository.findById(tankId).get();
     }
 
-    public List<Tank> findAllTanks() {
-        return tankRepository.findAll();
+    public List<Tank> findAllTanks(String email) {
+        return tankRepository.findAll(email);
     }
 
     @Transactional
@@ -49,7 +50,11 @@ public class TankApplicationService {
         tankRepository.delete(tankRepository.findById(tankId).get());
     }
 
-    public Optional<Tank> updateTank(Tank tank) {
+    @Transactional
+    public Optional<Tank> updateTank(Tank tank, String email) {
+        User user= userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No user found"));
+        UserDTO userTank= UserMapper.userToUserDTO(user);
         Optional<Tank> optionalTank = tankRepository.findById(tank.getTankId());
         if (optionalTank.isPresent()) {
             Tank updatedTank = optionalTank.get();

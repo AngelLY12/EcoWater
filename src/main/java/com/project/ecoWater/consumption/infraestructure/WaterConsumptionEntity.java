@@ -28,7 +28,7 @@ public class WaterConsumptionEntity {
     private DeviceEntity device;
 
     @Column
-    private BigDecimal flowRate;
+    private Float flowRate;
     private Timestamp startedDate;
     private Timestamp endedDate;
 }

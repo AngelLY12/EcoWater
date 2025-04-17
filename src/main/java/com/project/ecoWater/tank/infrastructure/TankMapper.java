@@ -1,5 +1,6 @@
 package com.project.ecoWater.tank.infrastructure;
 
+import com.project.ecoWater.sensor.infraestructure.SensorDataMapper;
 import com.project.ecoWater.tank.app.TankDTO;
 import com.project.ecoWater.tank.domain.Tank;
 import com.project.ecoWater.user.domain.User;
@@ -15,6 +16,7 @@ public class TankMapper {
                 .capacity(tankEntity.getCapacity())
                 .fillingType(tankEntity.getFillingType())
                 .tankHeight(tankEntity.getTankHeight())
+                .isMain(tankEntity.getIsMain())
                 .createdAt(tankEntity.getCreatedAt())
                 .user(UserMapper.userEntityToUserDTO(tankEntity.getUser()))
                 .build();
@@ -27,6 +29,7 @@ public class TankMapper {
                 .fillingType(tank.getFillingType())
                 .tankHeight(tank.getTankHeight())
                 .createdAt(tank.getCreatedAt())
+                .isMain(tank.getIsMain())
                 .user(UserMapper.userDTOToUserEntity(tank.getUser()))
                 .build();
     }
@@ -34,6 +37,9 @@ public class TankMapper {
     public static TankDTO tankToTankDTO(Tank tank) {
         return TankDTO.builder()
                 .tankId(tank.getTankId())
+                .user(tank.getUser())
+                .capacity(tank.getCapacity())
+                .tankHeight(tank.getTankHeight())
                 .build();
     }
 
@@ -41,6 +47,9 @@ public class TankMapper {
         return TankEntity.builder()
                 .tankId(tankDTO.getTankId())
                 .user(UserMapper.userDTOToUserEntity(tankDTO.getUser()))
+                .capacity(tankDTO.getCapacity())
+                .tankHeight(tankDTO.getTankHeight())
+                .isMain(tankDTO.getIsMain())
                 .build();
     }
 
@@ -48,6 +57,9 @@ public class TankMapper {
         return TankDTO.builder()
                 .tankId(tankEntity.getTankId())
                 .user(UserMapper.userEntityToUserDTO(tankEntity.getUser()))
+                .capacity(tankEntity.getCapacity())
+                .tankHeight(tankEntity.getTankHeight())
+                .isMain(tankEntity.getIsMain())
                 .build();
     }
 

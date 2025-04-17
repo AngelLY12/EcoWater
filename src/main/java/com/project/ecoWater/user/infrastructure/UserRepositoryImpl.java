@@ -44,7 +44,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public void deleteUserByEmail(String email) {
         userJpaRepository.deleteByEmail(email);
 
@@ -55,8 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.existsByEmail(email);
     }
     @Override
-    @Transactional
-    public Optional<User> updateUser(User user) {
+    public Optional<User> updateUser(User user, String email) {
         UserEntity userEntity = UserMapper.toEntity(user);
         UserEntity updatedUserEntity = userJpaRepository.save(userEntity);
         return Optional.ofNullable(UserMapper.toDomain(updatedUserEntity));

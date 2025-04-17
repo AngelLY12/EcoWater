@@ -21,10 +21,8 @@ import java.util.UUID;
 public class DeviceEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "device_id", columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID deviceId;
+    @Column(name = "device_id", updatable = false, nullable = false)
+    private String deviceId;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
@@ -46,4 +44,8 @@ public class DeviceEntity {
 
     @Column(name = "creation_register")
     private Timestamp creationRegister;
+    private Boolean connected;
+    private Timestamp lastSeen;
+    private String ssid;
+
 }

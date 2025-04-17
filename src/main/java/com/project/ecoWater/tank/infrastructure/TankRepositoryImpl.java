@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -24,8 +25,8 @@ public class TankRepositoryImpl implements TankRepository {
     }
 
     @Override
-    public List<Tank> findAll() {
-        return tankJpaRepository.findAll().stream().map(TankMapper::tankEntityToTank).collect(Collectors.toList());
+    public List<Tank> findAll(String email) {
+        return tankJpaRepository.findAllByUser(email).stream().map(TankMapper::tankEntityToTank).collect(Collectors.toList());
     }
 
     @Override
@@ -46,11 +47,18 @@ public class TankRepositoryImpl implements TankRepository {
     }
 
     @Override
-    @Transactional
-    public Optional<Tank> updateTank(Tank tank) {
+    public Optional<Tank> updateTank(Tank tank, String email) {
         TankEntity tankEntity = TankMapper.tankToTankEntity(tank);
         TankEntity updatedTankEntity = tankJpaRepository.save(tankEntity);
         return Optional.ofNullable(TankMapper.tankEntityToTank(updatedTankEntity));
     }
 
+
+    @Override
+    @Transactional
+    public Tank findByTankFillingId(Long fillingId) {
+        TankEntity tankEntity=tankJpaRepository.findByTankFillingId(fillingId);
+        return TankMapper.tankEntityToTank(tankEntity);
+
+    }
 }

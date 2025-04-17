@@ -40,9 +40,9 @@ public class TankController {
     }
 
     @GetMapping("/getAllTanks")
-    public ResponseEntity<List<Tank>> getAllTanks() {
+    public ResponseEntity<List<Tank>> getAllTanks(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            List<Tank> getAllTanks=tankApplicationService.findAllTanks();
+            List<Tank> getAllTanks=tankApplicationService.findAllTanks(userDetails.getUsername());
             return ResponseEntity.ok(getAllTanks);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
@@ -50,9 +50,9 @@ public class TankController {
     }
 
     @PatchMapping("/updateTank")
-    public ResponseEntity<Optional<Tank>> updateTank(@RequestBody Tank tank) {
+    public ResponseEntity<Optional<Tank>> updateTank(@RequestBody Tank tank, @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            Optional<Tank> updatedTank=tankApplicationService.updateTank(tank);
+            Optional<Tank> updatedTank=tankApplicationService.updateTank(tank, userDetails.getUsername());
             return ResponseEntity.ok(updatedTank);
         }catch (RuntimeException e) {
             throw new RuntimeException(e);

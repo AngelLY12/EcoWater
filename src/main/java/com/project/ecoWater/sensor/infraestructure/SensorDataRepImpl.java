@@ -35,4 +35,9 @@ public class SensorDataRepImpl implements SensorDataRepository {
     public boolean existsById(Long id) {
         return sensorDataJpaRep.existsById(id);
     }
+
+    @Override
+    public float findDistanceByTankFillingId(Long fillingId) {
+        return sensorDataJpaRep.findDistanceByTankFillingId(fillingId);
+    }
 }

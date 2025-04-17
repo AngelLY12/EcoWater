@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class WaterConsumption {
     private Long consumptionId;
     private DeviceDTO device;
-    private BigDecimal flowRate;
+    private Float flowRate;
     private Timestamp startedDate;
     private Timestamp endedDate;
 }

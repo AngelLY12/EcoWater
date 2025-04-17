@@ -40,7 +40,9 @@ docker-compose up --build
 ```
 Este comando hará lo siguiente:
 >1. Construirá las imágenes de Docker si es necesario.
+
 >2.Levantará los contenedores de la aplicación Spring Boot y la base de datos PostgreSQL.
+
 >3.Mapeará los puertos necesarios para acceder a la aplicación.
 
 ### Detener los contenedores

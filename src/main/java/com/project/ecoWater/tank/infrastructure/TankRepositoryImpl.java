@@ -37,8 +37,8 @@ public class TankRepositoryImpl implements TankRepository {
     }
 
     @Override
-    public void delete(Tank tank) {
-        tankJpaRepository.deleteById(tank.getTankId());
+    public void delete(Long tankId, String email) {
+        tankJpaRepository.deleteByIdAndUser(tankId,email);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class TankRepositoryImpl implements TankRepository {
     }
 
     @Override
-    public Optional<Tank> updateTank(Tank tank, String email) {
+    public Optional<Tank> updateTank(Tank tank) {
         TankEntity tankEntity = TankMapper.tankToTankEntity(tank);
         TankEntity updatedTankEntity = tankJpaRepository.save(tankEntity);
         return Optional.ofNullable(TankMapper.tankEntityToTank(updatedTankEntity));

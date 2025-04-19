@@ -21,6 +21,5 @@ public class Tank {
     private Timestamp createdAt;
     private Boolean isMain;
     private UserDTO user;
-    private SensorData sensorData;
 
 }

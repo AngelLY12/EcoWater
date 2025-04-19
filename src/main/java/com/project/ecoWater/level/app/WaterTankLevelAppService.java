@@ -44,14 +44,25 @@ public class WaterTankLevelAppService extends TankService<WaterTankLevel> {
     }
 
     public Optional<WaterTankLevel> findByEmail(String email) {
-        return waterTankLevelRepository.findByEmail(email);
+        return Optional.ofNullable(waterTankLevelRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No tank level found for the provided email.")));
     }
     public List<WaterTankLevel> findAll(String email) {
-        return waterTankLevelRepository.findAll(email);
+        List<WaterTankLevel> allLevels = waterTankLevelRepository.findAll(email);
+
+        if (allLevels.isEmpty()) {
+            throw new IllegalArgumentException("No tank levels found for this user.");
+        }
+
+        return allLevels;
     }
 
     @Override
     protected TankDTO getTankFromEntity(WaterTankLevel entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity is null. Cannot extract tank info.");
+        }
+
         return entity.getTank();
     }
 

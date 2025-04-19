@@ -12,8 +12,10 @@ import java.math.BigDecimal;
 @Builder
 public class TankDTO {
     private Long tankId;
+    private String tankName;
     private UserDTO user;
     private Float capacity;
     private Float tankHeight;
     private Boolean isMain;
+
 }

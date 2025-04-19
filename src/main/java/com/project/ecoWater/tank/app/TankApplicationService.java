@@ -30,7 +30,11 @@ public class TankApplicationService {
     }
 
     public List<Tank> findAllTanks(String email) {
-        return tankRepository.findAll(email);
+        List<Tank> allTanks = tankRepository.findAll(email);
+        if(allTanks.isEmpty()){
+            throw new IllegalArgumentException("No tanks found for this user.");
+        }
+        return allTanks;
     }
 
     @Transactional
@@ -43,11 +47,12 @@ public class TankApplicationService {
         return tankRepository.save(tank);
     }
 
-    public void deleteTank(Long tankId) {
+    @Transactional
+    public void deleteTank(Long tankId, String email) {
         if (!tankRepository.existsById(tankId)) {
             throw new IllegalArgumentException("No such tank id");
         }
-        tankRepository.delete(tankRepository.findById(tankId).get());
+        tankRepository.delete(tankId, email);
     }
 
     @Transactional
@@ -55,6 +60,7 @@ public class TankApplicationService {
         User user= userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("No user found"));
         UserDTO userTank= UserMapper.userToUserDTO(user);
+        tank.setUser(userTank);
         Optional<Tank> optionalTank = tankRepository.findById(tank.getTankId());
         if (optionalTank.isPresent()) {
             Tank updatedTank = optionalTank.get();

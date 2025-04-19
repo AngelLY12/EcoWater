@@ -73,9 +73,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             boolean canBeRenewed = jwtService.canTokenBeRenewed(jwt);
 
             if (!isTokenValid || (isTokenExpired && !canBeRenewed)) {
-                log.debug("The JWT is not valid");
-                SecurityContextHolder.clearContext();
-                filterChain.doFilter(request, response);
+                log.debug("The JWT is not valid or cannot be renewed");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Unauthorized: Invalid or expired token");
                 return;
             }
 

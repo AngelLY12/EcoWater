@@ -5,10 +5,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DeviceRepository {
-    Optional<Device> getDevice(String mac);
-    List<Device> getAllDevices();
+    Optional<Device> getDevice(String deviceId);
+    List<Device> getAllDevices(String email);
     Device saveDevice(Device device);
-    void deleteDevice(String mac);
-    boolean existsDeviceById(String mac);
+    void deleteDevice(String deviceId, String email);
+    boolean existsDeviceById(String deviceId);
     Optional<Device> updateDevice(Device device);
 }

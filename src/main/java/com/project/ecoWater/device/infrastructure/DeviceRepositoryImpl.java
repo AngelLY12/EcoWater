@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 public class DeviceRepositoryImpl implements DeviceRepository {
     private final DeviceJpaRepository deviceJpaRepository;
     @Override
-    public Optional<Device> getDevice(String mac) {
-        return deviceJpaRepository.findById(mac).map(DeviceMapper::deviceEntityToDevice);
+    public Optional<Device> getDevice(String deviceId) {
+        return deviceJpaRepository.findById(deviceId).map(DeviceMapper::deviceEntityToDevice);
     }
 
     @Override
-    public List<Device> getAllDevices() {
-        return deviceJpaRepository.findAll().stream().map(DeviceMapper::deviceEntityToDevice).collect(Collectors.toList());
+    public List<Device> getAllDevices(String email) {
+        return deviceJpaRepository.findAllByUser(email).stream().map(DeviceMapper::deviceEntityToDevice).collect(Collectors.toList());
     }
 
     @Override
@@ -33,13 +33,13 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     }
 
     @Override
-    public void deleteDevice(String mac) {
-        deviceJpaRepository.deleteById(mac);
+    public void deleteDevice(String deviceId, String email) {
+        deviceJpaRepository.deleteByIdAndUser(deviceId, email);
     }
 
     @Override
-    public boolean existsDeviceById(String mac) {
-        return deviceJpaRepository.existsById(mac);
+    public boolean existsDeviceById(String deviceId) {
+        return deviceJpaRepository.existsById(deviceId);
     }
 
     @Override

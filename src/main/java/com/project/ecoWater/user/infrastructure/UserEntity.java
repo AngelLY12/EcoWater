@@ -3,6 +3,7 @@ package com.project.ecoWater.user.infrastructure;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecoWater.device.infrastructure.DeviceEntity;
+import com.project.ecoWater.sensor.infraestructure.SensorDataEntity;
 import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,10 +49,10 @@ public class UserEntity implements UserDetails {
     @Column(name="created_at")
     private Timestamp created;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceEntity> devices;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TankEntity> tanks;
 
 

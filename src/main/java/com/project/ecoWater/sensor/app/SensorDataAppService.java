@@ -53,20 +53,6 @@ public class SensorDataAppService extends DeviceService<SensorData> {
         }},
                 "device");
 
-        validateAndAssignUser(
-                sensorData,
-                email,
-                tank -> {
-                    TankDTO tankDTO= tank.getTank();
-                    if (tankDTO != null) {
-                        Tank persistedTank=tankRepository.findById(tankDTO.getTankId())
-                                .orElseThrow(() -> new IllegalArgumentException("Tank not found"));
-                        sensorData.setTank(TankMapper.tankToTankDTO(persistedTank));
-                    }
-                },
-                "tank"
-        );
-
         sensorData.setMeasurementTime(Timestamp.valueOf(LocalDateTime.now()));
         return sensorDataRepository.save(sensorData);
     }
@@ -80,12 +66,19 @@ public class SensorDataAppService extends DeviceService<SensorData> {
     }
 
     public List<SensorData> getAllSensorData(){
-        return sensorDataRepository.findAll();
+        List<SensorData> sensorDataList = sensorDataRepository.findAll();
+        if(sensorDataList.isEmpty()){
+            throw new IllegalArgumentException("SensorDatas not found");
+        }
+        return sensorDataList;
     }
 
 
     @Override
     protected DeviceDTO getDeviceFromEntity(SensorData entity) {
+        if(entity == null){
+            throw new IllegalArgumentException("SensorData not found");
+        }
         return entity.getDevice();
     }
 }

@@ -21,52 +21,32 @@ public class TankController {
 
     @PostMapping("/addTank")
     public ResponseEntity<Tank> createTank(@RequestBody Tank tank, @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            Tank tankSaved = tankApplicationService.saveTank(tank, userDetails.getUsername());
-            return ResponseEntity.ok(tankSaved);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        Tank tankSaved = tankApplicationService.saveTank(tank, userDetails.getUsername());
+        return ResponseEntity.ok(tankSaved);
     }
 
     @GetMapping("/getTank/{tankId}")
     public ResponseEntity<Tank> getTankById(@PathVariable Long tankId) {
-        try {
-            Tank getTank=tankApplicationService.findTankById(tankId);
-            return ResponseEntity.ok(getTank);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        Tank getTank=tankApplicationService.findTankById(tankId);
+        return ResponseEntity.ok(getTank);
     }
 
     @GetMapping("/getAllTanks")
     public ResponseEntity<List<Tank>> getAllTanks(@AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            List<Tank> getAllTanks=tankApplicationService.findAllTanks(userDetails.getUsername());
-            return ResponseEntity.ok(getAllTanks);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        List<Tank> getAllTanks=tankApplicationService.findAllTanks(userDetails.getUsername());
+        return ResponseEntity.ok(getAllTanks);
     }
 
     @PatchMapping("/updateTank")
     public ResponseEntity<Optional<Tank>> updateTank(@RequestBody Tank tank, @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            Optional<Tank> updatedTank=tankApplicationService.updateTank(tank, userDetails.getUsername());
-            return ResponseEntity.ok(updatedTank);
-        }catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        Optional<Tank> updatedTank=tankApplicationService.updateTank(tank, userDetails.getUsername());
+        return ResponseEntity.ok(updatedTank);
     }
 
     @DeleteMapping("/deleteTank/{tankId}")
-    public ResponseEntity<String> deleteTank(@PathVariable Long tankId) {
-        try {
-            tankApplicationService.deleteTank(tankId);
-            return ResponseEntity.ok("Deleted tank successfully");
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<String> deleteTank(@PathVariable Long tankId, @AuthenticationPrincipal UserDetails userDetails) {
+        tankApplicationService.deleteTank(tankId, userDetails.getUsername());
+        return ResponseEntity.ok("Deleted tank successfully");
     }
 
 }

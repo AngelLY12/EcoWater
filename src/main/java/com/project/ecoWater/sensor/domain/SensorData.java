@@ -16,5 +16,4 @@ public class SensorData {
     private DeviceDTO device;
     private Float distance;
     private Timestamp measurementTime;
-    private TankDTO tank;
 }

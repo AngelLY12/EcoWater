@@ -1,6 +1,9 @@
 package com.project.ecoWater.device.domain;
 
 
+import com.project.ecoWater.tank.app.TankDTO;
+import com.project.ecoWater.tank.domain.Tank;
+import com.project.ecoWater.tank.infrastructure.TankEntity;
 import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import jakarta.persistence.*;
@@ -17,6 +20,8 @@ public class Device {
     private String deviceId;
 
     private UserDTO user;
+
+    private TankDTO tank;
 
     private String deviceName;
 

@@ -30,8 +30,4 @@ public class SensorDataEntity {
     @Column
     private Float distance;
     private Timestamp measurementTime;
-
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "tank_id")
-    private TankEntity tank;
 }

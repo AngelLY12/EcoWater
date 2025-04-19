@@ -21,54 +21,31 @@ public class DeviceController {
     @PostMapping("/addDevice")
     public ResponseEntity<Device> createDevice(@RequestBody DeviceRequest device, @AuthenticationPrincipal UserDetails userDetails) {
         System.out.println("Email recibido en controlador: " + userDetails.getUsername());
-
-        try {
-
-            Device createdDevice = deviceApplicationService.createDevice(device, userDetails.getUsername());
-            return ResponseEntity.ok(createdDevice);
-
-        }catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Device createdDevice = deviceApplicationService.createDevice(device, userDetails.getUsername());
+        return ResponseEntity.ok(createdDevice);
     }
 
-    @GetMapping("/getDevice/{mac}")
-    public ResponseEntity<Optional<Device>> getDevice(@PathVariable String mac) {
-        try {
-            Optional<Device> device = deviceApplicationService.getDevice(mac);
-            return ResponseEntity.ok(device);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    @GetMapping("/getDevice/{deviceId}")
+    public ResponseEntity<Optional<Device>> getDevice(@PathVariable String deviceId) {
+        Optional<Device> device = deviceApplicationService.getDevice(deviceId);
+        return ResponseEntity.ok(device);
     }
 
     @GetMapping("/getAllDevices")
-    public ResponseEntity<List<Device>> getAllDevices() {
-        try {
-            List<Device> devices = deviceApplicationService.getAllDevices();
-            return ResponseEntity.ok(devices);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<List<Device>> getAllDevices(@AuthenticationPrincipal UserDetails userDetails) {
+        List<Device> devices = deviceApplicationService.getAllDevices(userDetails.getUsername());
+        return ResponseEntity.ok(devices);
     }
     @PatchMapping("/updateDevice")
     public ResponseEntity<Optional<Device>> updateDevice(@RequestBody Device device, @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            Optional<Device> updatedDevice = deviceApplicationService.updateDevice(device, userDetails.getUsername());
-            return ResponseEntity.ok(updatedDevice);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        Optional<Device> updatedDevice = deviceApplicationService.updateDevice(device, userDetails.getUsername());
+        return ResponseEntity.ok(updatedDevice);
     }
 
-    @DeleteMapping("/deleteDevice/{mac}")
-    public ResponseEntity<String> deleteDevice(@PathVariable String mac) {
-        try {
-            deviceApplicationService.deleteDevice(mac);
-            return ResponseEntity.ok("Device deleted successfully");
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    @DeleteMapping("/deleteDevice/{deviceId}")
+    public ResponseEntity<String> deleteDevice(@PathVariable String deviceId, @AuthenticationPrincipal UserDetails userDetails) {
+        deviceApplicationService.deleteDevice(deviceId, userDetails.getUsername());
+        return ResponseEntity.ok("Device deleted successfully");
     }
 
 }

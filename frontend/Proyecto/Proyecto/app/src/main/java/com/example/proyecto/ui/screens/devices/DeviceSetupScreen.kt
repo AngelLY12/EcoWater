@@ -1,6 +1,7 @@
 package com.example.proyecto.ui.screens.devices
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,12 +40,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.model.models.DeviceRequest
 import com.example.proyecto.model.models.DeviceType
+import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.models.TankDTO
 import com.example.proyecto.ui.components.CustomDropdown
 import com.example.proyecto.ui.components.CustomOutlinedTextField
 import com.example.proyecto.ui.viewModels.BluetoothViewModel
+import com.example.proyecto.ui.viewModels.TankViewModel
 import com.google.gson.Gson
 
 @Composable
@@ -57,7 +63,15 @@ fun DeviceSetupScreen(
     val deviceTypes = DeviceType.values().toList()
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("setupDevice", Context.MODE_PRIVATE)
+    val tankViewModel: TankViewModel= viewModel()
 
+    LaunchedEffect(Unit) {
+        tankViewModel.loadTanks(context)
+    }
+
+    val tanks = tankViewModel.tanks.value
+
+    var selectedTank by remember { mutableStateOf<Tank?>(null) }
 
     Column(
         modifier = Modifier
@@ -115,6 +129,9 @@ fun DeviceSetupScreen(
                     option.name.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }
                 }
             )
+
+
+
             /*
             CustomOutlinedTextField(
                 label = "Tipo de dispositivo",
@@ -145,6 +162,26 @@ fun DeviceSetupScreen(
 
              */
         }
+        Box {
+            CustomDropdown(
+                options = tanks,
+                label = "Tanque del dispositivo",
+                selectedOption = selectedTank,
+                onOptionSelected = { selected ->
+                    selectedTank = selected
+                    // Aquí puedes hacer lo que necesites con el tanque seleccionado
+
+                    Log.d("Dropdown", "ID del tanque seleccionado: ${selected.tankId}")
+                },
+                optionToText = { option ->
+                    option.tankName.toString()
+                }
+            )
+        }
+
+
+
+
 
         // Ubicación del dispositivo
         CustomOutlinedTextField(
@@ -162,7 +199,8 @@ fun DeviceSetupScreen(
                     device_name = deviceName.value,
                     device_type = deviceType.value.toString(),
                     device_location = deviceLocation.value,
-                    ssid = ""
+                    ssid = "",
+                    tank = selectedTank
                 )
                 val json = gson.toJson(data)
                 sharedPreferences.edit() { putString("device_data", json) }

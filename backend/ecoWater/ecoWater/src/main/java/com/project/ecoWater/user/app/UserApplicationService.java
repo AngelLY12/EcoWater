@@ -31,7 +31,9 @@ public class UserApplicationService {
     }
 
     public Optional<User> findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+        userRepository.existUserByEmail(email);
+        return Optional.ofNullable(userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User exists in check but not found in fetch.")));
     }
     public Optional<User> findById(UUID userId) {
         return userRepository.findById(userId);
@@ -71,7 +73,12 @@ public class UserApplicationService {
     }
 
     public boolean existUserByEmail(String email) {
-        return userRepository.existUserByEmail(email);
+        if(!userRepository.existUserByEmail(email)){
+            throw new IllegalArgumentException("User with email " + email + " does not exist.");
+
+        }
+        return true;
+
     }
 
 }

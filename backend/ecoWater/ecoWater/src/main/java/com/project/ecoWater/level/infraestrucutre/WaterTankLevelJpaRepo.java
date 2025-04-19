@@ -14,10 +14,10 @@ public interface WaterTankLevelJpaRepo extends JpaRepository<WaterTankLevelEntit
     @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.user.email = :email AND FUNCTION('DATE', t.dateMeasurement) = CURRENT_DATE ")
     List<WaterTankLevelEntity> findAllByUser(@Param("email")String email);
 
-    @Query(value = "SELECT ((t.tankHeight - sd.distance)/t.tankHeight)*t.capacity FROM SensorDataEntity sd JOIN TankEntity t ON t.tankId = sd.tank.tankId WHERE sd.tank.tankId = :tankId ORDER BY sd.measurementTime DESC LIMIT 1")
+    @Query(value = "SELECT ((t.tankHeight - sd.distance)/t.tankHeight)*t.capacity FROM SensorDataEntity sd JOIN TankEntity t ON t.tankId = sd.device.tank.tankId WHERE sd.device.tank.tankId = :tankId ORDER BY sd.measurementTime DESC LIMIT 1")
     float findLatestWaterLevelByTankId(@Param("tankId") Long tankId);
 
-    @Query(value = "SELECT ((t.tankHeight - sd.distance) / t.tankHeight)*100 FROM SensorDataEntity sd JOIN TankEntity t ON t.tankId = sd.tank.tankId WHERE sd.tank.tankId = :tankId ORDER BY sd.measurementTime DESC LIMIT 1")
+    @Query(value = "SELECT ((t.tankHeight - sd.distance) / t.tankHeight)*100 FROM SensorDataEntity sd JOIN TankEntity t ON t.tankId = sd.device.tank.tankId WHERE sd.device.tank.tankId = :tankId ORDER BY sd.measurementTime DESC LIMIT 1")
     float findLastFillPercentageByTankId(@Param("tankId")Long tankId);
 
     @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.user.email = :email AND t.tank.isMain= true ORDER BY t.dateMeasurement DESC limit 1")

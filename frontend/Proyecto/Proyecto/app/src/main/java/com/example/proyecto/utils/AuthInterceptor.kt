@@ -30,6 +30,11 @@ class AuthInterceptor(val context: Context,
                 cleanupAuthState(context)
             }
         }
+        if (response.code() == 403) {
+            CoroutineScope(Dispatchers.IO).launch {
+                cleanupAuthState(context)
+            }
+        }
         return response
     }
 

@@ -2,27 +2,16 @@ package com.example.proyecto.ui.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -50,7 +39,6 @@ import androidx.navigation.NavHostController
 import com.example.proyecto.R
 import com.example.proyecto.ui.components.BottomNavigationBar
 import com.example.proyecto.ui.theme.chartColor
-import com.example.proyecto.ui.theme.mainColor
 import com.example.proyecto.ui.viewModels.WaterTankViewModel
 import com.example.proyecto.utils.GlobalEvent
 import com.example.proyecto.utils.GlobalEvent.AuthEvent
@@ -80,24 +68,17 @@ fun CapacityGraphHeader(modifier: Modifier = Modifier) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun EcoWaterScreen(navController: NavHostController,onNotificationsClick: () -> Unit = {}, viewModel: WaterTankViewModel = viewModel()) {
-    val scope = rememberCoroutineScope()
+fun EcoWaterScreen(navController: NavHostController, viewModel: WaterTankViewModel = viewModel()) {
     val context = LocalContext.current
     val levels = viewModel.levelsListState.value
     val isLoading = viewModel.isLoading.value
-
-    LaunchedEffect(Unit) {
-        GlobalEvent.authEvents.collect {
-            if (it is AuthEvent.Logout) navController.navigate("login")
-        }
-        scope.launch {
-            viewModel.loadData(context)
-
-        }
-    }
     LaunchedEffect(Unit) {
         viewModel.loadLevels(context)
     }
+    LaunchedEffect(Unit) {
+        viewModel.loadData(context)
+    }
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController = navController)
@@ -137,11 +118,17 @@ fun EcoWaterScreen(navController: NavHostController,onNotificationsClick: () -> 
                             horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.Top
                         ) {
-                            IconButton(onClick = onNotificationsClick) {
+                            IconButton(
+
+                                onClick = {}
+                            ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_notifications),
                                     contentDescription = "Notificaciones",
-                                    tint = Color.White
+                                    tint = Color.White,
+                                    modifier = Modifier.clickable {
+                                        navController.navigate("notfTank")
+                                    }
                                 )
                             }
                         }
@@ -211,7 +198,6 @@ fun EcoWaterScreen(navController: NavHostController,onNotificationsClick: () -> 
 
 
             item{
-                // Gráfico de capacidad (solo encabezado y espacio para la gráfica)
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

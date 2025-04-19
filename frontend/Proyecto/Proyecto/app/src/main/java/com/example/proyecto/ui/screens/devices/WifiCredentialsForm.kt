@@ -113,7 +113,7 @@ fun WifiCredentialsForm( navController: NavHostController,viewModel: BluetoothVi
                             toastViewModel.showToast("Dispositivo agregado correctamente",
                                 ToastType.SUCCESS)
                         }else{
-                            toastViewModel.showToast("Error al agregar dispositivo",
+                            toastViewModel.showToast("Tanque: ${updatedDevice.tank}",
                                 ToastType.ERROR)
                         }
                     }

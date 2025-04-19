@@ -1,5 +1,6 @@
 package com.example.proyecto.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +49,7 @@ fun TankInfo(viewModel: WaterTankViewModel = viewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
         ) {
         if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth())
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else {
             WaterTankInfo(level)
         }
@@ -57,6 +58,8 @@ fun TankInfo(viewModel: WaterTankViewModel = viewModel()) {
 
 @Composable
 fun WaterTankInfo(level: LevelResponse?) {
+    val consumido= level?.tank?.capacity?.toInt()?.minus(level?.waterLevel?.toInt()!!)
+    Log.d("LEVEL_DATA:","TankDTO en el level: ${level?.tank}")
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,6 +99,32 @@ fun WaterTankInfo(level: LevelResponse?) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+
+            Card(
+                modifier = Modifier
+                    .size(width = 140.dp, height = 60.dp),
+                shape = RoundedCornerShape(20.dp),
+                elevation = CardDefaults.cardElevation(10.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "🟢 Disponible",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF32CD32)
+                    )
+                    Text(
+                        text = "${level?.waterLevel?.toInt() ?: "--"} L",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+
                 Card(
                     modifier = Modifier.size(width = 140.dp, height = 60.dp),
                     shape = RoundedCornerShape(20.dp),
@@ -113,7 +142,7 @@ fun WaterTankInfo(level: LevelResponse?) {
                             color = Color(0xFF1E90FF)
                         )
                         Text(
-                            text = "${level?.waterLevel?.toInt() ?: "--"} L",
+                            text = "${consumido ?: "--"} L",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -123,30 +152,7 @@ fun WaterTankInfo(level: LevelResponse?) {
 
 
 
-                Card(
-                    modifier = Modifier
-                        .size(width = 140.dp, height = 60.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    elevation = CardDefaults.cardElevation(10.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "🟢 Disponible",
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF32CD32)
-                        )
-                        Text(
-                            text = "${level?.waterLevel?.toInt() ?: "--"} L",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
+
 
 
 

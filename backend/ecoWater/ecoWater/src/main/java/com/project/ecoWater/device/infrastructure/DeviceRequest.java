@@ -1,6 +1,8 @@
 package com.project.ecoWater.device.infrastructure;
 
 import com.project.ecoWater.device.domain.DeviceType;
+import com.project.ecoWater.tank.app.TankDTO;
+import com.project.ecoWater.tank.domain.Tank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +20,5 @@ public class DeviceRequest
     DeviceType device_type;
     String device_location;
     String ssid;
+    TankDTO tank;
 }

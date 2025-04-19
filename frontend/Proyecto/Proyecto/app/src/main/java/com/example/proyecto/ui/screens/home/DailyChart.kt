@@ -50,7 +50,6 @@ fun DailyChart(levels: List<Levels>) {
         AndroidView(
             factory = { context ->
                 LineChart(context).apply {
-                    // 1. Configuración base mejorada
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
@@ -112,7 +111,7 @@ fun DailyChart(levels: List<Levels>) {
                         axisMaximum = (maxCapacity+100)
                         granularity = if (maxCapacity > 0) 100f else 1f
                         setGranularityEnabled(true)
-                        gridColor = Color.White.toArgb() // Gris semi-transparente
+                        gridColor = Color.White.toArgb()
                         textColor = Color.White.toArgb()
                         setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
                     }
@@ -121,8 +120,8 @@ fun DailyChart(levels: List<Levels>) {
 
                     // 6. Configuración final
                     data = LineData(dataSet)
-                    animateY(1000, Easing.EaseInOutCubic)
-                    setVisibleXRangeMaximum(6f) // Muestra máximo 6 puntos
+                    animateY(500, Easing.EaseInOutCubic)
+                    setVisibleXRangeMaximum(6f)
                     moveViewToX(entries.lastIndex.toFloat())
                     invalidate()
                 }

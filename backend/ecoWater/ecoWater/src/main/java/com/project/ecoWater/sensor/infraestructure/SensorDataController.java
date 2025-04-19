@@ -23,31 +23,19 @@ public class SensorDataController {
     public ResponseEntity<SensorData> save(@RequestBody SensorData sensorData,
                                            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        try {
-            SensorData result = sensorDataAppService.createSensorData(sensorData, userDetails.getUsername());
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        SensorData result = sensorDataAppService.createSensorData(sensorData, userDetails.getUsername());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getSensorDatas")
     public ResponseEntity<List<SensorData>> getAll() {
-        try {
-            List<SensorData> result = sensorDataAppService.getAllSensorData();
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        List<SensorData> result = sensorDataAppService.getAllSensorData();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getSensorData/{id}")
     public ResponseEntity<SensorData> getById(@PathVariable Long id) {
-        try {
-            SensorData data= sensorDataAppService.getSensorData(id);
-            return ResponseEntity.ok(data);
-        }catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        SensorData data= sensorDataAppService.getSensorData(id);
+        return ResponseEntity.ok(data);
     }
 }

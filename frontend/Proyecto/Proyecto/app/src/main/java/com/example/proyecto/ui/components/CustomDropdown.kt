@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.proyecto.ui.theme.mainColor
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -22,7 +23,8 @@ fun <T> CustomDropdown(
     label: String,
     selectedOption: T?,
     onOptionSelected: (T) -> Unit,
-    optionToText: (T) -> String = { it.toString() } // para mostrar cualquier tipo como texto
+    optionToText: (T) -> String = { it.toString() }, // para mostrar cualquier tipo como texto
+    whiteBg: Boolean?=null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -34,18 +36,19 @@ fun <T> CustomDropdown(
             value = selectedOption?.let { optionToText(it) } ?: "",
             onValueChange = {},
             readOnly = true,
-            label = { Text(label, color = Color.White) },
+            label = { Text(label, color = if(whiteBg==true) mainColor else Color.White) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                textColor = Color.White,
-                placeholderColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White,
-                cursorColor = Color.White
+                textColor = if(whiteBg==true) mainColor else Color.White,
+                placeholderColor = if(whiteBg==true) mainColor else Color.White,
+                focusedLabelColor = if(whiteBg==true) mainColor else Color.White,
+                unfocusedLabelColor = if(whiteBg==true) mainColor else Color.White,
+                focusedBorderColor = if(whiteBg==true) mainColor else Color.White,
+                unfocusedBorderColor = if(whiteBg==true) mainColor else Color.White,
+                cursorColor = if(whiteBg==true) mainColor else Color.White,
+                leadingIconColor = if(whiteBg==true) mainColor else Color.White
             ),
             modifier = Modifier.fillMaxWidth()
         )

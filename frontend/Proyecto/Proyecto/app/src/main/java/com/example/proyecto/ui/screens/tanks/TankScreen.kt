@@ -34,9 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.proyecto.R
+import com.example.proyecto.ui.components.ExpandableInfoCard
 import com.example.proyecto.ui.viewModels.TankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,7 +110,12 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
         }else{
             LazyColumn(modifier = Modifier.weight(1f)) {
                 itemsIndexed(tanks) { index, tank ->
-                    TankItem(tank = tank)
+                    ExpandableInfoCard(
+                        name = tank.tankName?:"no name",
+                        imagePainter = painterResource(id = R.drawable.deposito_de_agua),
+                        capacity=tank.capacity,
+                        tank=tank
+                    )
                 }
             }
         }

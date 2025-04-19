@@ -3,6 +3,7 @@ package com.example.login.objects
 import android.content.Context
 import com.example.proyecto.data.interfaces.devices.DeviceApiRepController
 import com.example.proyecto.data.interfaces.levels.WaterLevelRepController
+import com.example.proyecto.data.interfaces.sensorDatas.SensorDataRepController
 import com.example.proyecto.data.interfaces.users.AuthRepController
 import com.example.proyecto.data.interfaces.tanks.TankRepController
 import com.example.proyecto.data.interfaces.users.UserRepController
@@ -51,5 +52,8 @@ object RetrofitInstance {
     }
     fun getDevice(context: Context): DeviceApiRepController{
         return provideRetrofit(context).create(DeviceApiRepController::class.java)
+    }
+    fun getSensorData(context: Context): SensorDataRepController{
+        return provideRetrofit(context).create(SensorDataRepController::class.java)
     }
 }

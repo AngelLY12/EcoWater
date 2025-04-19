@@ -25,7 +25,6 @@ class AuthViewModel : ViewModel() {
         }
     }
     fun logout(context: Context) {
-        // Eliminar el token
         saveToken(context, null)
         _isLoggedIn.value = false
 

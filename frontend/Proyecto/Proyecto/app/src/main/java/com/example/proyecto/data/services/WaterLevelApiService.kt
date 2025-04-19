@@ -12,6 +12,36 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object WaterLevelApiService: WaterLevelApiRep {
+    override fun addLevel(
+        level: Levels,
+        context: Context,
+        callback: (Levels?) -> Unit
+    ) {
+        RetrofitInstance.getWaterLevel(context).addLevel(level).enqueue(object : Callback<Levels>{
+            override fun onResponse(
+                call: Call<Levels?>,
+                response: Response<Levels?>
+            ) {
+                if(response.isSuccessful){
+                    callback(response.body())
+                    Log.d("WATER_LEVEL_RESPONSE:","${response.body()}")
+
+                }else{
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(
+                call: Call<Levels?>,
+                t: Throwable
+            ) {
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e("API_ERROR", "Error de conexión", t)
+            }
+
+        })
+    }
 
 
     override fun getTop(
@@ -29,7 +59,7 @@ object WaterLevelApiService: WaterLevelApiRep {
 
                 } else {
                     callback(null)
-                    Toast.makeText(context, "Error al obtener los niveles", Toast.LENGTH_SHORT).show()                }
+                }
             }
 
             override fun onFailure(
@@ -57,7 +87,6 @@ object WaterLevelApiService: WaterLevelApiRep {
                     Log.d("LEVELS_API", "${response.body()}")
                 }else{
                     callback(null)
-                    Toast.makeText(context, "Error al obtener los niveles", Toast.LENGTH_SHORT).show()
 
             }
             }

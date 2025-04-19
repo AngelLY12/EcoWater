@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -74,15 +75,15 @@ fun EditFieldModal(
                         containerColor = mainColor,
                         contentColor = Color.White
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(4.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Guardar")
                 }
             },
             dismissButton = {
-                TextButton(
+                OutlinedButton(
                     onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth().padding(4.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Cancelar", color = mainColor)
                 }
@@ -92,3 +93,66 @@ fun EditFieldModal(
         )
     }
 }
+
+@Composable
+fun <T> EditDropdownModal(
+    showModal: Boolean,
+    title: String,
+    options: List<T>,
+    selectedOption: T,
+    optionToText: (T) -> String,
+    onDismiss: () -> Unit,
+    onConfirm: (T) -> Unit
+) {
+    var selected by remember { mutableStateOf(selectedOption) }
+
+    if (showModal) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = {
+                Text(
+                    text = title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = mainColor
+                )
+            },
+            text = {
+                CustomDropdown(
+                    options = options,
+                    selectedOption = selected,
+                    onOptionSelected = { selected = it },
+                    label = "Selecciona un tipo",
+                    optionToText = optionToText,
+                    whiteBg = true
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onConfirm(selected)
+                        onDismiss()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = mainColor,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Guardar")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Cancelar", color =mainColor)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
+}
+

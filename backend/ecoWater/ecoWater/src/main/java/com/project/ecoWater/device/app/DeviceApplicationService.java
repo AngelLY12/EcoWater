@@ -3,6 +3,10 @@ package com.project.ecoWater.device.app;
 import com.project.ecoWater.device.domain.Device;
 import com.project.ecoWater.device.domain.DeviceRepository;
 import com.project.ecoWater.device.infrastructure.DeviceRequest;
+import com.project.ecoWater.tank.app.TankDTO;
+import com.project.ecoWater.tank.domain.Tank;
+import com.project.ecoWater.tank.domain.TankRepository;
+import com.project.ecoWater.tank.infrastructure.TankMapper;
 import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
@@ -24,11 +28,12 @@ import java.util.UUID;
 public class DeviceApplicationService {
     private final DeviceRepository deviceRepository;
     private final UserRepository userRepository;
-    public Optional<Device> getDevice(String mac) {
-        if(!deviceRepository.existsDeviceById(mac)) {
+    private final TankRepository tankRepository;
+    public Optional<Device> getDevice(String deviceId) {
+        if(!deviceRepository.existsDeviceById(deviceId)) {
             throw new IllegalArgumentException("Device not found");
         }
-        return deviceRepository.getDevice(mac);
+        return deviceRepository.getDevice(deviceId);
     }
 
     @Transactional
@@ -37,9 +42,12 @@ public class DeviceApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + email));
         UserDTO userDevice= UserMapper.userToUserDTO(user);
         System.out.printf("USUARIO ENCONTRADO: %s\n", user);
-
+        Tank tank = tankRepository.findById(deviceRequest.getTank().getTankId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + email));
+        TankDTO tankDevice = TankMapper.tankToTankDTO(tank);
         Device newDevice = Device.builder()
                 .deviceId(deviceRequest.getDevice_id())
+                .tank(tankDevice)
                 .user(userDevice)
                 .deviceType(deviceRequest.getDevice_type())
                 .deviceName(deviceRequest.getDevice_name())
@@ -73,17 +81,27 @@ public class DeviceApplicationService {
         }
         return Optional.empty();
     }
-    public void deleteDevice(String mac) {
-        if(!deviceRepository.existsDeviceById(mac)) {
+    @Transactional
+    public void deleteDevice(String deviceId, String email) {
+        if(!deviceRepository.existsDeviceById(deviceId)) {
             throw new IllegalArgumentException("Device not found");
         }
-        deviceRepository.deleteDevice(mac);
+        deviceRepository.deleteDevice(deviceId, email);
     }
-    public List<Device> getAllDevices() {
-        return deviceRepository.getAllDevices();
+    public List<Device> getAllDevices(String email) {
+        List<Device> devices = deviceRepository.getAllDevices(email);
+
+        if (devices.isEmpty()) {
+            throw new IllegalArgumentException("No devices found for this user.");
+        }
+
+        return devices;
     }
-    public boolean existDeviceById(String mac) {
-        return deviceRepository.existsDeviceById(mac);
+    public boolean existDeviceById(String deviceId) {
+        if (!deviceRepository.existsDeviceById(deviceId)) {
+            throw new IllegalArgumentException("Device with ID " + deviceId + " does not exist.");
+        }
+    return true;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.project.ecoWater.tank.infrastructure;
 
+import com.project.ecoWater.device.infrastructure.DeviceEntity;
+import com.project.ecoWater.filling.infraestructure.TankFillingEntity;
 import com.project.ecoWater.level.infraestrucutre.WaterTankLevelEntity;
 import com.project.ecoWater.sensor.domain.SensorData;
 import com.project.ecoWater.sensor.infraestructure.SensorDataEntity;
@@ -52,7 +54,13 @@ public class TankEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "tank")
-    private List<WaterTankLevelEntity> tanks;
+    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WaterTankLevelEntity> tanksLevels;
+
+    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TankFillingEntity> tankFillings;
+
+    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeviceEntity> devices;
 
 }

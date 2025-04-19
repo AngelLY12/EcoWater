@@ -8,9 +8,9 @@ public interface TankRepository {
     Optional<Tank> findById(Long tankId);
     List<Tank> findAll(String email);
     Tank save(Tank tank);
-    void delete(Tank tank);
+    void delete(Long tankId, String email);
     boolean existsById(Long tankId);
-    Optional<Tank> updateTank(Tank tank, String email);
+    Optional<Tank> updateTank(Tank tank);
 
     Tank findByTankFillingId(Long fillingId);
 

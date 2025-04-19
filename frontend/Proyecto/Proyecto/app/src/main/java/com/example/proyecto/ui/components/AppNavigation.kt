@@ -1,6 +1,7 @@
 package com.example.login
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.proyecto.ui.components.BottomNavItem
+import com.example.proyecto.ui.components.NotificationScreen
+import com.example.proyecto.ui.components.NotificationScreenPreview
 import com.example.proyecto.ui.screens.home.EcoWaterScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceListScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceSetupScreen
@@ -27,10 +30,16 @@ fun AppNavigation( navController: NavHostController,
                    toastViewModel: ToastViewModel= viewModel()
 
 ) {
-    val navController = rememberNavController()
-    val context= LocalContext.current
     val tokenState = authViewModel.isLoggedIn.collectAsState().value
     val bluetoothViewModel: BluetoothViewModel = viewModel()
+
+    LaunchedEffect(tokenState) {
+        if (!tokenState) {
+            navController.navigate("login") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     NavHost(navController = navController,
         startDestination =
@@ -46,8 +55,8 @@ fun AppNavigation( navController: NavHostController,
             navController.navigate("setupDevice")
         }, toastViewModel) }
         composable (BottomNavItem.Devices.route){ LinkedDeviceScreenPreview(navController) }
-        composable (BottomNavItem.Notifications.route){
-            com.example.proyecto.ui.components.DispositivosScreenPreview(
+        composable ("notfTank"){
+            NotificationScreenPreview (
                 navController
             )
         }

@@ -37,49 +37,32 @@ import com.example.proyecto.ui.components.CustomToast
 import com.example.proyecto.ui.viewModels.AuthViewModel
 import com.example.proyecto.ui.viewModels.ToastViewModel
 import com.example.proyecto.utils.GlobalEvent
+import com.example.proyecto.utils.LogoutHandler
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val authViewModel: AuthViewModel = viewModel()
             val snackbarHostState = remember { SnackbarHostState() }
-            val coroutineScope = rememberCoroutineScope()
             val toastViewModel: ToastViewModel = viewModel()
-            val context= LocalContext.current
-
+            val context=LocalContext.current
 
             LaunchedEffect(Unit) {
                 authViewModel.updateLoginState(context)
             }
 
-            // Observador de logout
-            LaunchedEffect(Unit) {
-                GlobalEvent.authEvents.collect { event ->
-                    when (event) {
-                        is GlobalEvent.AuthEvent.Logout -> {
-                            // Mostrar Snackbar
-                            coroutineScope.launch {
-                                snackbarHostState.showSnackbar("Sesión expirada. Por favor, inicia sesión de nuevo.")
-                            }
+            LogoutHandler(navController, snackbarHostState)
 
-                            // Redirigir al login
-                            navController.navigate("login") {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
 
-                            }
-                        }
-                    }
-                }
-            }
 
             Box(modifier = Modifier.fillMaxSize()
 
@@ -98,5 +81,9 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        authViewModel.updateLoginState(this)
     }
 }

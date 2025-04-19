@@ -24,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -70,6 +71,8 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier
@@ -79,7 +82,12 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = Color.Blue
+            )
+        }
         Image(
             painter = painterResource(id = R.drawable.title),
             contentDescription = "EcoWater Logo",
@@ -113,6 +121,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                     onValueChange = { email = it },
                     label = { Text("Correo electrónico") },
                     singleLine = true,
+                    enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -124,13 +133,16 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                     onValueChange = { password = it },
                     label = { Text("Contraseña") },
                     singleLine = true,
+                    enabled = !isLoading,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        IconButton(onClick = { passwordVisible = !passwordVisible },
+                            enabled = !isLoading,
+                        ) {
                             Icon(
                                 imageVector = if (passwordVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                                 contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
@@ -152,10 +164,14 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
+
                 Button(
                     onClick = {
+                        isLoading = true
                         val authRequest = AuthRequest(email = email, password = password)
                         AuthApiService.authUser(authRequest, context) { authResponse ->
+                            isLoading = false
                             if (authResponse != null) {
                                 Log.d("AUTH", "Token guardado correctamente")
                                 toastViewModel.showToast("Inicio de sesión exitoso, bienvenido", ToastType.SUCCESS)
@@ -166,6 +182,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                             }
                         }
                     },
+                    enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Blue,
                         contentColor = Color.White
@@ -181,6 +198,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                 Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedButton(
+                    enabled = !isLoading,
                     onClick = { navController.navigate("register") },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = mainColor),
                     shape = RoundedCornerShape(20.dp),
@@ -188,10 +206,12 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(38.dp)
+
                 ) {
                     Text("Registrarse")
                 }
             }
         }
+
     }
 }

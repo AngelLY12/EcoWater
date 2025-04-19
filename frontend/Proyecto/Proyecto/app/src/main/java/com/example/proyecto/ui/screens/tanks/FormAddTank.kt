@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.data.services.TankApiService
 import com.example.proyecto.model.models.Tank
@@ -42,7 +43,7 @@ import com.example.proyecto.ui.components.ToastType
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel){
+fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel= viewModel()){
     var tankName by remember { mutableStateOf("") }
     var capacity by remember { mutableStateOf("") }
     var height by remember { mutableStateOf("") }

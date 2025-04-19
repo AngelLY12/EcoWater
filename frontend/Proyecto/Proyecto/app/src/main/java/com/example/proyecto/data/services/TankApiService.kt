@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.tanks.TankApiRep
 import com.example.proyecto.model.models.Tank
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,24 +62,52 @@ object TankApiService: TankApiRep {
 
     override fun updateTank(
         tank: Tank,
-        context: Context) {
+        context: Context,
+        callback: (Tank?)-> Unit
+    ) {
         RetrofitInstance.getTankApi(context).updateTank(tank).enqueue(object : Callback<Tank>{
             override fun onResponse(
                 call: Call<Tank?>,
                 response: Response<Tank?>
             ) {
                 if (response.isSuccessful) {
-                    Toast.makeText(context, "Campo actualizado", Toast.LENGTH_SHORT).show()
+                    callback(response.body())
                 } else {
-                    Toast.makeText(context, "Error al actualizar campo", Toast.LENGTH_SHORT).show()
+                    callback(null)
                 }            }
 
             override fun onFailure(
                 call: Call<Tank?>,
                 t: Throwable
             ) {
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
+
+        })
+    }
+
+    override fun deleteTank(
+        tankId: Long,
+        context: Context,
+        callback: (String?) -> Unit
+    ) {
+        RetrofitInstance.getTankApi(context).deleteTank(tankId).enqueue(object : Callback<ResponseBody>{
+            override fun onResponse(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                if(response.isSuccessful){
+                    callback("Tanque eliminado correctamente")
+                }else{
+                    callback("Failed")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
+                Log.e("API_ERROR", "Error de conexión", t)                      }
 
         })
     }

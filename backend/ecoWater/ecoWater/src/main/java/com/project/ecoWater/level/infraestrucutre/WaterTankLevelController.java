@@ -26,35 +26,21 @@ public class WaterTankLevelController {
     public ResponseEntity<WaterTankLevel> save(@RequestBody WaterTankLevel waterTankLevel,
                                                @AuthenticationPrincipal UserDetails userDetails
     ) {
-      try {
-          WaterTankLevel result = waterTankLevelAppService.save(waterTankLevel, userDetails.getUsername());
-          return ResponseEntity.ok(result);
-      } catch (RuntimeException e) {
-          throw new RuntimeException(e);
-          //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-
-      }
+        WaterTankLevel result = waterTankLevelAppService.save(waterTankLevel, userDetails.getUsername());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getLevels")
     public ResponseEntity<List<WaterTankLevel>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            List<WaterTankLevel> result = waterTankLevelAppService.findAll(userDetails.getUsername());
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<WaterTankLevel> result = waterTankLevelAppService.findAll(userDetails.getUsername());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getLevel")
     public ResponseEntity<WaterTankLevel> getByEmail(@AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            Optional<WaterTankLevel> level= waterTankLevelAppService.findByEmail(userDetails.getUsername());
-            return level.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.noContent().build());
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Optional<WaterTankLevel> level= waterTankLevelAppService.findByEmail(userDetails.getUsername());
+        return level.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
 }

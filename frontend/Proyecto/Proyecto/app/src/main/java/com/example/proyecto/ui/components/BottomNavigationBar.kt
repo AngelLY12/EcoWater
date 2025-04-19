@@ -4,9 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.sharp.Home
+import androidx.compose.material.icons.sharp.Notifications
+import androidx.compose.material.icons.sharp.Person
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,14 +64,15 @@ fun BottomNavigationBar(navController: NavController) {
                             painter = painterResource(id = item.icon),
                             modifier = Modifier.size(18.dp),
                             contentDescription = item.title,
-                            tint = Color.White
+                            tint = if (currentRoute == item.route) Color.White else Color.Gray
                         )
+
                     },
                     label = {
                         Text(
                             text = item.title,
                             fontSize = 12.sp
-                            ,color=Color.White
+                            ,color=if (currentRoute == item.route) Color.White else Color.LightGray
                         )
                     },
                     selected = currentRoute == item.route,
@@ -79,7 +85,7 @@ fun BottomNavigationBar(navController: NavController) {
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color.White,
                         selectedTextColor = Color.White,
-                        unselectedIconColor = Color.LightGray,
+                        unselectedIconColor = Color.Gray,
                         unselectedTextColor = Color.LightGray,
                         indicatorColor = Color(0xFF083257)
 
@@ -93,10 +99,10 @@ fun BottomNavigationBar(navController: NavController) {
 sealed class BottomNavItem(
     val route: String,
     val title: String,
-    val icon: Int
+    val icon: Int,
 ) {
     object Home : BottomNavItem("home", "Inicio", R.drawable.ic_home)
-    object Devices : BottomNavItem("devices", "Dispositivos", R.drawable.ic_devices)
-    object Notifications : BottomNavItem("notifications", "Alertas", R.drawable.ic_notifications)
-    object Profile : BottomNavItem("profile", "Perfil", R.drawable.ic_profile)
+    object Devices : BottomNavItem("devices", "Dispositivos", R.drawable.devices)
+    object Notifications : BottomNavItem("notifications", "Alertas", R.drawable.notificaciones)
+    object Profile : BottomNavItem("profile", "Perfil", R.drawable.perfil)
 }

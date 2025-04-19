@@ -12,7 +12,6 @@ public class SensorDataMapper {
                 .device(DeviceMapper.deviceEntityToDeviceDTO(sensorDataEntity.getDevice()))
                 .distance(sensorDataEntity.getDistance())
                 .measurementTime(sensorDataEntity.getMeasurementTime())
-                .tank(TankMapper.tankEntityToTankDTO(sensorDataEntity.getTank()))
                 .build();
     }
 
@@ -22,7 +21,6 @@ public class SensorDataMapper {
                 .device(DeviceMapper.deviceDTOToDeviceEntity(sensorData.getDevice()))
                 .distance(sensorData.getDistance())
                 .measurementTime(sensorData.getMeasurementTime())
-                .tank(TankMapper.tankDTOToTankEntity(sensorData.getTank()))
                 .build();
     }
 

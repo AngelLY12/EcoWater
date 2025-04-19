@@ -35,6 +35,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -69,6 +70,7 @@ import com.example.proyecto.ui.components.ToastType
 import com.example.proyecto.ui.theme.mainColor
 import com.example.proyecto.ui.viewModels.ToastViewModel
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -82,7 +84,6 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var passworConfirmVisible by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("createUser", Context.MODE_PRIVATE)
 
@@ -94,6 +95,7 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Image(
             painter = painterResource(id = R.drawable.title),
             contentDescription = "EcoWater Logo",
@@ -147,7 +149,8 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             .padding(vertical = 8.dp),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            IconButton(onClick = { passwordVisible = !passwordVisible },
+                            ) {
                                 Icon(
                                     imageVector = if (passwordVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                                     contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
@@ -167,7 +170,8 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             .padding(vertical = 8.dp),
                         visualTransformation = if (passworConfirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            IconButton(onClick = { passworConfirmVisible = !passworConfirmVisible }) {
+                            IconButton(onClick = { passworConfirmVisible = !passworConfirmVisible },
+                            ) {
                                 Icon(
                                     imageVector = if (passworConfirmVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                                     contentDescription = if (passworConfirmVisible) "Ocultar contraseña" else "Mostrar contraseña"
@@ -178,6 +182,8 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
+
+
 
                     Button(
                         onClick = {
@@ -234,6 +240,7 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
         }
 
 
+
     }
 }
 
@@ -248,7 +255,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
     var userName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
-
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val gson = Gson()
     val sharedPreferences = context.getSharedPreferences("createUser", Context.MODE_PRIVATE)
@@ -263,6 +270,12 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = Color.Blue
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -316,6 +329,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
 
                     OutlinedTextField(
                         value = userName,
+                        enabled = !isLoading,
                         onValueChange = { userName = it },
                         label = { Text("Nombre") },
                         singleLine = true,
@@ -327,6 +341,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
 
                     OutlinedTextField(
                         value = lastName,
+                        enabled = !isLoading,
                         onValueChange = { lastName = it },
                         label = { Text("Apellidos") },
                         singleLine = true,
@@ -338,6 +353,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
 
                     OutlinedTextField(
                         value = age,
+                        enabled = !isLoading,
                         onValueChange = { age = it },
                         label = { Text("Edad") },
                         singleLine = true,
@@ -349,8 +365,10 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
 
                     Spacer(modifier = Modifier.height(12.dp))
 
+
                     Button(
                         onClick = {
+                            isLoading = true
                             val userAge = age.toIntOrNull()
                             if (userName.isBlank() || lastName.isBlank() || age.isBlank()) {
                                 toastViewModel.showToast("Por favor, completa todos los campos.", ToastType.ERROR)
@@ -364,6 +382,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                                 )
                                 if (user != null) {
                                     UserApiService.create(user, context) { response ->
+                                        isLoading = false
                                         if (response != null) {
                                             toastViewModel.showToast("Usuario creado exitosamente", ToastType.SUCCESS)
                                             navController.navigate("login")
@@ -376,6 +395,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                                 }
                             }
                         },
+                        enabled = !isLoading,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Blue,
                             contentColor = Color.White
@@ -391,6 +411,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
             }
 
         }
+
     }
 }
 

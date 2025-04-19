@@ -29,11 +29,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.ui.components.BottomNavigationBar
+import com.example.proyecto.ui.components.ExpandableInfoCard
 import com.example.proyecto.ui.screens.tanks.TankItem
 import com.example.proyecto.ui.viewModels.DeviceViewModel
+import com.example.proyecto.R
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -92,7 +96,12 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
             }else{
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     itemsIndexed(devices) { index, device ->
-                        DeviceItem(device = device)
+                        ExpandableInfoCard(
+                            name = device.deviceName!!,
+                            imagePainter = painterResource(id = R.drawable.device),
+                            isConnected = device.connected,
+                            device = device
+                        )
                     }
                 }
             }

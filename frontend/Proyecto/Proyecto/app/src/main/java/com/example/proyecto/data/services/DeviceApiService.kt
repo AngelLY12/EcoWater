@@ -7,6 +7,8 @@ import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.devices.DeviceApiRep
 import com.example.proyecto.model.models.Device
 import com.example.proyecto.model.models.DeviceRequest
+import com.example.proyecto.model.models.Tank
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,7 +60,7 @@ object DeviceApiService: DeviceApiRep {
                     callback(deviceList)
                 } else {
                     callback(null)
-                    Toast.makeText(context, "Error al obtener los dispositivos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "No se encontraron dispositivos", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -72,4 +74,56 @@ object DeviceApiService: DeviceApiRep {
 
         })
     }
+
+    override fun updateDevice(
+        device: Device,
+        context: Context,
+        callback: (Device?) -> Unit
+    ) {
+        RetrofitInstance.getDevice(context).updateDevice(device).enqueue(object : Callback<Device>{
+            override fun onResponse(
+                call: Call<Device?>,
+                response: Response<Device?>
+            ) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(
+                call: Call<Device?>,
+                t: Throwable
+            ) {
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
+                Log.e("API_ERROR", "Error de conexión", t)            }
+
+        })
+    }
+
+    override fun deleteDevice(
+        deviceId: String,
+        context: Context,
+        callback: (String?) -> Unit
+    ) {
+        RetrofitInstance.getDevice(context).deleteDevice(deviceId).enqueue(object : Callback<ResponseBody>{
+            override fun onResponse(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                if(response.isSuccessful){
+                    callback("Dipositivo eliminado correctamente")
+                }else{
+                    callback("Failed")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
+                Log.e("API_ERROR", "Error de conexión", t)                      }
+
+        })    }
 }

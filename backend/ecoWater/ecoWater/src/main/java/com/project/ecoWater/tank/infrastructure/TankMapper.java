@@ -37,15 +37,29 @@ public class TankMapper {
     public static TankDTO tankToTankDTO(Tank tank) {
         return TankDTO.builder()
                 .tankId(tank.getTankId())
+                .tankName(tank.getTankName())
                 .user(tank.getUser())
                 .capacity(tank.getCapacity())
                 .tankHeight(tank.getTankHeight())
+                .isMain(tank.getIsMain())
+                .build();
+    }
+
+    public static Tank tankDTOToTank(TankDTO tank) {
+        return Tank.builder()
+                .tankId(tank.getTankId())
+                .tankName(tank.getTankName())
+                .user(tank.getUser())
+                .capacity(tank.getCapacity())
+                .tankHeight(tank.getTankHeight())
+                .isMain(tank.getIsMain())
                 .build();
     }
 
     public static TankEntity tankDTOToTankEntity(TankDTO tankDTO) {
         return TankEntity.builder()
                 .tankId(tankDTO.getTankId())
+                .tankName(tankDTO.getTankName())
                 .user(UserMapper.userDTOToUserEntity(tankDTO.getUser()))
                 .capacity(tankDTO.getCapacity())
                 .tankHeight(tankDTO.getTankHeight())

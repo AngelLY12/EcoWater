@@ -1,8 +1,8 @@
 package com.example.proyecto.data.interfaces.levels
 
 import android.content.Context
-import com.example.proyecto.model.models.LevelResponse
-import com.example.proyecto.model.models.Levels
+import com.example.proyecto.model.level.LevelResponse
+import com.example.proyecto.model.level.Levels
 
 interface WaterLevelApiRep {
     fun addLevel(level: Levels,context: Context, callback: (Levels?) -> Unit )

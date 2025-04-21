@@ -5,8 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.levels.WaterLevelApiRep
-import com.example.proyecto.model.models.LevelResponse
-import com.example.proyecto.model.models.Levels
+import com.example.proyecto.model.level.LevelResponse
+import com.example.proyecto.model.level.Levels
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

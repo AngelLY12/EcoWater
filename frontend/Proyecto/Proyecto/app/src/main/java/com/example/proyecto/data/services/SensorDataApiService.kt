@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.sensorDatas.SensorDataApiRep
-import com.example.proyecto.model.models.SensorDataRequest
+import com.example.proyecto.model.sensor.SensorDataRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

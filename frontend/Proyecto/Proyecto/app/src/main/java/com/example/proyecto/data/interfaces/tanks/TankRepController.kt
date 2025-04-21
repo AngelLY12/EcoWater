@@ -1,6 +1,6 @@
 package com.example.proyecto.data.interfaces.tanks
 
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.tank.Tank
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body

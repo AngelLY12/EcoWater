@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -32,8 +34,9 @@ public class DeviceEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "tank_id")
+    @ManyToOne(cascade = CascadeType.REFRESH, optional = true)
+    @JoinColumn(name = "tank_id", nullable = true, foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private TankEntity tank;
 
     @Column(name = "device_name")
@@ -56,10 +59,10 @@ public class DeviceEntity {
     private Timestamp lastSeen;
     private String ssid;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "device")
     private List<SensorDataEntity> deviceSensors;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "device")
     private List<WaterConsumptionEntity> deviceConsumptions;
 
 }

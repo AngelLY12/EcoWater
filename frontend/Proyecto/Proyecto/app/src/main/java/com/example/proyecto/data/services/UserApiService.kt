@@ -3,17 +3,12 @@ package com.example.login.services
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.example.login.models.AuthRequest
-import com.example.login.models.AuthResponse
 import com.example.login.models.User
 import com.example.login.objects.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Callback
-import androidx.core.content.edit
 import com.example.proyecto.data.interfaces.users.UserApiRep
-import com.example.proyecto.data.services.AuthApiService.saveToken
-import java.util.UUID
 
 
 object UserApiService : UserApiRep {

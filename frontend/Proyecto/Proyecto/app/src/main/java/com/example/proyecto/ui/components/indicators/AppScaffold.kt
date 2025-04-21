@@ -1,4 +1,4 @@
-package com.example.proyecto.ui.components
+package com.example.proyecto.ui.components.indicators
 
 import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold

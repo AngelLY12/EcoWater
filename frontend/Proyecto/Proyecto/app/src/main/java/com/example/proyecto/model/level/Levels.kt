@@ -1,5 +1,6 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.level
 
+import com.example.proyecto.model.tank.TankDTO
 import java.sql.Timestamp
 
 data class Levels(

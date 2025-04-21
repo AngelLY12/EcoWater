@@ -4,6 +4,8 @@ import com.project.ecoWater.tank.app.TankDTO;
 import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -27,7 +29,8 @@ public class TankFillingEntity {
     private Timestamp startedDate;
     private Timestamp finishedDate;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "tank_id")
+    @ManyToOne(cascade = CascadeType.REFRESH, optional = true)
+    @JoinColumn(name = "tank_id",  nullable = true, foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private TankEntity tank;
 }

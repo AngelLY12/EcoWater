@@ -3,17 +3,14 @@ package com.example.proyecto.data.services
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
-import com.example.login.models.AuthRequest
-import com.example.login.models.AuthResponse
+import com.example.proyecto.model.auth.AuthRequest
+import com.example.proyecto.model.auth.AuthResponse
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.users.ApiAuthService
-import com.example.proyecto.ui.components.CustomToast
-import com.example.proyecto.ui.components.ToastType
 import com.example.proyecto.utils.JwtUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
 
 object AuthApiService: ApiAuthService {
     override fun authUser(authRequest: AuthRequest, context: Context,callback: (AuthResponse?) -> Unit) {

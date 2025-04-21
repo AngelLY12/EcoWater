@@ -23,7 +23,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -37,12 +36,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.R
-import com.example.proyecto.ui.components.BottomNavigationBar
+import com.example.proyecto.ui.components.layout.BottomNavigationBar
 import com.example.proyecto.ui.theme.chartColor
 import com.example.proyecto.ui.viewModels.WaterTankViewModel
-import com.example.proyecto.utils.GlobalEvent
-import com.example.proyecto.utils.GlobalEvent.AuthEvent
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale

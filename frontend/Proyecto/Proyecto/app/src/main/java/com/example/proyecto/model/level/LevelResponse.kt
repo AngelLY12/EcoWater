@@ -1,6 +1,6 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.level
 
-import java.sql.Timestamp
+import com.example.proyecto.model.tank.TankDTO
 
 data class LevelResponse(
     val tank: TankDTO,

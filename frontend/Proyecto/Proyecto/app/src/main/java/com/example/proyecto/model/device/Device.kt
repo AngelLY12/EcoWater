@@ -1,6 +1,6 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.device
 
-import java.security.Timestamp
+import com.example.proyecto.model.user.UserDTO
 
 data class Device(
     val deviceId: String?=null,

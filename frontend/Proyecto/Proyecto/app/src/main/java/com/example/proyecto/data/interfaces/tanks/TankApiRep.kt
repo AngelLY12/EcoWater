@@ -1,7 +1,7 @@
 package com.example.proyecto.data.interfaces.tanks
 
 import android.content.Context
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.tank.Tank
 
 interface TankApiRep{
     fun create(tank: Tank , context: Context, callback: (Tank?)-> Unit)

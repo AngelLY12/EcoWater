@@ -1,4 +1,4 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.device
 
 enum class DeviceType {
         SENSOR_PROXIMIDAD, CAUDALIMETRO

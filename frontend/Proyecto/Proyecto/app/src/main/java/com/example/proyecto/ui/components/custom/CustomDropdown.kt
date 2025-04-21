@@ -1,4 +1,4 @@
-package com.example.proyecto.ui.components
+package com.example.proyecto.ui.components.custom
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi

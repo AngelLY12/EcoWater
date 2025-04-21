@@ -1,17 +1,17 @@
-package com.example.login
+package com.example.proyecto.ui.components.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.proyecto.ui.components.BottomNavItem
-import com.example.proyecto.ui.components.NotificationScreen
-import com.example.proyecto.ui.components.NotificationScreenPreview
+import com.example.login.DataUser
+import com.example.login.LoginScreen
+import com.example.login.RegisterScreen
+import com.example.proyecto.ui.components.layout.BottomNavItem
+import com.example.proyecto.ui.components.layout.NotificationScreenPreview
 import com.example.proyecto.ui.screens.home.EcoWaterScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceListScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceSetupScreen
@@ -45,9 +45,9 @@ fun AppNavigation( navController: NavHostController,
         startDestination =
         if (tokenState)
          BottomNavItem.Home.route else "login" ) {
-        composable("register") { RegisterScreen(navController,toastViewModel) }
-        composable("login") { LoginScreen(navController,toastViewModel) }
-        composable("dataUser") {DataUser(navController,toastViewModel) }
+        composable("register") { RegisterScreen(navController, toastViewModel) }
+        composable("login") { LoginScreen(navController, toastViewModel) }
+        composable("dataUser") { DataUser(navController, toastViewModel) }
         composable(BottomNavItem.Home.route) { EcoWaterScreenPreview(navController) }
         composable("addTank") { TankScreenPreview(navController) }
         composable ("¿?"){ DeviceListScreenPreview(navController) }

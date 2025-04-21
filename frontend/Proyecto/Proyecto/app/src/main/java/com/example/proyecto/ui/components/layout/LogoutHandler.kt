@@ -1,4 +1,4 @@
-package com.example.proyecto.utils
+package com.example.proyecto.ui.components.layout
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.SnackbarHostState
@@ -13,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.proyecto.utils.GlobalEvent
 import kotlinx.coroutines.launch
 
 @Composable

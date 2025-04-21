@@ -9,13 +9,8 @@ import com.example.proyecto.data.services.TankApiService.getAll
 import com.example.proyecto.data.services.TankApiService.deleteTank
 import com.example.proyecto.data.services.TankApiService.updateTank
 
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.tank.Tank
 import androidx.compose.runtime.State
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.proyecto.ui.components.ToastType
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 
 class TankViewModel () : ViewModel() {

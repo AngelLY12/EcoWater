@@ -1,4 +1,4 @@
-package com.example.proyecto.ui.components
+package com.example.proyecto.ui.components.custom
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -17,14 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.proyecto.model.models.Device
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.device.Device
+import com.example.proyecto.model.tank.Tank
 import com.example.proyecto.ui.screens.devices.DeviceItem
 import com.example.proyecto.ui.screens.tanks.TankItem
-import com.example.proyecto.ui.viewModels.DeviceViewModel
-import com.example.proyecto.ui.viewModels.TankViewModel
-import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
 fun ExpandableInfoCard(

@@ -1,12 +1,11 @@
 package com.example.proyecto.data.interfaces.levels
 
 import retrofit2.Call
-import com.example.proyecto.model.models.LevelResponse
-import com.example.proyecto.model.models.Levels
+import com.example.proyecto.model.level.LevelResponse
+import com.example.proyecto.model.level.Levels
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface WaterLevelRepController {
 

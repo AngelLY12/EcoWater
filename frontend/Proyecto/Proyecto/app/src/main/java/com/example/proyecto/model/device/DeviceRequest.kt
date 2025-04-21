@@ -1,4 +1,6 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.device
+
+import com.example.proyecto.model.tank.Tank
 
 data class DeviceRequest(
     val device_id: String?=null,

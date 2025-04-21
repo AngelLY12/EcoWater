@@ -1,4 +1,4 @@
-package com.example.proyecto.ui.components
+package com.example.proyecto.ui.components.indicators
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

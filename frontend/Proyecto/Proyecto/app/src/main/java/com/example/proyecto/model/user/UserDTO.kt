@@ -1,4 +1,4 @@
-package com.example.proyecto.model.models
+package com.example.proyecto.model.user
 
 import java.util.UUID
 

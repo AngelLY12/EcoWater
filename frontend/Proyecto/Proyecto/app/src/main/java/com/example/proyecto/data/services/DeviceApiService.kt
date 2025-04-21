@@ -5,9 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.devices.DeviceApiRep
-import com.example.proyecto.model.models.Device
-import com.example.proyecto.model.models.DeviceRequest
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.device.Device
+import com.example.proyecto.model.device.DeviceRequest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

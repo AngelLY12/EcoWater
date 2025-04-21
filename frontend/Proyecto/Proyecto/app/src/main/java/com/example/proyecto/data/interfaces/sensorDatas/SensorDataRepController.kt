@@ -1,7 +1,6 @@
 package com.example.proyecto.data.interfaces.sensorDatas
 
-import com.example.proyecto.model.models.Levels
-import com.example.proyecto.model.models.SensorDataRequest
+import com.example.proyecto.model.sensor.SensorDataRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

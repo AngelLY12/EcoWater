@@ -1,7 +1,7 @@
 package com.example.proyecto.data.interfaces.users
 
-import com.example.login.models.AuthRequest
-import com.example.login.models.AuthResponse
+import com.example.proyecto.model.auth.AuthRequest
+import com.example.proyecto.model.auth.AuthResponse
 import com.example.login.models.User
 import retrofit2.Call
 import retrofit2.http.Body

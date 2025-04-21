@@ -2,11 +2,9 @@ package com.example.proyecto.ui.screens.devices
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,19 +20,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.proyecto.ui.components.BottomNavigationBar
+import com.example.proyecto.ui.components.layout.BottomNavigationBar
 import com.example.proyecto.ui.viewModels.BluetoothViewModel
 import com.example.proyecto.utils.BluetoothUtils
-import com.example.proyecto.R
-import com.example.proyecto.ui.components.ToastType
+import com.example.proyecto.ui.components.custom.ToastType
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")

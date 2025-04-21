@@ -1,6 +1,5 @@
 package com.example.proyecto.ui.screens.tanks
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -30,16 +30,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.data.services.TankApiService
-import com.example.proyecto.model.models.Tank
-import com.example.proyecto.ui.components.BottomNavItem
-import com.example.proyecto.ui.components.CustomDropdown
-import com.example.proyecto.ui.components.CustomOutlinedTextField
-import com.example.proyecto.ui.components.ToastType
+import com.example.proyecto.model.tank.Tank
+import com.example.proyecto.ui.components.layout.BottomNavItem
+import com.example.proyecto.ui.components.custom.CustomDropdown
+import com.example.proyecto.ui.components.custom.CustomOutlinedTextField
+import com.example.proyecto.ui.components.custom.ToastType
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
@@ -85,30 +86,30 @@ fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel
             }
 
             Column(modifier = Modifier.padding(8.dp)) {
-                Text("Nombre del tinaco",color = Color.White, fontSize = 16.sp)
                 CustomOutlinedTextField(
-                    label = "Ingresa el nombre del Tinaco",
+                    label = "Nombre del Tinaco",
                     value = tankName,
-                    onValueChange = {tankName=it}
+                    onValueChange = {tankName=it},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text("Capacidad",color = Color.White, fontSize = 16.sp)
                 CustomOutlinedTextField(
-                    label = "Ingresa la Capacidad",
+                    label = "Capacidad",
                     value = capacity,
                     onValueChange = {capacity=it},
-                    )
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
 
 
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text("Altura",color = Color.White, fontSize = 16.sp)
                 CustomOutlinedTextField(
-                    label = "Ingresa la altura",
+                    label = "Altura",
                     value = height,
                     onValueChange = {height=it},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

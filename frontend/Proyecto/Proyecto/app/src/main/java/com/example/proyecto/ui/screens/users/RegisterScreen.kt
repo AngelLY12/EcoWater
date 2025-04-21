@@ -1,6 +1,7 @@
 package com.example.login
 
 import android.content.Context
+import android.util.Patterns
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -8,29 +9,21 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,7 +32,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.core.content.edit
@@ -64,13 +57,11 @@ import androidx.navigation.NavHostController
 import com.example.login.models.User
 import com.example.login.services.UserApiService
 import com.example.proyecto.R
-import com.example.proyecto.model.models.DeviceRequest
-import com.example.proyecto.ui.components.ProgressIndicatorStep
-import com.example.proyecto.ui.components.ToastType
+import com.example.proyecto.ui.components.indicators.ProgressIndicatorStep
+import com.example.proyecto.ui.components.custom.ToastType
 import com.example.proyecto.ui.theme.mainColor
 import com.example.proyecto.ui.viewModels.ToastViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -86,6 +77,12 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
     var passworConfirmVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("createUser", Context.MODE_PRIVATE)
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var passwordConfirmError by remember { mutableStateOf<String?>(null) }
+
+    val valid = emailError == null && passwordError == null && passwordConfirmError==null &&
+            email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
 
     Column(
         modifier = Modifier
@@ -126,24 +123,46 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                     Text("Regístrate", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     Text("Datos de inicio", fontSize = 20.sp)
 
-                    Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
                         value = email,
-                        onValueChange = { email = it },
+                        onValueChange = { email = it
+                            emailError = if (email.isBlank()) {
+                                "El correo no puede estar vacío"
+                            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                "Correo no válido"
+                            } else null
+                                        },
                         label = { Text("Correo electrónico") },
+                        isError = emailError != null,
+
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = if(emailError!=null) Icons.Filled.Info else Icons.Filled.Check,
+                                contentDescription = if(emailError!=null) "Email no valido" else "Email valido"
+                            )
+                        }
+
+
                     )
+
 
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { password = it },
+                        onValueChange = { password = it
+                            passwordError = if (password.length < 6) {
+                                "La contraseña debe tener al menos 6 caracteres"
+                            } else null
+                                        },
                         label = { Text("Contraseña") },
                         singleLine = true,
+                        isError = passwordError != null,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
@@ -157,14 +176,24 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+
                     )
+                    if (passwordError != null) {
+                        Text(passwordError ?: "", color = Color.Red, fontSize = 10.sp)
+                    }
 
                     OutlinedTextField(
                         value = confirmPassword,
-                        onValueChange = { confirmPassword = it },
+                        onValueChange = { confirmPassword = it
+                            passwordConfirmError = if (password != confirmPassword) {
+                                "Las contraseñas no coinciden"
+                            } else null
+                                        },
                         label = { Text("Confirmar contraseña") },
                         singleLine = true,
+                        isError = passwordConfirmError != null,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
@@ -178,9 +207,13 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(12.dp)
-                    )
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
 
+                    )
+                    if (passwordConfirmError != null) {
+                        Text(passwordConfirmError ?: "", color = Color.Red, fontSize = 10.sp)
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
 
 
@@ -216,7 +249,8 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                         shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(38.dp)
+                            .height(38.dp),
+                        enabled = valid
                     ) {
                         Text("Continuar")
                     }
@@ -336,7 +370,9 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+
                     )
 
                     OutlinedTextField(
@@ -348,7 +384,9 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+
                     )
 
                     OutlinedTextField(
@@ -360,7 +398,9 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))

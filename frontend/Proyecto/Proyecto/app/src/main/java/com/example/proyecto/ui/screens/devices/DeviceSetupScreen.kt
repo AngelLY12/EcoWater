@@ -16,16 +16,14 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.DropdownMenu
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,17 +35,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.proyecto.model.models.DeviceRequest
-import com.example.proyecto.model.models.DeviceType
-import com.example.proyecto.model.models.Tank
-import com.example.proyecto.model.models.TankDTO
-import com.example.proyecto.ui.components.CustomDropdown
-import com.example.proyecto.ui.components.CustomOutlinedTextField
+import com.example.proyecto.model.device.DeviceRequest
+import com.example.proyecto.model.device.DeviceType
+import com.example.proyecto.model.tank.Tank
+import com.example.proyecto.ui.components.custom.CustomDropdown
+import com.example.proyecto.ui.components.custom.CustomOutlinedTextField
 import com.example.proyecto.ui.viewModels.BluetoothViewModel
 import com.example.proyecto.ui.viewModels.TankViewModel
 import com.google.gson.Gson
@@ -113,7 +111,9 @@ fun DeviceSetupScreen(
         CustomOutlinedTextField(
             label = "Nombre del dispositivo",
             value = deviceName.value,
-            onValueChange = { deviceName.value = it }
+            onValueChange = { deviceName.value = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+
         )
 
         // Dropdown para tipo de dispositivo
@@ -187,7 +187,9 @@ fun DeviceSetupScreen(
         CustomOutlinedTextField(
             label = "Ubicación del dispositivo",
             value = deviceLocation.value,
-            onValueChange = { deviceLocation.value = it }
+            onValueChange = { deviceLocation.value = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+
         )
 
         // Botón de guardar

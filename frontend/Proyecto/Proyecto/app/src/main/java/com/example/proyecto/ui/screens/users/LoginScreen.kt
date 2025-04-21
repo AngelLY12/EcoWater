@@ -1,22 +1,20 @@
 package com.example.login
 
 import android.util.Log
-import android.widget.Toast
+import android.util.Patterns
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -28,17 +26,16 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,19 +43,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.login.models.AuthRequest
-import com.example.login.services.UserApiService
+import com.example.proyecto.model.auth.AuthRequest
 import com.example.proyecto.R
 import com.example.proyecto.data.services.AuthApiService
-import com.example.proyecto.ui.components.BottomNavItem
-import com.example.proyecto.ui.components.CustomToast
-import com.example.proyecto.ui.components.ToastType
+import com.example.proyecto.ui.components.layout.BottomNavItem
+import com.example.proyecto.ui.components.custom.ToastType
 import com.example.proyecto.ui.theme.loginColor
 import com.example.proyecto.ui.theme.mainColor
 import com.example.proyecto.ui.viewModels.ToastViewModel
@@ -68,12 +62,11 @@ import com.example.proyecto.ui.viewModels.ToastViewModel
 fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel) {
 
     val context = LocalContext.current
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
-
-
+    val valid = email.isNotBlank() && password.isNotBlank()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -118,19 +111,25 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
 
                 OutlinedTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { email = it
+
+                    },
                     label = { Text("Correo electrónico") },
                     singleLine = true,
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
+
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = { password = it
+
+                                    },
                     label = { Text("Contraseña") },
                     singleLine = true,
                     enabled = !isLoading,
@@ -148,8 +147,11 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                                 contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+
                 )
+
 
                 Text(
                     text = "Olvide mi contraseña",
@@ -173,16 +175,15 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                         AuthApiService.authUser(authRequest, context) { authResponse ->
                             isLoading = false
                             if (authResponse != null) {
-                                Log.d("AUTH", "Token guardado correctamente")
-                                toastViewModel.showToast("Inicio de sesión exitoso, bienvenido", ToastType.SUCCESS)
+                                toastViewModel.showToast("Inicio de sesión exitoso", ToastType.SUCCESS)
                                 navController.navigate(BottomNavItem.Home.route)
                             } else {
-                                Log.e("AUTH", "Error al autenticar usuario")
                                 toastViewModel.showToast("Credenciales incorrectas", ToastType.ERROR)
                             }
                         }
+
                     },
-                    enabled = !isLoading,
+                    enabled = !isLoading && valid,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Blue,
                         contentColor = Color.White

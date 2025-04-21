@@ -5,9 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,19 +28,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.proyecto.model.models.Device
-import com.example.proyecto.model.models.DeviceRequest
-import com.example.proyecto.model.models.DeviceType
-import com.example.proyecto.ui.components.EditDropdownModal
-import com.example.proyecto.ui.components.EditFieldModal
+import com.example.proyecto.model.device.Device
+import com.example.proyecto.model.device.DeviceType
+import com.example.proyecto.ui.components.custom.DeleteCardAlert
+import com.example.proyecto.ui.components.custom.EditDropdownModal
+import com.example.proyecto.ui.components.custom.EditFieldModal
 import com.example.proyecto.ui.viewModels.DeviceViewModel
-import com.example.proyecto.ui.viewModels.TankViewModel
 
 @Composable
 fun DeviceItem(device: Device) {
     var showEditNameModal by remember { mutableStateOf(false) }
     var showEditLocationModal by remember { mutableStateOf(false) }
     var showEditDeviceTypeModal by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember {mutableStateOf(false)}
     var deviceEdit by remember { mutableStateOf(device) }
     val context= LocalContext.current
     val viewModel: DeviceViewModel = viewModel()
@@ -218,13 +216,24 @@ fun DeviceItem(device: Device) {
             }
 
             // Eliminar y Divider
+
             Text(
                 text = "Eliminar",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White,
                 modifier = Modifier.clickable{
-                    viewModel.deleteDevice(device.deviceId!!,context)
+                    showDeleteDialog=true
+                }
+            )
+            DeleteCardAlert(
+                title = "¿Estas seguro que quieres eliminar el dispositivo?",
+                text = "Esta acción no se puede deshacer y eliminara los registros relacionados a sus mediciones.",
+                showDialog = showDeleteDialog,
+                onDismiss = { showDeleteDialog = false },
+                onConfirm = {
+                    showDeleteDialog = false
+                    viewModel.deleteDevice(device.deviceId!!, context)
                 }
             )
             Divider(

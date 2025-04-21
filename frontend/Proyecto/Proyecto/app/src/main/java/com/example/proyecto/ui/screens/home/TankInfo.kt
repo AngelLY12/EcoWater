@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto.R
-import com.example.proyecto.model.models.LevelResponse
+import com.example.proyecto.model.level.LevelResponse
 import com.example.proyecto.ui.viewModels.WaterTankViewModel
 
 @Composable

@@ -4,18 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.Divider
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Arrangement
@@ -32,9 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.proyecto.ui.components.BottomNavigationBar
-import com.example.proyecto.ui.components.ExpandableInfoCard
-import com.example.proyecto.ui.screens.tanks.TankItem
+import com.example.proyecto.ui.components.layout.BottomNavigationBar
+import com.example.proyecto.ui.components.custom.ExpandableInfoCard
 import com.example.proyecto.ui.viewModels.DeviceViewModel
 import com.example.proyecto.R
 
@@ -73,7 +65,7 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
             ) {
 
                 Text(
-                    text = "Dispositivo vinculado",
+                    text = "Dispositivos vinculados",
                     fontSize = 28.sp, // Aumentado a 28.sp
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -81,7 +73,6 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
 
             if(isLoading){
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))

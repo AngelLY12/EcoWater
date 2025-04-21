@@ -1,7 +1,5 @@
 package com.example.proyecto.ui.screens.tanks
 
-import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,15 +27,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.proyecto.data.services.TankApiService
-import com.example.proyecto.model.models.Tank
-import com.example.proyecto.ui.components.EditDropdownModal
-import com.example.proyecto.ui.components.EditFieldModal
-import com.example.proyecto.ui.components.ToastType
+import com.example.proyecto.model.tank.Tank
+import com.example.proyecto.ui.components.custom.DeleteCardAlert
+import com.example.proyecto.ui.components.custom.EditDropdownModal
+import com.example.proyecto.ui.components.custom.EditFieldModal
 import com.example.proyecto.ui.viewModels.TankViewModel
-import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
 fun TankItem(tank: Tank) {
@@ -52,6 +46,7 @@ fun TankItem(tank: Tank) {
     val viewModel: TankViewModel = viewModel()
     val optionsMain = listOf(true, false)
     val optionsFillType = listOf("MANUAL", "AUTOMATICO", "BOMBA", "RED_AGUA", "CISTERNA")
+    var showDeleteDialog by remember {mutableStateOf(false)}
 
 
     OutlinedCard(
@@ -329,6 +324,17 @@ fun TankItem(tank: Tank) {
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White,
                 modifier = Modifier.clickable{
+                    showDeleteDialog=true
+                }
+            )
+
+            DeleteCardAlert(
+                title = "¿Estas seguro que quieres eliminar el tanque?",
+                text = "Esta acción no se puede deshacer y eliminara los dispositivos enlazados y las mediciones.",
+                showDialog = showDeleteDialog,
+                onDismiss = { showDeleteDialog = false },
+                onConfirm = {
+                    showDeleteDialog = false
                     viewModel.deleteTank(tank.tankId!!,context)
                 }
             )

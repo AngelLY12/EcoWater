@@ -8,10 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.proyecto.data.services.DeviceApiService
 import com.example.proyecto.data.services.DeviceApiService.getAllDevices
-import com.example.proyecto.data.services.TankApiService
-import com.example.proyecto.model.models.Device
-import com.example.proyecto.model.models.DeviceRequest
-import com.example.proyecto.model.models.Tank
+import com.example.proyecto.model.device.Device
 
 class DeviceViewModel: ViewModel() {
     private val _devices = mutableStateOf<List<Device>>(emptyList())

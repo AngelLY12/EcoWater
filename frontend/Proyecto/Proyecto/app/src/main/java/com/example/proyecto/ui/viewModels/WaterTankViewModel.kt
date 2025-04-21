@@ -4,16 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.proyecto.data.services.WaterLevelApiService
-import com.example.proyecto.model.models.LevelResponse
+import com.example.proyecto.model.level.LevelResponse
 import androidx.compose.runtime.State
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.viewModelScope
-import com.example.proyecto.model.models.Levels
-import com.example.proyecto.model.models.Tank
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable.isActive
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.proyecto.model.level.Levels
 
 class WaterTankViewModel: ViewModel() {
     private val _levelState = mutableStateOf<LevelResponse?>(null)

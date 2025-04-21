@@ -54,13 +54,13 @@ public class TankEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tank")
     private List<WaterTankLevelEntity> tanksLevels;
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tank")
     private List<TankFillingEntity> tankFillings;
 
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tank")
     private List<DeviceEntity> devices;
 
 }

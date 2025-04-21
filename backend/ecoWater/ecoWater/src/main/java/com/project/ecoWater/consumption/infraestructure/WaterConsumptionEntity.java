@@ -5,6 +5,8 @@ import com.project.ecoWater.device.app.DeviceDTO;
 import com.project.ecoWater.device.infrastructure.DeviceEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -23,8 +25,9 @@ public class WaterConsumptionEntity {
     @Column(name = "water_consumption_id", updatable = false, nullable = false)
     private Long consumptionId;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "device_id")
+    @ManyToOne(cascade = CascadeType.REFRESH, optional = true)
+    @JoinColumn(name = "device_id",  nullable = true, foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private DeviceEntity device;
 
     @Column

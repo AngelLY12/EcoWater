@@ -1,6 +1,6 @@
 # EcoWater
 
-**EcoWater** es una aplicación diseñada para el control de la diabetes mellitus, permitiendo el registro y monitoreo de datos relacionados con la salud, como los niveles de glucosa, dieta, y medicación. Este proyecto utiliza Spring Boot para el backend y Docker para la base de datos PostgreSQL.
+**EcoWater** es una aplicación diseñada para el control del agua, permitiendo el registro y monitoreo de datos relacionados a la misma, como los niveles de agua, llenado de tanque, y consumo. Este proyecto utiliza Spring Boot para el backend y Docker para la base de datos PostgreSQL.
 
 ## Requisitos
 

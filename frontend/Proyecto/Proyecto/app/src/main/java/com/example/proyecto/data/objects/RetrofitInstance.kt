@@ -1,6 +1,7 @@
 package com.example.login.objects
 
 import android.content.Context
+import com.example.proyecto.data.interfaces.alerts.AlertRepController
 import com.example.proyecto.data.interfaces.devices.DeviceApiRepController
 import com.example.proyecto.data.interfaces.levels.WaterLevelRepController
 import com.example.proyecto.data.interfaces.sensorDatas.SensorDataRepController
@@ -55,5 +56,8 @@ object RetrofitInstance {
     }
     fun getSensorData(context: Context): SensorDataRepController{
         return provideRetrofit(context).create(SensorDataRepController::class.java)
+    }
+    fun getAlert(context: Context): AlertRepController{
+        return provideRetrofit(context).create(AlertRepController::class.java)
     }
 }

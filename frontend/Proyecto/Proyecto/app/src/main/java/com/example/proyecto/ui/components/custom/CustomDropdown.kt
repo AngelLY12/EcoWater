@@ -23,10 +23,11 @@ fun <T> CustomDropdown(
     label: String,
     selectedOption: T?,
     onOptionSelected: (T) -> Unit,
-    optionToText: (T) -> String = { it.toString() }, // para mostrar cualquier tipo como texto
+    optionToText: (T) -> String = { it.toString() },
     whiteBg: Boolean?=null
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val isWhiteBg = if (whiteBg == true) mainColor else Color.White
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -36,19 +37,19 @@ fun <T> CustomDropdown(
             value = selectedOption?.let { optionToText(it) } ?: "",
             onValueChange = {},
             readOnly = true,
-            label = { Text(label, color = if(whiteBg==true) mainColor else Color.White) },
+            label = { Text(label, color = isWhiteBg) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                textColor = if(whiteBg==true) mainColor else Color.White,
-                placeholderColor = if(whiteBg==true) mainColor else Color.White,
-                focusedLabelColor = if(whiteBg==true) mainColor else Color.White,
-                unfocusedLabelColor = if(whiteBg==true) mainColor else Color.White,
-                focusedBorderColor = if(whiteBg==true) mainColor else Color.White,
-                unfocusedBorderColor = if(whiteBg==true) mainColor else Color.White,
-                cursorColor = if(whiteBg==true) mainColor else Color.White,
-                leadingIconColor = if(whiteBg==true) mainColor else Color.White
+                textColor = isWhiteBg,
+                placeholderColor = isWhiteBg,
+                focusedLabelColor = isWhiteBg,
+                unfocusedLabelColor = isWhiteBg,
+                focusedBorderColor = isWhiteBg,
+                unfocusedBorderColor = isWhiteBg,
+                cursorColor = isWhiteBg,
+                leadingIconColor = isWhiteBg
             ),
             modifier = Modifier.fillMaxWidth()
         )

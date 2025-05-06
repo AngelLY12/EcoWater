@@ -1,5 +1,6 @@
 package com.example.login
 
+import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.compose.foundation.BorderStroke
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavHostController
+import com.example.login.services.UserApiService
 import com.example.proyecto.model.auth.AuthRequest
 import com.example.proyecto.R
 import com.example.proyecto.data.services.AuthApiService
@@ -56,6 +58,7 @@ import com.example.proyecto.ui.components.custom.ToastType
 import com.example.proyecto.ui.theme.loginColor
 import com.example.proyecto.ui.theme.mainColor
 import com.example.proyecto.ui.viewModels.ToastViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 @Composable
@@ -75,6 +78,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.padding(vertical = 8.dp),
@@ -170,11 +174,29 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
 
                 Button(
                     onClick = {
+
                         isLoading = true
                         val authRequest = AuthRequest(email = email, password = password)
                         AuthApiService.authUser(authRequest, context) { authResponse ->
                             isLoading = false
                             if (authResponse != null) {
+                                saveLoginState(email, context)
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                                        task->
+                                    if(task.isSuccessful){
+                                        val token= task.result
+                                        Log.d("FCM_TOKEN", "Token generado: $token")
+                                        UserApiService.updateTokenFMC(token, context) { response ->
+                                            if (response != null) {
+                                                Log.d("FCM_TOKEN", "Backend actualizado en login")
+                                            } else {
+                                                Log.e("FCM_TOKEN", "Error al actualizar token en login")
+                                                // Opcional: Reintentar o guardar el token localmente para enviar después
+                                            }                                        }
+                                    }else {
+                                        Log.e("FCM_TOKEN", "Error al obtener token", task.exception)
+                                    }
+                                }
                                 toastViewModel.showToast("Inicio de sesión exitoso", ToastType.SUCCESS)
                                 navController.navigate(BottomNavItem.Home.route)
                             } else {
@@ -215,4 +237,8 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
         }
 
     }
+}
+private fun saveLoginState(email: String, context: Context) {
+    val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+    prefs.edit().putString("user_email", email).apply()
 }

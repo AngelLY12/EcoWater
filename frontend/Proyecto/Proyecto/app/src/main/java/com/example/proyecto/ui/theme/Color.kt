@@ -21,3 +21,4 @@ val loginColor = Brush.verticalGradient(
     ),
     )
 val chartColor= Color(0xFF0A507C)
+val toogleChecked= Color(0xFF4CAF50)

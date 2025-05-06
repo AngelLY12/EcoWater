@@ -47,7 +47,7 @@ fun InfoCard(
         border = BorderStroke(1.dp, Color.White),
         colors = CardDefaults.outlinedCardColors(containerColor = Color(0xFF083257))
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(8.dp)) {
 
             // Imagen y nombre
             Row(

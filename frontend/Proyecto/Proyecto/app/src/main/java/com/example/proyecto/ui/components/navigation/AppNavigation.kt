@@ -11,7 +11,9 @@ import com.example.login.DataUser
 import com.example.login.LoginScreen
 import com.example.login.RegisterScreen
 import com.example.proyecto.ui.components.layout.BottomNavItem
-import com.example.proyecto.ui.components.layout.NotificationScreenPreview
+import com.example.proyecto.ui.screens.Notifications.AddAlertsScreen
+import com.example.proyecto.ui.screens.Notifications.AlertsScreen
+import com.example.proyecto.ui.screens.Notifications.NotificationScreenPreview
 import com.example.proyecto.ui.screens.home.EcoWaterScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceListScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceSetupScreen
@@ -63,6 +65,8 @@ fun AppNavigation( navController: NavHostController,
         composable("formAddTank"){ FormAddTank(navController, toastViewModel) }
         composable("setupDevice") { DeviceSetupScreen(navController,bluetoothViewModel) }
         composable("wifiSetup") { WifiCredentialsForm(navController,bluetoothViewModel, toastViewModel) }
+        composable (BottomNavItem.Notifications.route){ AlertsScreen(navController) }
+        composable ("addAlert"){ AddAlertsScreen(navController) }
 
     }
 }

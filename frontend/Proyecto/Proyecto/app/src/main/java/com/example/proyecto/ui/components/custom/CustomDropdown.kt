@@ -23,6 +23,11 @@ fun <T> CustomDropdown(
     label: String,
     selectedOption: T?,
     onOptionSelected: (T) -> Unit,
+    optionToText: (T) -> String = { it.toString() },
+    whiteBg: Boolean?=null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val isWhiteBg = if (whiteBg == true) mainColor else Color.White
     optionToText: (T) -> String = { it.toString() }, // para mostrar cualquier tipo como texto
     whiteBg: Boolean?=null
 ) {
@@ -36,11 +41,20 @@ fun <T> CustomDropdown(
             value = selectedOption?.let { optionToText(it) } ?: "",
             onValueChange = {},
             readOnly = true,
+            label = { Text(label, color = isWhiteBg) },
             label = { Text(label, color = if(whiteBg==true) mainColor else Color.White) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+                textColor = isWhiteBg,
+                placeholderColor = isWhiteBg,
+                focusedLabelColor = isWhiteBg,
+                unfocusedLabelColor = isWhiteBg,
+                focusedBorderColor = isWhiteBg,
+                unfocusedBorderColor = isWhiteBg,
+                cursorColor = isWhiteBg,
+                leadingIconColor = isWhiteBg
                 textColor = if(whiteBg==true) mainColor else Color.White,
                 placeholderColor = if(whiteBg==true) mainColor else Color.White,
                 focusedLabelColor = if(whiteBg==true) mainColor else Color.White,

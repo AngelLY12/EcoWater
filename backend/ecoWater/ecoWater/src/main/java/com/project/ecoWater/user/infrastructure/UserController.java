@@ -53,4 +53,11 @@ public class UserController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/updateToken/{token}")
+    public ResponseEntity<String> updateFMCToken(@PathVariable String token, @AuthenticationPrincipal UserDetails userDetails) {
+        userService.updateFcmToken(token,userDetails.getUsername());
+        return ResponseEntity.ok(token);
+    }
+
 }

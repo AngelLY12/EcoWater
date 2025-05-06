@@ -1,5 +1,7 @@
 package com.project.ecoWater.user.domain;
 
+import com.project.ecoWater.user.app.UserDTO;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,5 +15,7 @@ public interface UserRepository {
     void deleteUserByEmail(String email);
     boolean existUserByEmail(String email);
     Optional<User> updateUser(User user, String email);
+
+    void updateTokenFMC(User user);
 
 }

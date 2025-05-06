@@ -1,5 +1,6 @@
 # EcoWater
 
+
 **EcoWater** es una aplicación diseñada para el control del agua, permitiendo el registro y monitoreo de datos relacionados a la misma, como los niveles de agua, llenado de tanque, y consumo. Este proyecto utiliza Spring Boot para el backend y Docker para la base de datos PostgreSQL.
 
 ## Requisitos

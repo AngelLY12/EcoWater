@@ -3,6 +3,9 @@ package com.project.ecoWater.user.infrastructure;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecoWater.device.infrastructure.DeviceEntity;
+import com.project.ecoWater.notification.NotificationEntity;
+import com.project.ecoWater.notification.alert.UserAlertSettings;
+
 import com.project.ecoWater.sensor.infraestructure.SensorDataEntity;
 import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;
@@ -48,6 +51,7 @@ public class UserEntity implements UserDetails {
 
     @Column(name="created_at")
     private Timestamp created;
+    private String tokenFMC;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceEntity> devices;
@@ -55,16 +59,11 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TankEntity> tanks;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotificationEntity> notifications;
 
-    /*
-    @JsonCreator
-    public static UserEntity fromUUID(@JsonProperty("userId") UUID userId) {
-        UserEntity user = new UserEntity();
-        user.userId = userId;
-        return user;
-    }
-
-     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAlertSettings> alerts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

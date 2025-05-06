@@ -30,6 +30,12 @@ class MainActivity : ComponentActivity() {
     private lateinit var authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        intent?.extras?.let { extras ->
+            if (extras.containsKey("from_notification")) {
+                val alertType = extras.getString("alert_type")
+            }
+        }
+
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         enableEdgeToEdge()

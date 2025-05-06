@@ -2,6 +2,7 @@ package com.project.ecoWater.user.app;
 
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
+import com.project.ecoWater.user.infrastructure.UserMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -78,6 +79,20 @@ public class UserApplicationService {
 
         }
         return true;
+
+    }
+
+    @Transactional
+    public void updateFcmToken(String token, String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        if (user.getTokenFMC() != null && user.getTokenFMC().equals(token)) {
+            throw new IllegalArgumentException("Token ya estaba actualizado");
+        }
+
+        user.setTokenFMC(token);
+        userRepository.updateTokenFMC(user);
 
     }
 

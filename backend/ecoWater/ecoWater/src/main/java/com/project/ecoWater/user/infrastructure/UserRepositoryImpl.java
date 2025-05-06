@@ -1,5 +1,6 @@
 package com.project.ecoWater.user.infrastructure;
 
+import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
 import jakarta.transaction.Transactional;
@@ -58,6 +59,12 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity = UserMapper.toEntity(user);
         UserEntity updatedUserEntity = userJpaRepository.save(userEntity);
         return Optional.ofNullable(UserMapper.toDomain(updatedUserEntity));
+    }
+
+    @Override
+    public void updateTokenFMC(User user) {
+        UserEntity userEntity = UserMapper.toEntity(user);
+        userJpaRepository.save(userEntity);
     }
 
 }

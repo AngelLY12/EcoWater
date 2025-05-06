@@ -1,6 +1,8 @@
 package com.project.ecoWater.tank.infrastructure;
 
 
+import com.project.ecoWater.notification.FirebaseNotificationService;
+import com.project.ecoWater.notification.alert.AlertType;
 import com.project.ecoWater.tank.app.TankApplicationService;
 import com.project.ecoWater.tank.domain.Tank;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +20,12 @@ import java.util.Optional;
 public class TankController {
 
     private final TankApplicationService tankApplicationService;
+    private final FirebaseNotificationService notificationService;
 
     @PostMapping("/addTank")
     public ResponseEntity<Tank> createTank(@RequestBody Tank tank, @AuthenticationPrincipal UserDetails userDetails) {
         Tank tankSaved = tankApplicationService.saveTank(tank, userDetails.getUsername());
+        notificationService.sendNotification(userDetails.getUsername(),"Nuevo tanque creado", "Se ha creado el tanque " + tank.getTankName(), AlertType.FULL_TANK);
         return ResponseEntity.ok(tankSaved);
     }
 

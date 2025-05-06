@@ -11,4 +11,5 @@ public class UserDTO {
     private UUID userId;
     private String email;
     private String userName;
+    private String tokenFMC;
 }

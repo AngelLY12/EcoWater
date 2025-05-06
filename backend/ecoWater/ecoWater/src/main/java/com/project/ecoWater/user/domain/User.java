@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String password;
 
     private Timestamp created;
+    private String tokenFMC;
 
 
     @Override

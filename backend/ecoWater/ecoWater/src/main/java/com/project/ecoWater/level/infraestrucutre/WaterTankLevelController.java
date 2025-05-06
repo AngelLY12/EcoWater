@@ -3,6 +3,7 @@ package com.project.ecoWater.level.infraestrucutre;
 
 import com.project.ecoWater.level.app.WaterTankLevelAppService;
 import com.project.ecoWater.level.domain.WaterTankLevel;
+import com.project.ecoWater.notification.alert.MonitoringService;
 import com.project.ecoWater.tank.domain.Tank;
 import com.project.ecoWater.user.app.UserApplicationService;
 import com.project.ecoWater.user.domain.User;
@@ -21,12 +22,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WaterTankLevelController {
     private final WaterTankLevelAppService waterTankLevelAppService;
+    private final MonitoringService monitoringService;
 
     @PostMapping("/addLevel")
     public ResponseEntity<WaterTankLevel> save(@RequestBody WaterTankLevel waterTankLevel,
                                                @AuthenticationPrincipal UserDetails userDetails
     ) {
         WaterTankLevel result = waterTankLevelAppService.save(waterTankLevel, userDetails.getUsername());
+        monitoringService.checkTankLevel(userDetails.getUsername(), waterTankLevel.getFillPercentage());
         return ResponseEntity.ok(result);
     }
 

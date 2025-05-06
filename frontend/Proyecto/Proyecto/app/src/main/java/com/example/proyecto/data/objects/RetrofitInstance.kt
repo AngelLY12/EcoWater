@@ -60,4 +60,5 @@ object RetrofitInstance {
     fun getAlert(context: Context): AlertRepController{
         return provideRetrofit(context).create(AlertRepController::class.java)
     }
+
 }

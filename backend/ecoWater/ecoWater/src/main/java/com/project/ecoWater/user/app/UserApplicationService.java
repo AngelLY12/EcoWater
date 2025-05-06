@@ -93,6 +93,7 @@ public class UserApplicationService {
 
         user.setTokenFMC(token);
         userRepository.updateTokenFMC(user);
+
     }
 
 }

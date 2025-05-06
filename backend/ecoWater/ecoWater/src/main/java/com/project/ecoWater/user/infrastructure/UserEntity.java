@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecoWater.device.infrastructure.DeviceEntity;
 import com.project.ecoWater.notification.NotificationEntity;
 import com.project.ecoWater.notification.alert.UserAlertSettings;
+
 import com.project.ecoWater.sensor.infraestructure.SensorDataEntity;
 import com.project.ecoWater.tank.infrastructure.TankEntity;
 import jakarta.persistence.*;

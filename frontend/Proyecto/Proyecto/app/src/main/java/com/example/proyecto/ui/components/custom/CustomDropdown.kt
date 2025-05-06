@@ -28,6 +28,10 @@ fun <T> CustomDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val isWhiteBg = if (whiteBg == true) mainColor else Color.White
+    optionToText: (T) -> String = { it.toString() }, // para mostrar cualquier tipo como texto
+    whiteBg: Boolean?=null
+) {
+    var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -38,6 +42,7 @@ fun <T> CustomDropdown(
             onValueChange = {},
             readOnly = true,
             label = { Text(label, color = isWhiteBg) },
+            label = { Text(label, color = if(whiteBg==true) mainColor else Color.White) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
@@ -50,6 +55,14 @@ fun <T> CustomDropdown(
                 unfocusedBorderColor = isWhiteBg,
                 cursorColor = isWhiteBg,
                 leadingIconColor = isWhiteBg
+                textColor = if(whiteBg==true) mainColor else Color.White,
+                placeholderColor = if(whiteBg==true) mainColor else Color.White,
+                focusedLabelColor = if(whiteBg==true) mainColor else Color.White,
+                unfocusedLabelColor = if(whiteBg==true) mainColor else Color.White,
+                focusedBorderColor = if(whiteBg==true) mainColor else Color.White,
+                unfocusedBorderColor = if(whiteBg==true) mainColor else Color.White,
+                cursorColor = if(whiteBg==true) mainColor else Color.White,
+                leadingIconColor = if(whiteBg==true) mainColor else Color.White
             ),
             modifier = Modifier.fillMaxWidth()
         )

@@ -16,6 +16,7 @@ public class UserMapper {
                 .age(user.getAge())
                 .password(user.getPassword())
                 .created(user.getCreated())
+                .tokenFMC(user.getTokenFMC())
                 .build();
 
     }
@@ -29,6 +30,7 @@ public class UserMapper {
                 .age(userEntity.getAge())
                 .password(userEntity.getPassword())
                 .created(userEntity.getCreated())
+                .tokenFMC(userEntity.getTokenFMC())
                 .build();
 
 
@@ -56,6 +58,7 @@ public class UserMapper {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .userName(user.getUser_name())
+                .tokenFMC(user.getTokenFMC())
                 .build();
     }
 
@@ -64,6 +67,7 @@ public class UserMapper {
                 .userId(userEntity.getUserId())
                 .email(userEntity.getEmail())
                 .userName(userEntity.getName())
+                .tokenFMC(userEntity.getTokenFMC())
                 .build();
     }
 
@@ -72,6 +76,7 @@ public class UserMapper {
                 .userId(userDTO.getUserId())
                 .email(userDTO.getEmail())
                 .name(userDTO.getUserName())
+                .tokenFMC(userDTO.getTokenFMC())
                 .build();
     }
 

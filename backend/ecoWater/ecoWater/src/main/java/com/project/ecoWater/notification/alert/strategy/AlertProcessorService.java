@@ -2,6 +2,7 @@ package com.project.ecoWater.notification.alert.strategy;
 
 import com.project.ecoWater.notification.FirebaseNotificationService;
 import com.project.ecoWater.notification.alert.AlertType;
+import com.project.ecoWater.notification.alert.UserAlertSettings;
 import com.project.ecoWater.notification.alert.UserAlertSettingsRepository;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.infrastructure.UserMapper;
@@ -14,7 +15,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AlertProcessorService {
 
@@ -31,23 +31,26 @@ public class AlertProcessorService {
                 .collect(Collectors.toMap(AlertStrategy::getType, s -> s));
     }
 
-    public void processAlert(User user, AlertType type, float value) {
+    public void processAlert(String email, AlertType type, float value) {
         AlertStrategy strategy = strategyMap.get(type);
         if (strategy == null) {
             log.warn("No strategy found for type: {}", type);
             return;
         }
 
-        alertSettingsRepository.findByUserAndAlertType(UserMapper.toEntity(user), AlertType.valueOf(type.name()))
-                .ifPresent(settings -> {
-                    if (strategy.shouldSendAlert(settings, value)) {
-                        notificationService.sendNotification(
-                                user.getEmail(),
-                                strategy.getTitle(),
-                                strategy.getMessage(value),
-                                strategy.getType()
-                        );
-                    }
-                });
+        List<UserAlertSettings> settingsList = alertSettingsRepository
+                .findAllByUserAndAlertType(email, AlertType.valueOf(type.name()));
+
+        for (UserAlertSettings settings : settingsList) {
+            if (strategy.shouldSendAlert(settings, value)) {
+                notificationService.sendNotification(
+                        email,
+                        strategy.getTitle(),
+                        strategy.getMessage(value),
+                        strategy.getType()
+                );
+            }
+        }
+
     }
 }

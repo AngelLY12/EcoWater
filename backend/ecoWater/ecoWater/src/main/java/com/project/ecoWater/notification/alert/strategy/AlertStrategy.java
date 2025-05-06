@@ -1,4 +1,7 @@
-package com.project.ecoWater.notification.alert;
+package com.project.ecoWater.notification.alert.strategy;
+
+import com.project.ecoWater.notification.alert.AlertType;
+import com.project.ecoWater.notification.alert.UserAlertSettings;
 
 public interface AlertStrategy {
     AlertType getType();

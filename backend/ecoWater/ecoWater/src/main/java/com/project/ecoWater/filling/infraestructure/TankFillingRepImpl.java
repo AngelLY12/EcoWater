@@ -6,6 +6,8 @@ import com.project.ecoWater.level.infraestrucutre.WaterTankLevelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +35,21 @@ public class TankFillingRepImpl implements TankFillingRepository {
     @Override
     public boolean existsById(Long id) {
         return tankFillingJpaRep.existsById(id);
+    }
+
+    @Override
+    public List<TankFilling> findMainTankFillingsByUserAndDate(String email, LocalDate date) {
+        return tankFillingJpaRep.findMainTankFillingsByUserAndDate(email, date)
+                .stream()
+                .map(TankFillingMapper::tankFillingEntityToTankFilling)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TankFilling> findMainTankFillingsByUserAndDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return tankFillingJpaRep.findMainTankFillingsByUserAndDateTime(email, startDateTime, endDateTime)
+                .stream()
+                .map(TankFillingMapper::tankFillingEntityToTankFilling)
+                .collect(Collectors.toList());
     }
 }

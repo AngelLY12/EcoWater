@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.project.ecoWater.tank.domain.Tank;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -95,6 +96,13 @@ public class TankFillingAppService extends TankService<TankFilling> {
 
         float volume = (float) (Math.PI * Math.pow(radius, 2) * level);
         return volume;
+    }
+    public List<TankFilling> findMainTankFillingsByUserAndDate(String email, LocalDate date) {
+        return tankFillingRepository.findMainTankFillingsByUserAndDate(email, date);
+    }
+
+    public List<TankFilling> findMainTankFillingsByUserAndDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return tankFillingRepository.findMainTankFillingsByUserAndDateTime(email, startDateTime, endDateTime);
     }
 
 }

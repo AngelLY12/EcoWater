@@ -104,6 +104,13 @@
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-mqtt</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>2.2.0</version> <!-- Puedes usar la versión más reciente -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

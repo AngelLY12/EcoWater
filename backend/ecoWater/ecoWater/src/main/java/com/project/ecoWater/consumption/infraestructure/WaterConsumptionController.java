@@ -33,9 +33,9 @@ public class WaterConsumptionController {
     }
 
     @GetMapping("/getConsumptions")
-    public ResponseEntity<List<WaterConsumption>> getAll() {
+    public ResponseEntity<List<WaterConsumption>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            List<WaterConsumption> result = waterConsumptionAppService.findAll();
+            List<WaterConsumption> result = waterConsumptionAppService.findAll(userDetails.getUsername());
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
@@ -50,5 +50,11 @@ public class WaterConsumptionController {
         }catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/getConsumptionLocation")
+    public ResponseEntity<List<WaterConsumption>> getConsumptionLocation(@AuthenticationPrincipal UserDetails userDetails) {
+        List<WaterConsumption> consumption = waterConsumptionAppService.findConsumptionByLocation(userDetails.getUsername());
+        return ResponseEntity.ok(consumption);
     }
 }

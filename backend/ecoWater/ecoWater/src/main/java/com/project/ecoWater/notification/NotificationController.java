@@ -19,12 +19,10 @@ public class NotificationController {
     private final FirebaseNotificationService firebaseNotificationService;
 
     @GetMapping("/listAll")
-    public ResponseEntity<Page<NotificationEntity>> getNotificaciones(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<List<NotificationDTO>> getNotificaciones(
+            @AuthenticationPrincipal UserDetails userDetails) {
 
-        Page<NotificationEntity> notifications = notificationRepository
-                .findByUserEmail(userDetails.getUsername(), pageable);
+        List<NotificationDTO> notifications = firebaseNotificationService.getNotifications(userDetails.getUsername());
 
         return ResponseEntity.ok(notifications);
     }

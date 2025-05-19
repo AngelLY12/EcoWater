@@ -15,7 +15,7 @@ public class NotificacionCleanupTask {
     @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void cleanupOldNotifications() {
-        LocalDateTime fechaLimite = LocalDateTime.now().minusMonths(1);
+        LocalDateTime fechaLimite = LocalDateTime.now().minusWeeks(1);
         notificationRepository.deleteByCreatedAtBefore(fechaLimite);
         System.out.println("Notificaciones antiguas eliminadas");
     }

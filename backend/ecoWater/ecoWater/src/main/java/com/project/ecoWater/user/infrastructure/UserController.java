@@ -31,6 +31,17 @@ public class UserController {
 
     }
 
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername(); // Obtén el correo del usuario autenticado
+        Optional<User> userOptional = userService.findUserByEmail(email);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userOptional.get());
+    }
+
+
     @PatchMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> userOptional= userService.updateUser(user,userDetails.getUsername());
@@ -59,5 +70,7 @@ public class UserController {
         userService.updateFcmToken(token,userDetails.getUsername());
         return ResponseEntity.ok(token);
     }
+
+
 
 }

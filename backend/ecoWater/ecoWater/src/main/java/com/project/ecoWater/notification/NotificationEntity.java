@@ -28,6 +28,7 @@ public class NotificationEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
     private AlertType alertType;
 
     @PrePersist

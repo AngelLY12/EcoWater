@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,20 @@ public interface WaterTankLevelJpaRepo extends JpaRepository<WaterTankLevelEntit
 
     @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.user.email = :email AND t.tank.isMain= true ORDER BY t.dateMeasurement DESC limit 1")
     Optional<WaterTankLevelEntity> findTopLevelOfMainTankByEmail(@Param("email")String email);
+
+    @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.isMain = true AND t.tank.user.email = :email ORDER BY t.dateMeasurement DESC")
+    List<WaterTankLevelEntity> findAllMainTankLevelsByUser(@Param("email") String email);
+
+    @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.isMain = true AND t.tank.user.email = :email ORDER BY t.dateMeasurement ASC LIMIT 1")
+    Optional<WaterTankLevelEntity> findFirstMeasurementForMainTank(@Param("email") String email);
+    @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.isMain = true AND t.tank.user.email = :email AND DATE(t.dateMeasurement) = :date ORDER BY t.dateMeasurement DESC")
+    List<WaterTankLevelEntity> findMainTankLevelsByUserAndDate(@Param("email") String email, @Param("date") LocalDate date);
+
+    @Query("SELECT t FROM WaterTankLevelEntity t WHERE t.tank.isMain = true AND t.tank.user.email = :email " +
+            "AND t.dateMeasurement BETWEEN :startDateTime AND :endDateTime ORDER BY t.dateMeasurement DESC")
+    List<WaterTankLevelEntity> findMainTankLevelsByUserAndDateTime(@Param("email") String email,
+                                                                   @Param("startDateTime") LocalDateTime startDateTime,
+                                                                   @Param("endDateTime") LocalDateTime endDateTime);
 
 
 }

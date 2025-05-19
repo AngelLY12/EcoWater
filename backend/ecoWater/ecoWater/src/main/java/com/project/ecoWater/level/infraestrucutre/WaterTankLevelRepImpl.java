@@ -5,6 +5,9 @@ import com.project.ecoWater.level.domain.WaterTankLevelRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,5 +47,33 @@ public class WaterTankLevelRepImpl implements WaterTankLevelRepository {
     @Override
     public float findLastFillPercentageByTankId(Long tankId) {
         return waterTankLevelJpaRepo.findLastFillPercentageByTankId(tankId);
+    }
+    @Override
+    public Optional<WaterTankLevel> findFirstMeasurementForMainTank(String email) {
+        return waterTankLevelJpaRepo.findFirstMeasurementForMainTank(email).map(WaterTankLevelMapper::toWaterTankLevel);
+    }
+
+    @Override
+    public List<WaterTankLevel> findAllMainTankLevelsByUser(String email) {
+        return waterTankLevelJpaRepo.findAllMainTankLevelsByUser(email)
+                .stream()
+                .map(WaterTankLevelMapper::toWaterTankLevel)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WaterTankLevel> findAllMainTankLevelsByDate(String email, LocalDate date) {
+        return waterTankLevelJpaRepo.findMainTankLevelsByUserAndDate(email, date)
+                .stream()
+                .map(WaterTankLevelMapper::toWaterTankLevel)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WaterTankLevel> findAllMainTankLevelsByDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return waterTankLevelJpaRepo.findMainTankLevelsByUserAndDateTime(email, startDateTime, endDateTime)
+                .stream()
+                .map(WaterTankLevelMapper::toWaterTankLevel)
+                .collect(Collectors.toList());
     }
 }

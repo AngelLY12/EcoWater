@@ -1,5 +1,5 @@
 # Etapa 1: Build - compila el proyecto y genera el JAR
-FROM maven:3.9.1-eclipse-temurin-23-alpine AS build
+FROM maven:3.9.1-openjdk-23-slim AS build
 WORKDIR /app
 
 # Copiar archivos de configuración de Maven y código fuente

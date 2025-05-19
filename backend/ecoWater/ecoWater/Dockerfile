@@ -1,5 +1,5 @@
 # Etapa 1: Build - compila el proyecto y genera el JAR
-FROM maven:3.9.1-openjdk-17-slim AS build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copiar archivos de configuración de Maven y código fuente

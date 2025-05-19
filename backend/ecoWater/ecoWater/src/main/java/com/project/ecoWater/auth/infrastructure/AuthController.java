@@ -5,6 +5,7 @@ import com.project.ecoWater.auth.app.AuthApplicationService;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.infrastructure.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,16 @@ public class AuthController {
 
 
     }
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> loginWithGoogle(@RequestBody GoogleAuthRequest request) {
+        try {
+            AuthResponse response = authApplicationService.authenticateWithGoogle(request.getIdToken());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
 
 }
 

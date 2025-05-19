@@ -11,6 +11,7 @@ import com.project.ecoWater.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,31 @@ public class WaterTankLevelAppService extends TankService<WaterTankLevel> {
     }
     public float calculateFillPercentage(Long levelId){
         return waterTankLevelRepository.findLastFillPercentageByTankId(levelId);
+    }
+
+    public Optional<WaterTankLevel> findFirstMeasurementForMainTank(String email) {
+        return Optional.ofNullable(waterTankLevelRepository.findFirstMeasurementForMainTank(email)
+                .orElseThrow(() -> new IllegalArgumentException("No hay datos en el consumo del agua.")));
+    }
+
+    public List<WaterTankLevel> findAllMainTankLevelsByUser(String email) {
+        List<WaterTankLevel> allLevels = waterTankLevelRepository.findAllMainTankLevelsByUser(email);
+
+        // Retorna lista vacía en lugar de lanzar una excepción
+        return allLevels;
+    }
+
+    public List<WaterTankLevel> findAllMainTankLevelsByDate(String email, LocalDate date) {
+        List<WaterTankLevel> levelsByDate = waterTankLevelRepository.findAllMainTankLevelsByDate(email, date);
+
+        // Retorna lista vacía si no hay registros
+        return levelsByDate;
+    }
+
+    public List<WaterTankLevel> findAllMainTankLevelsByDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<WaterTankLevel> levelsByDateTime = waterTankLevelRepository.findAllMainTankLevelsByDateTime(email, startDateTime, endDateTime);
+
+        return levelsByDateTime;
     }
 
 

@@ -26,4 +26,5 @@ public class WaterConsumptionMapper {
                 .device(DeviceMapper.deviceDTOToDeviceEntity(wc.getDevice()))
                 .build();
     }
+
 }

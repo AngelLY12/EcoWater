@@ -5,9 +5,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.project.ecoWater.notification.alert.AlertType;
-import com.project.ecoWater.notification.alert.UserAlertSettings;
-import com.project.ecoWater.notification.alert.UserAlertSettingsRepository;
+import com.project.ecoWater.notification.alert.*;
+import com.project.ecoWater.tank.infrastructure.TankMapper;
 import com.project.ecoWater.user.app.UserDTO;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.domain.UserRepository;
@@ -17,6 +16,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class FirebaseNotificationService {
@@ -24,6 +26,7 @@ public class FirebaseNotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final FirebaseApp firebaseApp;
+    private final UserAlertSettingsService userAlertSettingsService;
 
 
 
@@ -46,10 +49,21 @@ public class FirebaseNotificationService {
                 throw new RuntimeException("Usuario no tiene token FCM registrado");
             }
 
+            List<AlertDTO> alertSettings = userAlertSettingsService.getAllUserAlertSettings(email);
+
+            boolean isAlertEnabled = alertSettings.stream()
+                    .anyMatch(setting -> setting.getAlertType() == alertType && setting.isEnabled());
+
+            if (!isAlertEnabled) {
+                System.out.println("ℹ️ Alerta " + alertType + " deshabilitada para el usuario " + email + ". No se envía notificación.");
+                return;
+            }
+
             NotificationEntity notification = NotificationEntity.builder()
                     .title(title)
                     .message(body)
                     .user(UserMapper.userDTOToUserEntity(userDTO))
+                    .alertType(alertType)
                     .build();
 
             notificationRepository.save(notification);
@@ -71,6 +85,14 @@ public class FirebaseNotificationService {
         catch (Exception e) {
             System.err.println("❌ Error inesperado: " + e.getMessage());
         }
+        }
+
+        public List<NotificationDTO> getNotifications(String email){
+        List<NotificationEntity> notifications = notificationRepository.findByUserEmail(email);
+        if(notifications.isEmpty()){
+            throw new IllegalArgumentException("Notification not found");
+        }
+        return notifications.stream().map(NotificationMapper::mapToDto).collect(Collectors.toList());
         }
 
 

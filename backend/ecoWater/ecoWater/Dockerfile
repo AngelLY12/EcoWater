@@ -16,8 +16,6 @@ WORKDIR /app
 # Copiar el JAR generado en la etapa anterior
 COPY --from=build /app/target/ecoWater-0.0.1-SNAPSHOT.jar /app/ecoWater-0.0.1-SNAPSHOT.jar
 
-# Copiar archivo de configuración firebase
-COPY src/main/resources/firebase-service-account.json /app/resources/
 
 EXPOSE 8080
 

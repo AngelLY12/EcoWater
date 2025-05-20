@@ -4,9 +4,11 @@ import android.content.Context
 import com.example.proyecto.data.interfaces.alerts.AlertRepController
 import com.example.proyecto.data.interfaces.devices.DeviceApiRepController
 import com.example.proyecto.data.interfaces.levels.WaterLevelRepController
+import com.example.proyecto.data.interfaces.notifications.NotificationRepController
 import com.example.proyecto.data.interfaces.sensorDatas.SensorDataRepController
 import com.example.proyecto.data.interfaces.users.AuthRepController
 import com.example.proyecto.data.interfaces.tanks.TankRepController
+import com.example.proyecto.data.interfaces.tanksFilling.TanksFillingRepController
 import com.example.proyecto.data.interfaces.users.UserRepController
 import com.example.proyecto.data.services.AuthApiService.getToken
 import com.example.proyecto.utils.AuthInterceptor
@@ -17,7 +19,7 @@ import retrofit2.create
 
 
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.1.68:8080/"
+    private const val BASE_URL = "https://ecowater-1.onrender.com/"
 
     fun provideRetrofit(context: Context): Retrofit{
         val okHttpClient = OkHttpClient.Builder()
@@ -59,5 +61,11 @@ object RetrofitInstance {
     }
     fun getAlert(context: Context): AlertRepController{
         return provideRetrofit(context).create(AlertRepController::class.java)
+    }
+    fun getNotification(context: Context): NotificationRepController{
+        return provideRetrofit(context).create(NotificationRepController::class.java)
+    }
+    fun getTankFillingApi(context: Context): TanksFillingRepController{
+        return provideRetrofit(context).create(TanksFillingRepController::class.java)
     }
 }

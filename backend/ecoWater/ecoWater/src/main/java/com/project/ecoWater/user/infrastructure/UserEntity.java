@@ -73,4 +73,10 @@ public class UserEntity implements UserDetails {
     public String getUsername() {
         return getEmail();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }

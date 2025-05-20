@@ -1,5 +1,7 @@
 package com.project.ecoWater.notification.alert.strategy;
 
+import com.project.ecoWater.notification.alert.AlertDTO;
+import com.project.ecoWater.notification.alert.AlertMapper;
 import com.project.ecoWater.notification.alert.AlertType;
 import com.project.ecoWater.notification.alert.UserAlertSettings;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,14 @@ public class HighConsumptionAlertStrategy implements AlertStrategy {
         return settings.isEnabled() && value > settings.getThreshold() && !settings.isWasSent();
     }
     @Override
-    public void updateAlertState(UserAlertSettings settings, float value) {
-        if (value > settings.getThreshold() && !settings.isWasSent()) {
-            settings.setWasSent(true);
-        } else if (value <= settings.getThreshold() && settings.isWasSent()) {
-            settings.setWasSent(false);
+    public AlertDTO updateAlertState(UserAlertSettings settings, float value) {
+        AlertDTO updatedSettings = AlertMapper.mapToDto(settings);
+        if (value > updatedSettings.getThreshold() && !updatedSettings.isWasSent()) {
+            updatedSettings.setWasSent(true);
+        } else if (value <= updatedSettings.getThreshold() && updatedSettings.isWasSent()) {
+            updatedSettings.setWasSent(false);
         }
+        return updatedSettings;
 
     }
     @Override

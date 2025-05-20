@@ -1,6 +1,7 @@
 package com.project.ecoWater.notification.alert;
 
 
+import com.project.ecoWater.user.app.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,5 @@ public class AlertDTO {
     private String unit;
     private LocalDateTime createdAt;
     private boolean wasSent;
+    private UserDTO user;
 }

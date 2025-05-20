@@ -1,9 +1,7 @@
 package com.project.ecoWater.notification.alert.strategy;
 
 import com.project.ecoWater.notification.FirebaseNotificationService;
-import com.project.ecoWater.notification.alert.AlertType;
-import com.project.ecoWater.notification.alert.UserAlertSettings;
-import com.project.ecoWater.notification.alert.UserAlertSettingsRepository;
+import com.project.ecoWater.notification.alert.*;
 import com.project.ecoWater.user.domain.User;
 import com.project.ecoWater.user.infrastructure.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +40,8 @@ public class AlertProcessorService {
                 .findAllByUserAndAlertType(email, AlertType.valueOf(type.name()));
 
         for (UserAlertSettings settings : settingsList) {
-            strategy.updateAlertState(settings, value);
-            alertSettingsRepository.save(settings);
+            AlertDTO updated =strategy.updateAlertState(settings, value);
+            alertSettingsRepository.save(AlertMapper.mapToEntity(updated));
             if (strategy.shouldSendAlert(settings, value)) {
                 notificationService.sendNotification(
                         email,

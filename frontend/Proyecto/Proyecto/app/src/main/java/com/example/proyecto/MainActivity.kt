@@ -24,9 +24,11 @@ import com.example.proyecto.ui.components.custom.CustomToast
 import com.example.proyecto.ui.viewModels.AuthViewModel
 import com.example.proyecto.ui.viewModels.ToastViewModel
 import com.example.proyecto.ui.components.layout.LogoutHandler
+import com.example.proyecto.ui.theme.MyAppTheme
 
 
 class MainActivity : ComponentActivity() {
+
     private lateinit var authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,35 +42,38 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
-            val snackbarHostState = remember { SnackbarHostState() }
-            val toastViewModel: ToastViewModel = viewModel()
-            val context=LocalContext.current
+            MyAppTheme {
+                val navController = rememberNavController()
+                val snackbarHostState = remember { SnackbarHostState() }
+                val toastViewModel: ToastViewModel = viewModel()
+                val context=LocalContext.current
 
-            LaunchedEffect(Unit) {
-                authViewModel.updateLoginState(context)
-            }
-
-            LogoutHandler(navController, snackbarHostState)
-
-
-
-            Box(modifier = Modifier.fillMaxSize()
-
-                ) {
-                AppScaffold(navController, snackbarHostState) {
-                    AppNavigation(navController, authViewModel)
+                LaunchedEffect(Unit) {
+                    authViewModel.updateLoginState(context)
                 }
 
-                CustomToast(
-                    message = toastViewModel.toastMessage,
-                    visible = toastViewModel.toastVisible,
-                    type = toastViewModel.toastType,
-                    onDismiss = { toastViewModel.dismissToast() },
-                    modifier = Modifier
-                        .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
-                )
+                LogoutHandler(navController, snackbarHostState)
+
+
+
+                Box(modifier = Modifier.fillMaxSize()
+
+                ) {
+                    AppScaffold(navController, snackbarHostState) {
+                        AppNavigation(navController, authViewModel)
+                    }
+
+                    CustomToast(
+                        message = toastViewModel.toastMessage,
+                        visible = toastViewModel.toastVisible,
+                        type = toastViewModel.toastType,
+                        onDismiss = { toastViewModel.dismissToast() },
+                        modifier = Modifier
+                            .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
+                    )
+                }
             }
+
         }
     }
     override fun onResume() {

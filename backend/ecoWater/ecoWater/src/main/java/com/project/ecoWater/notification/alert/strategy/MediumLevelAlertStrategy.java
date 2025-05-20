@@ -13,9 +13,17 @@ public class MediumLevelAlertStrategy implements AlertStrategy {
 
     @Override
     public boolean shouldSendAlert(UserAlertSettings settings, float value) {
-        return settings.isEnabled() && value > settings.getThreshold() && value <= 60;
+        return settings.isEnabled() && value > settings.getThreshold() && value <= 60 && !settings.isWasSent();
     }
+    @Override
+    public void updateAlertState(UserAlertSettings settings, float value) {
+        if (value <= settings.getThreshold() && !settings.isWasSent()) {
+            settings.setWasSent(true);
+        } else if (value <= settings.getThreshold() && settings.isWasSent()) {
+            settings.setWasSent(false);
+        }
 
+    }
     @Override
     public String getTitle() {
         return "Nivel medio de agua";

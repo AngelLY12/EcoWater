@@ -14,7 +14,7 @@ FROM openjdk:23-jdk-slim
 WORKDIR /app
 
 # Copiar el JAR generado en la etapa anterior
-COPY --from=build /app/target/ecoWater-0.0.1-SNAPSHOT.jar /app/ecoWater-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/ecoWater-0.0.1-SNAPSHOT.jar .
 
 
 EXPOSE 8080

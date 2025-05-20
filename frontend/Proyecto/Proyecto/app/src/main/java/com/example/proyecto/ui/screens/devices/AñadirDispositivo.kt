@@ -39,9 +39,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun DeviceListScreen(navController: NavHostController,onBackClick: () -> Unit) {
+fun DeviceListScreen(navController: NavHostController,onBackClick: () -> Unit, toastViewModel: ToastViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -115,8 +116,8 @@ fun DeviceItem(deviceName: String, isSelected: Boolean) {
 }
 
 @Composable
-fun DeviceListScreenPreview(navController: NavHostController) {
+fun DeviceListScreenPreview(navController: NavHostController, toastViewModel: ToastViewModel) {
     Surface(color = Color(0xFF083257)) {
-        DeviceListScreen(navController=navController,onBackClick = {})
+        DeviceListScreen(navController=navController,onBackClick = {}, toastViewModel)
     }
 }

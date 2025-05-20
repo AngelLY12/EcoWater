@@ -1,8 +1,9 @@
 package com.example.login
 
-import android.content.Context
+import android.app.Activity
 import android.util.Log
-import android.util.Patterns
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,7 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -26,8 +30,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -55,16 +58,40 @@ import com.example.proyecto.R
 import com.example.proyecto.data.services.AuthApiService
 import com.example.proyecto.ui.components.layout.BottomNavItem
 import com.example.proyecto.ui.components.custom.ToastType
-import com.example.proyecto.ui.theme.loginColor
-import com.example.proyecto.ui.theme.mainColor
+import com.example.proyecto.ui.screens.users.OutlinedTextFieldLR
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.viewModels.AuthViewModel
+
+
 import com.example.proyecto.ui.viewModels.ToastViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 
 
 @Composable
-fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel) {
+fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel, authViewModel: AuthViewModel) {
 
     val context = LocalContext.current
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authViewModel.onGoogleAuthResult(
+            result = result,
+            context = context,
+            onSuccess = {
+                toastViewModel.showToast("Inicio con Google exitoso", ToastType.SUCCESS)
+                navController.navigate(BottomNavItem.Home.route)
+            },
+            onError = {
+                toastViewModel.showToast(it, ToastType.ERROR)
+                Log.e("AUTH_ERROR", "Response: ${it}")
+
+            }
+        )
+    }
+
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -73,7 +100,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = loginColor)
+            .background(brush = CustomTheme.gradient)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -98,10 +125,10 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
         Card(
             shape = RoundedCornerShape(24.dp),
             elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
+                .heightIn(min=300.dp,max=400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -111,36 +138,21 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text("Bienvenido", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Text("Bienvenido", color = CustomTheme.textOnPrimary, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
 
-                OutlinedTextField(
+                OutlinedTextFieldLR(
                     value = email,
-                    onValueChange = { email = it
-
-                    },
+                    onValueChange = {email = it},
                     label = { Text("Correo electrónico") },
-                    singleLine = true,
                     enabled = !isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
 
-
-                OutlinedTextField(
+                OutlinedTextFieldLR(
                     value = password,
-                    onValueChange = { password = it
-
-                                    },
+                    onValueChange = {password = it},
                     label = { Text("Contraseña") },
-                    singleLine = true,
                     enabled = !isLoading,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible },
@@ -155,22 +167,18 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
 
                 )
-
-
                 Text(
                     text = "Olvide mi contraseña",
                     modifier = Modifier
                         .align(Alignment.Start)
                         .padding(top = 8.dp)
                         .clickable { /* Navegar o mostrar mensaje */ },
-                    color = Color(0xFF0E94E7),
-                    fontSize = 14.sp,
+                    color = CustomTheme.textOnPrimary,
+                    style = MaterialTheme.typography.bodySmall ,
                     textDecoration = TextDecoration.Underline
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-
 
                 Button(
                     onClick = {
@@ -180,7 +188,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                         AuthApiService.authUser(authRequest, context) { authResponse ->
                             isLoading = false
                             if (authResponse != null) {
-                                saveLoginState(email, context)
+                                //saveLoginState(email, context)
                                 FirebaseMessaging.getInstance().token.addOnCompleteListener {
                                         task->
                                     if(task.isSuccessful){
@@ -191,7 +199,6 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                                                 Log.d("FCM_TOKEN", "Backend actualizado en login")
                                             } else {
                                                 Log.e("FCM_TOKEN", "Error al actualizar token en login")
-                                                // Opcional: Reintentar o guardar el token localmente para enviar después
                                             }                                        }
                                     }else {
                                         Log.e("FCM_TOKEN", "Error al obtener token", task.exception)
@@ -207,15 +214,15 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                     },
                     enabled = !isLoading && valid,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White
+                        containerColor = CustomTheme.normalButton,
+                        contentColor = CustomTheme.textPrimary
                     ),
                     shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(38.dp)
                 ) {
-                    Text("Iniciar Sesión")
+                    Text("Iniciar Sesión", color = CustomTheme.textPrimary)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -223,22 +230,57 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                 OutlinedButton(
                     enabled = !isLoading,
                     onClick = { navController.navigate("register") },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = mainColor),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = CustomTheme.cardPrimary),
                     shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, mainColor),
+                    border = BorderStroke(1.dp,CustomTheme.cardBorder),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(38.dp)
 
                 ) {
-                    Text("Registrarse")
+                    Text("Registrarse", color = CustomTheme.textSecondary)
                 }
+
+
+
             }
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Button(
+            onClick = {
+
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("272820450827-0r5goasrqcpid8n14og9g01m5pao7aof.apps.googleusercontent.com") // Reemplaza con el tuyo
+                    .requestEmail()
+                    .build()
+
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInLauncher.launch(googleSignInClient.signInIntent)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = CustomTheme.cardPrimary),
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+
+            ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_google),
+                contentDescription = "Google Logo",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Text("Iniciar con Google", color = CustomTheme.textPrimary)
+
         }
 
     }
 }
+/*
 private fun saveLoginState(email: String, context: Context) {
     val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
     prefs.edit().putString("user_email", email).apply()
 }
+
+ */

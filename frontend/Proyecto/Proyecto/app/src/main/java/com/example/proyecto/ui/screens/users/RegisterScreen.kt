@@ -31,8 +31,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,16 +61,15 @@ import com.example.login.services.UserApiService
 import com.example.proyecto.R
 import com.example.proyecto.ui.components.indicators.ProgressIndicatorStep
 import com.example.proyecto.ui.components.custom.ToastType
-import com.example.proyecto.ui.theme.mainColor
+import com.example.proyecto.ui.screens.users.OutlinedTextFieldLR
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.theme.Darkblue
 import com.example.proyecto.ui.viewModels.ToastViewModel
 import com.google.gson.Gson
 
 
 @Composable
 fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewModel) {
-    val loginColor = Brush.verticalGradient(
-        colors = listOf(Color(0xFF0E94E7), Color(0xFFD1DCFD), Color(0xFF0E94E7), Color(0xFF085381))
-    )
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -87,7 +88,7 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = com.example.proyecto.ui.theme.loginColor)
+            .background(brush = CustomTheme.gradient)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -108,7 +109,7 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
             Card(
                 shape = RoundedCornerShape(24.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(460.dp)
@@ -120,11 +121,11 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Regístrate", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    Text("Datos de inicio", fontSize = 20.sp)
+                    Text("Regístrate", color = CustomTheme.textOnPrimary, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text("Datos de inicio",  color = CustomTheme.textOnPrimary, style = MaterialTheme.typography.titleMedium)
 
 
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = email,
                         onValueChange = { email = it
                             emailError = if (email.isBlank()) {
@@ -132,15 +133,9 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                                 "Correo no válido"
                             } else null
-                                        },
+                        },
                         label = { Text("Correo electrónico") },
                         isError = emailError != null,
-
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         trailingIcon = {
                             Icon(
@@ -148,24 +143,17 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                                 contentDescription = if(emailError!=null) "Email no valido" else "Email valido"
                             )
                         }
-
-
                     )
 
-
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = password,
                         onValueChange = { password = it
                             passwordError = if (password.length < 6) {
                                 "La contraseña debe tener al menos 6 caracteres"
                             } else null
-                                        },
+                        },
                         label = { Text("Contraseña") },
-                        singleLine = true,
                         isError = passwordError != null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible },
@@ -176,27 +164,23 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-
                     )
+
+
                     if (passwordError != null) {
                         Text(passwordError ?: "", color = Color.Red, fontSize = 10.sp)
                     }
 
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = confirmPassword,
                         onValueChange = { confirmPassword = it
                             passwordConfirmError = if (password != confirmPassword) {
                                 "Las contraseñas no coinciden"
                             } else null
-                                        },
+                        },
                         label = { Text("Confirmar contraseña") },
-                        singleLine = true,
                         isError = passwordConfirmError != null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
                         visualTransformation = if (passworConfirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { passworConfirmVisible = !passworConfirmVisible },
@@ -207,7 +191,6 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
 
                     )
@@ -223,7 +206,6 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             when {
                                 email.isBlank() || password.isBlank() || confirmPassword.isBlank() ->
                                     toastViewModel.showToast("Por favor, completa todos los campos.", ToastType.ERROR)
-
                                 !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() ->
                                     toastViewModel.showToast("Correo electrónico no válido.", ToastType.ERROR)
 
@@ -243,8 +225,8 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Blue,
-                            contentColor = Color.White
+                            containerColor = CustomTheme.normalButton,
+                            contentColor = CustomTheme.textPrimary
                         ),
                         shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
@@ -252,21 +234,21 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
                             .height(38.dp),
                         enabled = valid
                     ) {
-                        Text("Continuar")
+                        Text("Continuar", color = CustomTheme.textPrimary)
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedButton(
                         onClick = { navController.navigate("login") },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = mainColor),
+                        colors = ButtonDefaults.outlinedButtonColors(CustomTheme.cardPrimary),
                         shape = RoundedCornerShape(20.dp),
-                        border = BorderStroke(1.dp, mainColor),
+                        border = BorderStroke(1.dp, Darkblue),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(38.dp)
                     ) {
-                        Text("Iniciar sesión")
+                        Text("Iniciar sesión", color = CustomTheme.textSecondary)
                     }
 
                 }
@@ -282,9 +264,7 @@ fun RegisterScreen(navController: NavHostController, toastViewModel: ToastViewMo
 
 @Composable
 fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
-    val loginColor = Brush.verticalGradient(
-        colors = listOf(Color(0xFF0E94E7), Color(0xFFD1DCFD), Color(0xFF0E94E7), Color(0xFF085381))
-    )
+
 
     var userName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -299,7 +279,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = com.example.proyecto.ui.theme.loginColor)
+            .background(brush = CustomTheme.gradient)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -344,7 +324,7 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
             Card(
                 shape = RoundedCornerShape(24.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp)
@@ -356,49 +336,33 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Regístrate", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    Text("Datos personales", fontSize = 20.sp)
+                    Text("Regístrate",color = CustomTheme.textOnPrimary, style = MaterialTheme.typography.titleLarge , fontWeight = FontWeight.Bold)
+                    Text("Datos personales", color = CustomTheme.textOnPrimary, style = MaterialTheme.typography.titleMedium)
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = userName,
                         enabled = !isLoading,
                         onValueChange = { userName = it },
                         label = { Text("Nombre") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
 
                     )
 
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = lastName,
                         enabled = !isLoading,
                         onValueChange = { lastName = it },
                         label = { Text("Apellidos") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-
                     )
 
-                    OutlinedTextField(
+                    OutlinedTextFieldLR(
                         value = age,
                         enabled = !isLoading,
                         onValueChange = { age = it },
                         label = { Text("Edad") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
 
                     )
@@ -412,8 +376,12 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                             val userAge = age.toIntOrNull()
                             if (userName.isBlank() || lastName.isBlank() || age.isBlank()) {
                                 toastViewModel.showToast("Por favor, completa todos los campos.", ToastType.ERROR)
+                                isLoading = false
+
                             } else if (userAge == null || userAge <= 0) {
                                 toastViewModel.showToast("Edad inválida.", ToastType.ERROR)
+                                isLoading = false
+
                             } else {
                                 val user = userRequest?.copy(
                                     user_name = userName,
@@ -437,15 +405,15 @@ fun DataUser(navController: NavHostController, toastViewModel: ToastViewModel) {
                         },
                         enabled = !isLoading,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Blue,
-                            contentColor = Color.White
+                            containerColor = CustomTheme.normalButton,
+                            contentColor = CustomTheme.textPrimary
                         ),
                         shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(38.dp)
                     ) {
-                        Text("Crear cuenta")
+                        Text("Crear cuenta", color=CustomTheme.textPrimary)
                     }
                 }
             }

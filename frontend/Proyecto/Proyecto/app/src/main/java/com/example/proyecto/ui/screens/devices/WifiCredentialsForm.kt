@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +50,9 @@ import com.google.gson.Gson
 import androidx.core.content.edit
 import com.example.proyecto.ui.components.custom.CustomOutlinedTextField
 import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.components.layout.ColumnLayout
+import com.example.proyecto.ui.components.layout.RowTitle
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
@@ -64,93 +69,68 @@ fun WifiCredentialsForm( navController: NavHostController,viewModel: BluetoothVi
     val deviceRequest = json?.let {
         gson.fromJson(it, DeviceRequest::class.java)
     }
+    Surface(color = CustomTheme.background) {
+        ColumnLayout {
+            RowTitle(navController = navController, "Credenciales Wi-Fi")
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color(0xFF083257)) // Fondo azul oscuro
-        .padding(16.dp).padding( top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+            CustomOutlinedTextField(
+                label = "SSID",
+                value = ssid.value,
+                onValueChange = { ssid.value = it },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Unspecified)
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Retroceder",
-                    tint = Color.White
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp)) // Espacio entre icono y título
-            Text(
-                "Credenciales Wi-Fi",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 8.dp)
             )
-        }
+            Spacer(modifier = Modifier.height(8.dp))
 
-        CustomOutlinedTextField(
-            label = "SSID",
-            value = ssid.value,
-            onValueChange = { ssid.value = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Unspecified)
-
-        )
-        CustomOutlinedTextField(
-            label = "Contraseña",
-            value = password.value,
-            onValueChange = { password.value = it },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                IconButton(
-                    onClick = { passwordVisible = !passwordVisible },
-                ) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
-                    )
-                }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            )
-
-        Button(
-            onClick = {
-                val updatedDevice = deviceRequest?.copy(ssid = ssid.value)
-                if (updatedDevice != null) {
-                    DeviceApiService.create(updatedDevice, context){
-                        response->
-                        if(response!=null){
-                            viewModel.sendCredentials(ssid.value, password.value)
-                            sharedPreferences.edit() { remove("device_data") }
-                            navController.navigate(BottomNavItem.Devices.route)
-                            toastViewModel.showToast("Dispositivo agregado correctamente",
-                                ToastType.SUCCESS)
-                        }else{
-                            toastViewModel.showToast("Tanque: ${updatedDevice.tank}",
-                                ToastType.ERROR)
-                        }
+            CustomOutlinedTextField(
+                label = "Contraseña",
+                value = password.value,
+                onValueChange = { password.value = it },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordVisible = !passwordVisible },
+                    ) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                        )
                     }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
 
-                } else {
-                    toastViewModel.showToast("Error dispositivo no encontrado",
-                        ToastType.ERROR)                }
-                navController.navigate(BottomNavItem.Devices.route)
-            },
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF083257))
+            Button(
+                onClick = {
+                    val updatedDevice = deviceRequest?.copy(ssid = ssid.value)
+                    if (updatedDevice != null) {
+                        DeviceApiService.create(updatedDevice, context){
+                                response->
+                            if(response!=null){
+                                viewModel.sendCredentials(ssid.value, password.value)
+                                sharedPreferences.edit() { remove("device_data") }
+                                navController.navigate(BottomNavItem.Devices.route)
+                                toastViewModel.showToast("Dispositivo agregado correctamente",
+                                    ToastType.SUCCESS)
+                            }else{
+                                toastViewModel.showToast("Tanque: ${updatedDevice.tank}",
+                                    ToastType.ERROR)
+                            }
+                        }
 
-        ) {
-            Text("Enviar")
+                    } else {
+                        toastViewModel.showToast("Error dispositivo no encontrado",
+                            ToastType.ERROR)                }
+                    navController.navigate(BottomNavItem.Devices.route)
+                },
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = CustomTheme.normalButton, contentColor = CustomTheme.textPrimary)
+
+            ) {
+                Text("Enviar", fontWeight = FontWeight.Bold, color = CustomTheme.textPrimary)
+            }
         }
+
     }
+
 }

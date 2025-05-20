@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,10 +33,14 @@ import com.example.proyecto.model.tank.Tank
 import com.example.proyecto.ui.components.custom.DeleteCardAlert
 import com.example.proyecto.ui.components.custom.EditDropdownModal
 import com.example.proyecto.ui.components.custom.EditFieldModal
+import com.example.proyecto.ui.components.custom.RowItem
+import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.TankViewModel
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun TankItem(tank: Tank) {
+fun TankItem(tank: Tank,  toastViewModel: ToastViewModel) {
     var showEditNameModal by remember { mutableStateOf(false) }
     var showEditCapacityModal by remember { mutableStateOf(false) }
     var showEditFillingModal by remember { mutableStateOf(false) }
@@ -54,46 +59,15 @@ fun TankItem(tank: Tank) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, Color.White),
-        colors = CardDefaults.outlinedCardColors(containerColor = Color(0xFF083257))
+        border = BorderStroke(1.dp, CustomTheme.cardBorderSecondary),
+        colors = CardDefaults.outlinedCardColors(containerColor = CustomTheme.cardPrimary)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-
-            // Cambiar nombre
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable{showEditNameModal=true
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Nombre",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = tank.tankName!!,  // Nombre del tanque
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
-
+            RowItem(onClick = {showEditNameModal=true}, item = tank,valueText = { it.tankName!!.toString() } ,title = "Nombre", unit = "")
             Divider(
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
-
             if (showEditNameModal) {
                 EditFieldModal(
                     showModal = showEditNameModal,
@@ -103,50 +77,30 @@ fun TankItem(tank: Tank) {
                     onConfirm = { newName ->
                         tankEdit = tank.copy(tankName = newName)
                         showEditNameModal = false
-                        viewModel.updateTank(context,tankEdit)
+                        viewModel.updateTank(context,tankEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Registro actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar", ToastType.WARNING)
+
+                            }
+                        }
                     },
                     label = "Nombre del tanque"
                 )
             }
 
-            // Sección de características
             Text(
                 text = "CARACTERÍSTICAS",
-                fontSize = 16.sp,
-                color = Color.Gray,
-                modifier = Modifier.padding(bottom = 8.dp)
+                style = MaterialTheme.typography.bodyMedium,
+                color = CustomTheme.textOnSecondary,
+                modifier = Modifier.padding(top=8.dp, bottom = 8.dp)
             )
 
-            // Capacidad
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clickable{showEditCapacityModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Capacidad",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = "${tank.capacity} L",  // Muestra la capacidad
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
+            RowItem(onClick = {showEditCapacityModal=true}, item = tank, valueText = { it.capacity.toString() },title = "Capacidad" ,unit = "L")
 
-            Divider(color = Color.White, thickness = 1.dp)
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp)
 
             if (showEditCapacityModal) {
                 EditFieldModal(
@@ -157,43 +111,24 @@ fun TankItem(tank: Tank) {
                     onConfirm = { newCapacity ->
                         tankEdit = tank.copy(capacity = newCapacity.toFloat())
                         showEditCapacityModal = false
-                        viewModel.updateTank(context,tankEdit)
+                        viewModel.updateTank(context,tankEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Registro actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar", ToastType.WARNING)
+
+                            }
+                        }
 
                     },
                     label = "Capacidad del tanque"
                 )
             }
 
+            RowItem(onClick = {showEditHeightgModal=true}, item = tank, valueText = { it.tankHeight.toString() },title = "Altura", unit = "Metros")
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clickable{showEditHeightgModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Altura",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = "${tank.tankHeight} Metros",  // Muestra la capacidad
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
-
-            Divider(color = Color.White, thickness = 1.dp)
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp)
 
             if (showEditHeightgModal) {
                 EditFieldModal(
@@ -204,46 +139,22 @@ fun TankItem(tank: Tank) {
                     onConfirm = { newHeight ->
                         tankEdit = tank.copy(tankHeight = newHeight.toFloat())
                         showEditHeightgModal = false
-                        viewModel.updateTank(context,tankEdit)
+                        viewModel.updateTank(context,tankEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Registro actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar", ToastType.WARNING)
+
+                            }
+                        }
                     },
                     label = "Capacidad del tanque"
                 )
             }
 
-            // Tipo de llenado
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clickable{showEditFillingModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Tipo de llenado",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = tank.fillingType!!,  // Muestra el tipo de llenado
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
-
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            RowItem(onClick = {showEditFillingModal=true}, item=tank,valueText = { it.fillingType.toString() }, title = "Tipo de llenado", unit = "")
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp,)
 
             if (showEditFillingModal) {
                 EditDropdownModal(
@@ -256,39 +167,21 @@ fun TankItem(tank: Tank) {
                     onConfirm = { newType ->
                         tankEdit = tank.copy(fillingType = newType)
                         showEditFillingModal = false
-                        viewModel.updateTank(context, tankEdit)
+                        viewModel.updateTank(context, tankEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Registro actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar", ToastType.WARNING)
+
+                            }
+                        }
                     }
                 )
 
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clickable{showEditMainModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Tanque principal",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = "${tank.isMain}",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
+            RowItem(onClick = {showEditMainModal=true}, item=tank,valueText = { it.isMain.toString() } ,title = "Tanque principal", unit = "")
 
             if (showEditMainModal) {
                 EditDropdownModal(
@@ -306,44 +199,56 @@ fun TankItem(tank: Tank) {
                         }
                         tankEdit = tank.copy(isMain = isMainBoolean)
                         showEditMainModal = false
-                        viewModel.updateTank(context, tankEdit)
+                        viewModel.updateTank(context, tankEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Registro actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar", ToastType.WARNING)
+
+                            }
+                        }
                     }
                 )
 
             }
 
             Divider(
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
             // Eliminar
             Text(
                 text = "Eliminar",
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 modifier = Modifier.clickable{
                     showDeleteDialog=true
-                }
+                }.padding(top = 8.dp, bottom = 8.dp)
             )
 
             DeleteCardAlert(
                 title = "¿Estas seguro que quieres eliminar el tanque?",
-                text = "Esta acción no se puede deshacer y eliminara los dispositivos enlazados y las mediciones.",
+                text = "Esta acción no se puede deshacer y eliminara completamente el registro.",
                 showDialog = showDeleteDialog,
                 onDismiss = { showDeleteDialog = false },
                 onConfirm = {
                     showDeleteDialog = false
-                    viewModel.deleteTank(tank.tankId!!,context)
+                    viewModel.deleteTank(tank.tankId!!,context){
+                            success->
+                        if(success.equals("Exito")){
+                            toastViewModel.showToast("Tanque eliminado con exito", ToastType.SUCCESS)
+                        }else{
+                            toastViewModel.showToast("Error al eliminar tanque", ToastType.ERROR)
+
+                        }
+                    }
+
                 }
             )
 
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+
         }
     }
 

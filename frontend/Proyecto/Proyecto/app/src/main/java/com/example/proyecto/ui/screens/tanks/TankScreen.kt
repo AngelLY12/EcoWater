@@ -35,11 +35,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.proyecto.R
 import com.example.proyecto.ui.components.custom.ExpandableInfoCard
+import com.example.proyecto.ui.components.layout.ColumnLayout
+import com.example.proyecto.ui.components.layout.RowTitle
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.TankViewModel
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TankScreen(navController: NavHostController, viewModel: TankViewModel = viewModel()) {
+fun TankScreen(navController: NavHostController, viewModel: TankViewModel = viewModel(), toastViewModel: ToastViewModel) {
     var showModal by remember { mutableStateOf(false) }
     var tankName by remember { mutableStateOf("") }
     var capacity by remember { mutableStateOf("") }
@@ -56,40 +60,8 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
 
     }
 
-
-
-
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .padding( top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Retroceder",
-                    tint = Color.White
-                )
-            }
-
-            Text(
-                text = "Tanques de agua",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-            )
-        }
+    ColumnLayout {
+        RowTitle(navController = navController, "Tanques de agua")
 
         if(isLoading){
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -99,7 +71,7 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
                 text = "Sin tanques en la lista",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 )
 
         }else{
@@ -109,7 +81,8 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
                         name = tank.tankName?:"no name",
                         imagePainter = painterResource(id = R.drawable.deposito_de_agua),
                         capacity=tank.capacity,
-                        tank=tank
+                        tank=tank,
+                        toastViewModel = toastViewModel
                     )
                 }
             }
@@ -118,7 +91,7 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
             navController.navigate("formAddTank")
 
         },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF083257) ),
+            colors = ButtonDefaults.buttonColors(containerColor = CustomTheme.normalButton, contentColor = CustomTheme.textPrimary ),
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) { Text("Agregar tanque")}
 
@@ -129,8 +102,8 @@ fun TankScreen(navController: NavHostController, viewModel: TankViewModel = view
 
 
 @Composable
-fun TankScreenPreview(navController: NavHostController) {
-    Surface(color = Color(0xFF083257)) {
-        TankScreen(navController=navController)
+fun TankScreenPreview(navController: NavHostController, toastViewModel: ToastViewModel) {
+    Surface(color = CustomTheme.background) {
+        TankScreen(navController=navController, toastViewModel = toastViewModel)
     }
 }

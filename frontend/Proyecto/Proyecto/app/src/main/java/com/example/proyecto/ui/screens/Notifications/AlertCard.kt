@@ -1,5 +1,6 @@
 package com.example.proyecto.ui.screens.Notifications
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,11 +34,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto.R
 import com.example.proyecto.model.alert.UserAlertSettings
-import com.example.proyecto.ui.theme.toogleChecked
+import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.theme.Green
 import com.example.proyecto.ui.viewModels.AlertsViewModel
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun AlertCard(alert: UserAlertSettings) {
+fun AlertCard(alert: UserAlertSettings, toastViewModel: ToastViewModel) {
     val context= LocalContext.current
     val viewModel: AlertsViewModel = viewModel()
     var isEnabled by remember { mutableStateOf(alert.enabled) }
@@ -58,7 +62,8 @@ fun AlertCard(alert: UserAlertSettings) {
     OutlinedCard(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        border = BorderStroke(1.dp, CustomTheme.cardBorderSecondary),
+        colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -73,9 +78,9 @@ fun AlertCard(alert: UserAlertSettings) {
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(alert.title?:"Sin titulo", style = MaterialTheme.typography.titleMedium.copy(color = Color.White))
-                Text(alertName, style = MaterialTheme.typography.bodySmall.copy(color = Color.White))
-                Text(alert.message?:"Sin mensaje", style = MaterialTheme.typography.bodySmall.copy(color = Color.White))
+                Text(alert.title?:"Sin titulo", style = MaterialTheme.typography.bodyLarge.copy(color = CustomTheme.textOnPrimary))
+                Text(alertName, style = MaterialTheme.typography.bodyMedium.copy(color = CustomTheme.textOnPrimary))
+                Text(alert.message?:"Sin mensaje", style = MaterialTheme.typography.bodySmall.copy(color = CustomTheme.textOnPrimary))
 
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -84,13 +89,19 @@ fun AlertCard(alert: UserAlertSettings) {
                     checked->
                     isEnabled=checked
                     val updatedAlert = alert.copy(enabled = checked)
-                    viewModel.updateAlert(context, updatedAlert)
+                    viewModel.updateAlert(context, updatedAlert){
+                        response->
+                        if(response){
+                            toastViewModel.showToast("Estatus actualizado", ToastType.INFO)
+                        }else{
+                            toastViewModel.showToast("No se actualizo el estatus", ToastType.WARNING)
+
+                        }
+                    }
                 },
-                colors = SwitchDefaults.colors(
-                    checkedIconColor = Color.White,
-                    checkedTrackColor = toogleChecked,
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = Color.Gray))
+                colors = SwitchDefaults.colors(checkedThumbColor = Color.White,
+                    checkedIconColor = Color.White, checkedTrackColor = CustomTheme.toggleOn, uncheckedThumbColor = Color.White, uncheckedTrackColor = Color.Gray
+                ))
         }
     }
 }

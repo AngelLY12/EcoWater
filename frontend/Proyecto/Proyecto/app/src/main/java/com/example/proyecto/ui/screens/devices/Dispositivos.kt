@@ -30,6 +30,9 @@ import com.example.proyecto.ui.components.layout.BottomNavigationBar
 import com.example.proyecto.ui.viewModels.BluetoothViewModel
 import com.example.proyecto.utils.BluetoothUtils
 import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.components.layout.ColumnLayout
+import com.example.proyecto.ui.components.layout.RowTitle
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
@@ -59,78 +62,31 @@ fun DispositivosScreen(navController: NavHostController, viewModel: BluetoothVie
         }
     }
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        },
-        containerColor = Color.Transparent
+        ColumnLayout {
 
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp).padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Retroceder",
-                        tint = Color.White
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.width(8.dp)) // Espacio entre icono y título
-                Text(
-                    text = "Dispositivos",
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold // Texto en negritas
-                    ),
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    color = Color.White // Título blanco
-                )
-            }
+            RowTitle(navController = navController,"Dispositivos")
 
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                color = Color(0xFF64B5F6) // Color más claro para LinearProgressIndicator
+                    .padding(end = 16.dp, start = 16.dp),
+                color = CustomTheme.iconSelected
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Cargando", tint = Color.Gray)
-                Spacer(modifier = Modifier.width(8.dp))
-
-            }
 
             if (devices.isEmpty()) {
                 Text(
                     text = "Buscando dispositivos...",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-                    modifier = Modifier.padding(start = 0.dp),
-                    color = Color.White
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = CustomTheme.textOnPrimary,
+                    modifier = Modifier.padding(16.dp)
                 )
             } else {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Selecciona tu dispositivo", fontWeight = FontWeight.Bold)
+                    Text("Selecciona tu dispositivo", fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = CustomTheme.textOnSecondary
+
+                    )
 
                     LazyColumn() {
                         itemsIndexed(devices) { _, device ->
@@ -163,27 +119,22 @@ fun DispositivosScreen(navController: NavHostController, viewModel: BluetoothVie
                     }
 
 
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    TextButton(onClick = { /* TODO: Implementar lógica para problemas */ }) {
-                        Text(text = "¿Tienes problemas?", fontSize = 16.sp)
-                    }
                 }
             }
         }
-    }
 }
+
 
 
 @Composable
 fun DeviceItem(deviceName: String, modifier: Modifier = Modifier) {
     Surface(
         shape = RoundedCornerShape(24.dp), // Bordes ovalados
-        color = Color(0xFF083257), // Color de fondo #083257
+        color = CustomTheme.cardPrimary, // Color de fondo #083257
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        border = BorderStroke(1.dp, Color.White) // Margen blanco
+        border = BorderStroke(1.dp, CustomTheme.cardBorder) // Margen blanco
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -192,9 +143,9 @@ fun DeviceItem(deviceName: String, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.width(8.dp)) // Espacio entre checkbox y texto
             Text(
                 text = deviceName,
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, fontWeight = FontWeight.Bold), // Texto más grueso
+                style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, // Texto más grueso
                 modifier = Modifier.padding(start = 0.dp), // Eliminar padding innecesario
-                color = Color.White // Texto blanco
+                color = CustomTheme.textOnSecondary // Texto blanco
             )
         }
     }
@@ -202,7 +153,7 @@ fun DeviceItem(deviceName: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun DispositivosScreenPreview(navController: NavHostController, viewModel: BluetoothViewModel = hiltViewModel(), onConnected: () -> Unit, toastViewModel: ToastViewModel) {
-    Surface(color = Color(0xFF083257)) { // Color azul oscuro #083257
+    Surface(color = CustomTheme.background) {
         DispositivosScreen(navController=navController, viewModel = viewModel, onConnected, toastViewModel = toastViewModel)
     }
 }

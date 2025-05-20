@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto.R
 import com.example.proyecto.model.level.LevelResponse
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.WaterTankViewModel
 
 @Composable
@@ -67,7 +69,6 @@ fun WaterTankInfo(level: LevelResponse?) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        // Contenedor para imagen + texto
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -82,9 +83,9 @@ fun WaterTankInfo(level: LevelResponse?) {
             )
             Text(
                 text = "${level?.fillPercentage?.toInt() ?: "--"}%",
-                fontSize = 24.sp,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .offset(y = (5).dp)
@@ -105,7 +106,7 @@ fun WaterTankInfo(level: LevelResponse?) {
                     .size(width = 140.dp, height = 60.dp),
                 shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(10.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = CustomTheme.cardSecondary)
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -115,11 +116,13 @@ fun WaterTankInfo(level: LevelResponse?) {
                     Text(
                         text = "🟢 Disponible",
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF32CD32)
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = CustomTheme.textOnPrimary
                     )
                     Text(
                         text = "${level?.waterLevel?.toInt() ?: "--"} L",
-                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = CustomTheme.textOnSecondary,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -129,7 +132,7 @@ fun WaterTankInfo(level: LevelResponse?) {
                     modifier = Modifier.size(width = 140.dp, height = 60.dp),
                     shape = RoundedCornerShape(20.dp),
                     elevation = CardDefaults.cardElevation(10.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                    colors = CardDefaults.cardColors(containerColor = CustomTheme.cardSecondary)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -139,11 +142,13 @@ fun WaterTankInfo(level: LevelResponse?) {
                         Text(
                             text = "💧 Consumido",
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1E90FF)
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = CustomTheme.textOnPrimary
                         )
                         Text(
                             text = "${consumido ?: "--"} L",
-                            fontSize = 18.sp,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = CustomTheme.textOnSecondary,
                             fontWeight = FontWeight.SemiBold
                         )
                     }

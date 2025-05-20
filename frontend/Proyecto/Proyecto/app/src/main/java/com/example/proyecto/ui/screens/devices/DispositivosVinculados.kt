@@ -29,11 +29,13 @@ import com.example.proyecto.ui.components.layout.BottomNavigationBar
 import com.example.proyecto.ui.components.custom.ExpandableInfoCard
 import com.example.proyecto.ui.viewModels.DeviceViewModel
 import com.example.proyecto.R
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewModel= viewModel()) {
+fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewModel= viewModel(), toastViewModel: ToastViewModel) {
 
     val context= LocalContext.current
     val devices = viewModel.devices.value
@@ -55,21 +57,20 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp).padding(innerPadding)
+                .padding(16.dp).padding(innerPadding)
         ) {
             // Botón de retroceso y título
             Row(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Text(
                     text = "Dispositivos vinculados",
-                    fontSize = 28.sp, // Aumentado a 28.sp
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = Modifier.padding(start = 8.dp)
+                    color = CustomTheme.textOnPrimary,
                 )
             }
 
@@ -82,16 +83,18 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
                     text = "Sin dispositivos en la lista",
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = Color.White,
+                    color = CustomTheme.textOnPrimary,
                 )
             }else{
+
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     itemsIndexed(devices) { index, device ->
                         ExpandableInfoCard(
                             name = device.deviceName!!,
                             imagePainter = painterResource(id = R.drawable.device),
                             isConnected = device.connected,
-                            device = device
+                            device = device,
+                            toastViewModel = toastViewModel
                         )
                     }
                 }
@@ -101,7 +104,7 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
                 navController.navigate("deviceList")
 
             },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF083257) ),
+                colors = ButtonDefaults.buttonColors(containerColor = CustomTheme.normalButton, contentColor = CustomTheme.textPrimary ),
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) { Text("Agregar Dispositivo")}
         }
@@ -112,8 +115,8 @@ fun LinkedDeviceScreen(navController: NavHostController,viewModel: DeviceViewMod
 }
 
 @Composable
-fun LinkedDeviceScreenPreview(navController: NavHostController) {
-    Surface(color = Color(0xFF083257)) {
-        LinkedDeviceScreen(navController=navController)
+fun LinkedDeviceScreenPreview(navController: NavHostController, toastViewModel: ToastViewModel) {
+    Surface(color = CustomTheme.background) {
+        LinkedDeviceScreen(navController=navController, toastViewModel = toastViewModel)
     }
 }

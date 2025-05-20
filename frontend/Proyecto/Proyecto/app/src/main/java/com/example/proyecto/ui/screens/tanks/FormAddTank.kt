@@ -41,6 +41,9 @@ import com.example.proyecto.ui.components.layout.BottomNavItem
 import com.example.proyecto.ui.components.custom.CustomDropdown
 import com.example.proyecto.ui.components.custom.CustomOutlinedTextField
 import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.components.layout.ColumnLayout
+import com.example.proyecto.ui.components.layout.RowTitle
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
@@ -55,35 +58,9 @@ fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel
     val context= LocalContext.current
 
 
-    Surface(color = Color(0xFF083257)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .padding( top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Retroceder",
-                        tint = Color.White
-                    )
-                }
-                Text(
-                    text = "Nuevo tanque de agua",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+    Surface(color = CustomTheme.background) {
+        ColumnLayout {
+            RowTitle(navController=navController,"Nuevo tanque de agua")
 
             Column(modifier = Modifier.padding(8.dp)) {
                 CustomOutlinedTextField(
@@ -120,6 +97,7 @@ fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel
                     selectedOption = fillType,
                     onOptionSelected = { fillType = it }
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 CustomDropdown(
                     options = optionsMain,
                     label = "¿Tinaco principal?",
@@ -153,7 +131,7 @@ fun FormAddTank(navController: NavHostController, toastViewModel: ToastViewModel
                 }
 
             },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF083257) ),
+                colors = ButtonDefaults.buttonColors(containerColor = CustomTheme.normalButton, contentColor = CustomTheme.textPrimary ),
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) { Text("Guardar")}
         }

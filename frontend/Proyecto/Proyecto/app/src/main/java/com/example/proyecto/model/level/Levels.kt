@@ -7,5 +7,6 @@ data class Levels(
     val levelId: Long?=null,
     val tank: TankDTO?=null,
     val waterLevel: Float?=null,
-    val dateMeasurement: Timestamp?=null
+    val dateMeasurement: Timestamp?=null,
+    val fillPercentage: Float?=null
 )

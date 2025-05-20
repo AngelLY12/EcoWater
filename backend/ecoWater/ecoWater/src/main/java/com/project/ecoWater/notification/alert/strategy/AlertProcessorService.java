@@ -42,6 +42,8 @@ public class AlertProcessorService {
                 .findAllByUserAndAlertType(email, AlertType.valueOf(type.name()));
 
         for (UserAlertSettings settings : settingsList) {
+            strategy.updateAlertState(settings, value);
+            alertSettingsRepository.save(settings);
             if (strategy.shouldSendAlert(settings, value)) {
                 notificationService.sendNotification(
                         email,

@@ -11,6 +11,7 @@ public class AlertMapper {
                 .createdAt(alert.getCreatedAt())
                 .title(alert.getTitle())
                 .message(alert.getMessage())
+                .wasSent(alert.isWasSent())
                 .build();
     }
 

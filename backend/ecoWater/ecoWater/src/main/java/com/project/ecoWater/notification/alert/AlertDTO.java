@@ -21,4 +21,5 @@ public class AlertDTO {
     private Float threshold;
     private String unit;
     private LocalDateTime createdAt;
+    private boolean wasSent;
 }

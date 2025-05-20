@@ -40,6 +40,7 @@ public class UserAlertSettings {
 
     private String title;
     private String message;
+    private boolean wasSent = false;
 
     @PrePersist
     public void prePersist() {

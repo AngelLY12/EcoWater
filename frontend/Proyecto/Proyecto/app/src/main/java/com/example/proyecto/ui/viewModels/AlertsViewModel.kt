@@ -36,14 +36,13 @@ class AlertsViewModel: ViewModel() {
 
 
 
-    fun updateAlert(context: Context, alert: UserAlertSettings) {
+    fun updateAlert(context: Context, alert: UserAlertSettings, onResult: ((Boolean) -> Unit)? = null) {
         AlertApiService.updateStatus(context = context, userAlertSettings = alert) { response ->
             if (response != null) {
                 updateDeviceInList(alert)
-                Toast.makeText(context, "Estatus actualizado correctamente", Toast.LENGTH_SHORT)
-                    .show()
+                onResult?.invoke(true)
             } else {
-                Toast.makeText(context, "Error al actualizar", Toast.LENGTH_SHORT).show()
+                onResult?.invoke(false)
             }
         }
     }

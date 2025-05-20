@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.sensorDatas.SensorDataApiRep
 import com.example.proyecto.model.sensor.SensorDataRequest
+import com.example.proyecto.model.sensor.SensorDataResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,9 +35,10 @@ object SensorDataApiService: SensorDataApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })
     }
+
+
 }

@@ -31,7 +31,6 @@ object TankApiService: TankApiRep {
 
             override fun onFailure(call: Call<Tank>, t: Throwable) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)
             }
         })
@@ -48,13 +47,11 @@ object TankApiService: TankApiRep {
                     callback(tankList)
                 } else {
                     callback(null)  // Si hubo error en la respuesta
-                    Toast.makeText(context, "Error al obtener tanques", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Tank>>, t: Throwable) {
                 callback(null)  // Si falla la conexión
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)
             }
         })
@@ -81,7 +78,6 @@ object TankApiService: TankApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })
@@ -106,7 +102,6 @@ object TankApiService: TankApiRep {
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)                      }
 
         })

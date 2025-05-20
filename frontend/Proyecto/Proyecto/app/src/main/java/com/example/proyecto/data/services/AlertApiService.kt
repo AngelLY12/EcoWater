@@ -82,7 +82,6 @@ object AlertApiService: AlertApiRep {
                     callback(deviceList)
                 } else {
                     callback(null)
-                    Toast.makeText(context, "No se encontraron alertas", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -91,7 +90,6 @@ object AlertApiService: AlertApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })

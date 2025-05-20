@@ -26,10 +26,8 @@ object DeviceApiService: DeviceApiRep {
                 if (response.isSuccessful) {
                     val deviceResponse=response.body()
                     callback(deviceResponse)
-                    Toast.makeText(context, "Dipositivo registrado", Toast.LENGTH_SHORT).show()
                 } else {
                     callback(null)
-                    Toast.makeText(context, "Error al registrar el dispositivo", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -38,7 +36,6 @@ object DeviceApiService: DeviceApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)
             }
 
@@ -59,7 +56,6 @@ object DeviceApiService: DeviceApiRep {
                     callback(deviceList)
                 } else {
                     callback(null)
-                    Toast.makeText(context, "No se encontraron dispositivos", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -68,7 +64,6 @@ object DeviceApiService: DeviceApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })
@@ -96,7 +91,6 @@ object DeviceApiService: DeviceApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })
@@ -121,7 +115,6 @@ object DeviceApiService: DeviceApiRep {
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)                      }
 
         })    }

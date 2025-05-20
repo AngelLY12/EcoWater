@@ -11,6 +11,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,8 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.example.proyecto.ui.theme.chartColor
-import com.example.proyecto.ui.theme.mainColor
+import com.example.proyecto.ui.theme.CustomTheme
 
 
 @Composable
@@ -31,35 +31,36 @@ fun DeleteCardAlert(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
+
     if (showDialog) {
         AlertDialog(
             onDismissRequest = onDismiss,
             title = {
-                Text(title, color = Color.Red, fontWeight = FontWeight.Bold)
+                Text(title, color = CustomTheme.deleteText, fontWeight = FontWeight.Bold)
             },
             text = {
-                Text(text, color = Color.White, fontWeight = FontWeight.Black)
+                Text(text, color = CustomTheme.textOnPrimary, fontWeight = FontWeight.Black)
             },
             dismissButton = {
                 OutlinedButton(onClick = onDismiss,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    border = BorderStroke(1.dp, Color.White),
+                    border = BorderStroke(1.dp, CustomTheme.cardBorder),
                 ) {
-                    Text("Cancelar", color = Color.White)
+                    Text("Cancelar", color =CustomTheme.outLinedButton)
                 }
 
             },
             confirmButton = {
                 Button(onClick = onConfirm,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = CustomTheme.normalButton),
                     ) {
-                    Text("Eliminar", color = Color.Red)
+                    Text("Eliminar", color = CustomTheme.textPrimary)
                 }
             },
 
             modifier = Modifier
                 .padding(8.dp),
-            backgroundColor = chartColor
+            backgroundColor = CustomTheme.modalBackground
         )
     }
 }

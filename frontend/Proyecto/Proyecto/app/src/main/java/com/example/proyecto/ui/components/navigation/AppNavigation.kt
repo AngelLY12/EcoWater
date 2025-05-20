@@ -21,7 +21,11 @@ import com.example.proyecto.ui.screens.tanks.TankScreenPreview
 import com.example.proyecto.ui.screens.devices.DispositivosScreenPreview
 import com.example.proyecto.ui.screens.devices.LinkedDeviceScreenPreview
 import com.example.proyecto.ui.screens.devices.WifiCredentialsForm
+import com.example.proyecto.ui.screens.profile.ProfileScreenPreview
+import com.example.proyecto.ui.screens.tanks.ConsumeTankScreenPreview
 import com.example.proyecto.ui.screens.tanks.FormAddTank
+import com.example.proyecto.ui.screens.tanks.ReportScreenScreenPreview
+import com.example.proyecto.ui.screens.tanks.StatisticalTankScreenPreview
 import com.example.proyecto.ui.viewModels.AuthViewModel
 import com.example.proyecto.ui.viewModels.BluetoothViewModel
 import com.example.proyecto.ui.viewModels.ToastViewModel
@@ -48,25 +52,29 @@ fun AppNavigation( navController: NavHostController,
         if (tokenState)
          BottomNavItem.Home.route else "login" ) {
         composable("register") { RegisterScreen(navController, toastViewModel) }
-        composable("login") { LoginScreen(navController, toastViewModel) }
+        composable("login") { LoginScreen(navController, toastViewModel, authViewModel) }
         composable("dataUser") { DataUser(navController, toastViewModel) }
-        composable(BottomNavItem.Home.route) { EcoWaterScreenPreview(navController) }
-        composable("addTank") { TankScreenPreview(navController) }
-        composable ("¿?"){ DeviceListScreenPreview(navController) }
+        composable("addTank") { TankScreenPreview(navController, toastViewModel) }
+        composable("consumeScreen") { ConsumeTankScreenPreview(navController) }
+        composable("statisticalScreen") { StatisticalTankScreenPreview(navController) }
+        composable("reportScreen") { ReportScreenScreenPreview(navController) }
+        composable ("¿?"){ DeviceListScreenPreview(navController, toastViewModel) }
         composable ("deviceList"){ DispositivosScreenPreview(navController,bluetoothViewModel, onConnected = {
             navController.navigate("setupDevice")
         }, toastViewModel) }
-        composable (BottomNavItem.Devices.route){ LinkedDeviceScreenPreview(navController) }
         composable ("notfTank"){
             NotificationScreenPreview (
-                navController
+                navController, toastViewModel = toastViewModel
             )
         }
         composable("formAddTank"){ FormAddTank(navController, toastViewModel) }
-        composable("setupDevice") { DeviceSetupScreen(navController,bluetoothViewModel) }
+        composable("setupDevice") { DeviceSetupScreen(navController,bluetoothViewModel, toastViewModel) }
         composable("wifiSetup") { WifiCredentialsForm(navController,bluetoothViewModel, toastViewModel) }
-        composable (BottomNavItem.Notifications.route){ AlertsScreen(navController) }
-        composable ("addAlert"){ AddAlertsScreen(navController) }
+        composable(BottomNavItem.Home.route) { EcoWaterScreenPreview(navController, toastViewModel) }
+        composable (BottomNavItem.Notifications.route){ AlertsScreen(navController, toastViewModel = toastViewModel) }
+        composable (BottomNavItem.Devices.route){ LinkedDeviceScreenPreview(navController, toastViewModel) }
+        composable (BottomNavItem.Profile.route){ ProfileScreenPreview(navController, authViewModel, toastViewModel) }
+        composable ("addAlert"){ AddAlertsScreen(navController, toastViewModel) }
 
     }
 }

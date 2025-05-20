@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.proyecto.R
+import com.example.proyecto.ui.theme.CustomTheme
 
 
 @Composable
@@ -33,25 +34,23 @@ fun BottomNavigationBar(navController: NavController) {
 
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
+    val textCol= CustomTheme.textOnPrimary
 
     NavigationBar(
         modifier = Modifier.fillMaxWidth().drawBehind{
             drawLine(
-                color = Color.White,
+                color = textCol,
                 start = Offset(0f,0f),
                 end = Offset(size.width,0f),
                 strokeWidth = 2f
             )
         }
             ,
-        containerColor = Color(0xFF083257),
+        containerColor = CustomTheme.background,
     ) {
 
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+
             items.forEach { item ->
                 NavigationBarItem(
                     icon = {
@@ -59,7 +58,7 @@ fun BottomNavigationBar(navController: NavController) {
                             painter = painterResource(id = item.icon),
                             modifier = Modifier.size(18.dp),
                             contentDescription = item.title,
-                            tint = if (currentRoute == item.route) Color.White else Color.Gray
+                            tint = if (currentRoute == item.route) CustomTheme.iconSelected else CustomTheme.iconUnselected
                         )
 
                     },
@@ -67,7 +66,7 @@ fun BottomNavigationBar(navController: NavController) {
                         Text(
                             text = item.title,
                             fontSize = 12.sp
-                            ,color=if (currentRoute == item.route) Color.White else Color.LightGray
+                            ,color=if (currentRoute == item.route) CustomTheme.iconSelected else CustomTheme.iconUnselected
                         )
                     },
                     selected = currentRoute == item.route,
@@ -78,18 +77,18 @@ fun BottomNavigationBar(navController: NavController) {
                         }
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        selectedTextColor = Color.White,
-                        unselectedIconColor = Color.Gray,
-                        unselectedTextColor = Color.LightGray,
-                        indicatorColor = Color(0xFF083257)
+                        selectedIconColor = CustomTheme.textOnPrimary,
+                        selectedTextColor = CustomTheme.textOnPrimary,
+                        unselectedIconColor = CustomTheme.textOnSecondary,
+                        unselectedTextColor = CustomTheme.textOnSecondary,
+                        indicatorColor = CustomTheme.background
 
                     )
                 )
             }
         }
-    }
 }
+
 
 sealed class BottomNavItem(
     val route: String,

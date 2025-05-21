@@ -14,6 +14,7 @@ import com.example.proyecto.ui.components.layout.BottomNavItem
 import com.example.proyecto.ui.screens.Notifications.AddAlertsScreen
 import com.example.proyecto.ui.screens.Notifications.AlertsScreen
 import com.example.proyecto.ui.screens.Notifications.NotificationScreenPreview
+import com.example.proyecto.ui.components.layout.NotificationScreenPreview
 import com.example.proyecto.ui.screens.home.EcoWaterScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceListScreenPreview
 import com.example.proyecto.ui.screens.devices.DeviceSetupScreen
@@ -75,6 +76,7 @@ fun AppNavigation( navController: NavHostController,
         composable (BottomNavItem.Devices.route){ LinkedDeviceScreenPreview(navController, toastViewModel) }
         composable (BottomNavItem.Profile.route){ ProfileScreenPreview(navController, authViewModel, toastViewModel) }
         composable ("addAlert"){ AddAlertsScreen(navController, toastViewModel) }
+
 
     }
 }

@@ -53,6 +53,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavHostController
 import com.example.login.services.UserApiService
+
 import com.example.proyecto.model.auth.AuthRequest
 import com.example.proyecto.R
 import com.example.proyecto.data.services.AuthApiService
@@ -204,6 +205,7 @@ fun LoginScreen(navController: NavHostController, toastViewModel: ToastViewModel
                                         Log.e("FCM_TOKEN", "Error al obtener token", task.exception)
                                     }
                                 }
+
                                 toastViewModel.showToast("Inicio de sesión exitoso", ToastType.SUCCESS)
                                 navController.navigate(BottomNavItem.Home.route)
                             } else {

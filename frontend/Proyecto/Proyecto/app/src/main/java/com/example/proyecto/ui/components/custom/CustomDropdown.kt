@@ -51,6 +51,7 @@ fun <T> CustomDropdown(
                 unfocusedBorderColor = text,
                 cursorColor = text,
                 leadingIconColor = text
+
             ),
             modifier = Modifier.fillMaxWidth()
         )

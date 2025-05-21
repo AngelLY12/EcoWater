@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.example.proyecto.ui.theme.CustomTheme
 import kotlin.Boolean
 
+
 @Composable
 fun CustomOutlinedTextField(
     label: String,
@@ -54,5 +55,14 @@ fun CustomOutlinedTextField(
         keyboardOptions = keyboardOptions,
         isError = isError,
         singleLine = true
+            focusedBorderColor = Color.White,
+            unfocusedBorderColor = Color.White,
+            focusedLabelColor = Color.White,
+            cursorColor = Color.White,
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White
+        ),
+        keyboardOptions = keyboardOptions,
+        isError = isError
     )
 }

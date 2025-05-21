@@ -3,6 +3,7 @@ package com.example.proyecto.ui.components.custom
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -10,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
-import com.example.proyecto.ui.theme.mainColor
+import com.example.proyecto.ui.theme.CustomTheme
 import kotlin.Boolean
 
 
@@ -26,22 +27,15 @@ fun CustomOutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     isError: Boolean = false,
-    whiteBg: Boolean?=null
 
 )
 {
-    val isWhiteBg = if (whiteBg == true) mainColor else Color.White
+    val text= CustomTheme.textOnPrimary
 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label, color = isWhiteBg) },
-    isError: Boolean = false)
-{
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label, color = Color.White) },
+        label = { Text(label, color = text) },
         modifier = modifier
             .fillMaxWidth()
             .clickable(enabled = onClick != null) {
@@ -51,12 +45,12 @@ fun CustomOutlinedTextField(
         trailingIcon = trailingIcon,
         visualTransformation = visualTransformation,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = isWhiteBg,
-            unfocusedBorderColor = isWhiteBg,
-            focusedLabelColor = isWhiteBg,
-            cursorColor = isWhiteBg,
-            focusedTextColor = isWhiteBg,
-            unfocusedTextColor = isWhiteBg
+            focusedBorderColor = text,
+            unfocusedBorderColor = text,
+            focusedLabelColor = text,
+            cursorColor = text,
+            focusedTextColor = text,
+            unfocusedTextColor = text
         ),
         keyboardOptions = keyboardOptions,
         isError = isError,

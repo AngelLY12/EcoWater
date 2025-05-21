@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,13 +29,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto.ui.theme.CustomTheme
 
 @Composable
 fun InfoCard(
     name: String,
     imagePainter: Painter,
     modifier: Modifier = Modifier,
-    capacity: Float? = null,
     isConnected: Boolean? = null,
     onClick: () -> Unit = {}
 ){
@@ -45,7 +46,7 @@ fun InfoCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, Color.White),
-        colors = CardDefaults.outlinedCardColors(containerColor = Color(0xFF083257))
+        colors = CardDefaults.outlinedCardColors(containerColor = CustomTheme.cardPrimary)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
@@ -65,15 +66,15 @@ fun InfoCard(
                 Column {
                     Text(
                         text = name,
-                        fontSize = 20.sp,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        color = CustomTheme.textOnPrimary
                     )
                     if (isConnected != null) {
                         Text(
                             text = if (isConnected) "Conectado" else "Desconectado",
-                            color = if (isConnected) Color.Green else Color.Red,
-                            fontSize = 14.sp
+                            color = if (isConnected) CustomTheme.toggleOn else CustomTheme.error,
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
@@ -81,36 +82,10 @@ fun InfoCard(
                 Icon(
                     imageVector = Icons.Filled.ArrowForward,
                     contentDescription = "Ir",
-                    tint = Color.White
+                    tint = CustomTheme.textOnPrimary
                 )
             }
 
-            capacity?.let {
-                Divider(
-                    color = Color.White,
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text(
-                            text = "Capacidad",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "$capacity L",
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-            }
         }
     }
 

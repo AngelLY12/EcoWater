@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +18,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.proyecto.R
 import com.example.proyecto.model.level.Levels
-import com.example.proyecto.ui.theme.chartColor
+import com.example.proyecto.ui.theme.CustomTheme
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
@@ -35,12 +36,14 @@ import kotlin.math.min
 fun DailyChart(levels: List<Levels>) {
     val maxCapacity = levels.maxOfOrNull { it.tank?.capacity ?: 0f } ?: 1000f
     val context = LocalContext.current
+    val backgroundColor = CustomTheme.cardPrimary.toArgb()
+    val textCol = CustomTheme.textOnPrimary.toArgb()
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = chartColor)
+        colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary)
     ) {
         AndroidView(
             factory = { context ->
@@ -49,7 +52,7 @@ fun DailyChart(levels: List<Levels>) {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
-                    setBackgroundColor(chartColor.toArgb())
+                    setBackgroundColor(backgroundColor)
                     description.isEnabled = false
                     legend.isEnabled = false
                     setTouchEnabled(true)
@@ -71,11 +74,11 @@ fun DailyChart(levels: List<Levels>) {
 
                     // 3. Dataset con degradado
                     val dataSet = LineDataSet(entries, "").apply {
-                        color = Color.White.toArgb()
+                        color = textCol
                         lineWidth = 3f
                         setDrawCircles(true)
                         circleRadius = 5f
-                        setCircleColor(Color.White.toArgb())
+                        setCircleColor(textCol)
                         setDrawValues(false)
                         mode = LineDataSet.Mode.LINEAR
                         fillDrawable = ContextCompat.getDrawable(context, R.drawable.chart_gradient)
@@ -95,7 +98,7 @@ fun DailyChart(levels: List<Levels>) {
                             }
                         }
                         textSize = 10f
-                        textColor = Color.White.toArgb()
+                        textColor =textCol
                         yOffset = 5f // Separación del borde
                     }
 
@@ -106,8 +109,8 @@ fun DailyChart(levels: List<Levels>) {
                         axisMaximum = (maxCapacity+100)
                         granularity = if (maxCapacity > 0) 100f else 1f
                         setGranularityEnabled(true)
-                        gridColor = Color.White.toArgb()
-                        textColor = Color.White.toArgb()
+                        gridColor = textCol
+                        textColor = textCol
                         setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
                     }
 

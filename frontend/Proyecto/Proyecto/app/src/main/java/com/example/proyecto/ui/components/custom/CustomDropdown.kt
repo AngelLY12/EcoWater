@@ -7,6 +7,7 @@ import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.proyecto.ui.theme.mainColor
+import com.example.proyecto.ui.theme.CustomTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,14 +25,10 @@ fun <T> CustomDropdown(
     selectedOption: T?,
     onOptionSelected: (T) -> Unit,
     optionToText: (T) -> String = { it.toString() },
-    whiteBg: Boolean?=null
 ) {
+
     var expanded by remember { mutableStateOf(false) }
-    val isWhiteBg = if (whiteBg == true) mainColor else Color.White
-    optionToText: (T) -> String = { it.toString() }, // para mostrar cualquier tipo como texto
-    whiteBg: Boolean?=null
-) {
-    var expanded by remember { mutableStateOf(false) }
+    val text = CustomTheme.textOnPrimary
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -41,28 +38,20 @@ fun <T> CustomDropdown(
             value = selectedOption?.let { optionToText(it) } ?: "",
             onValueChange = {},
             readOnly = true,
-            label = { Text(label, color = isWhiteBg) },
-            label = { Text(label, color = if(whiteBg==true) mainColor else Color.White) },
+            label = { Text(label, color = text) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                textColor = isWhiteBg,
-                placeholderColor = isWhiteBg,
-                focusedLabelColor = isWhiteBg,
-                unfocusedLabelColor = isWhiteBg,
-                focusedBorderColor = isWhiteBg,
-                unfocusedBorderColor = isWhiteBg,
-                cursorColor = isWhiteBg,
-                leadingIconColor = isWhiteBg
-                textColor = if(whiteBg==true) mainColor else Color.White,
-                placeholderColor = if(whiteBg==true) mainColor else Color.White,
-                focusedLabelColor = if(whiteBg==true) mainColor else Color.White,
-                unfocusedLabelColor = if(whiteBg==true) mainColor else Color.White,
-                focusedBorderColor = if(whiteBg==true) mainColor else Color.White,
-                unfocusedBorderColor = if(whiteBg==true) mainColor else Color.White,
-                cursorColor = if(whiteBg==true) mainColor else Color.White,
-                leadingIconColor = if(whiteBg==true) mainColor else Color.White
+                textColor = text,
+                placeholderColor = text,
+                focusedLabelColor = text,
+                unfocusedLabelColor = text,
+                focusedBorderColor = text,
+                unfocusedBorderColor = text,
+                cursorColor = text,
+                leadingIconColor = text
+
             ),
             modifier = Modifier.fillMaxWidth()
         )

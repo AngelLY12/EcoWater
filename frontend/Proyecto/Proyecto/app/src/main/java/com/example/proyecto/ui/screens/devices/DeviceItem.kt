@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,14 +34,19 @@ import com.example.proyecto.model.device.DeviceType
 import com.example.proyecto.ui.components.custom.DeleteCardAlert
 import com.example.proyecto.ui.components.custom.EditDropdownModal
 import com.example.proyecto.ui.components.custom.EditFieldModal
+import com.example.proyecto.ui.components.custom.RowItem
+import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.DeviceViewModel
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun DeviceItem(device: Device) {
+fun DeviceItem(device: Device,  toastViewModel: ToastViewModel) {
     var showEditNameModal by remember { mutableStateOf(false) }
     var showEditLocationModal by remember { mutableStateOf(false) }
     var showEditDeviceTypeModal by remember { mutableStateOf(false) }
     var showDeleteDialog by remember {mutableStateOf(false)}
+    val showDeviceSSID by remember { mutableStateOf(false) }
     var deviceEdit by remember { mutableStateOf(device) }
     val context= LocalContext.current
     val viewModel: DeviceViewModel = viewModel()
@@ -52,45 +58,16 @@ fun DeviceItem(device: Device) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, Color.White),
-        colors = CardDefaults.outlinedCardColors(containerColor = Color(0xFF083257))
+        border = BorderStroke(1.dp, CustomTheme.cardBorderSecondary),
+        colors = CardDefaults.outlinedCardColors(containerColor = CustomTheme.cardPrimary)
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            // Titulo y nombre del dispositivo
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .clickable{showEditNameModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Nombre",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = device.deviceName ?: "No name",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
+            RowItem(onClick = {showEditNameModal=true}, item = device,valueText = { it.deviceName!!.toString() } ,title = "Nombre", unit = "")
 
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
-
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp,
             )
 
             if (showEditNameModal) {
@@ -102,53 +79,32 @@ fun DeviceItem(device: Device) {
                     onConfirm = { newName ->
                         deviceEdit = device.copy(deviceName = newName)
                         showEditNameModal = false
-                        viewModel.updateDevice(context,deviceEdit)
+                        viewModel.updateDevice(context,deviceEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Dispositivo actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar dispositivo", ToastType.WARNING)
+
+                            }
+                        }
                     },
                     label = "Nombre del dispositivo"
                 )
             }
 
-            // Titulo de propiedades
             Text(
                 text = "PROPIEDADES",
-                fontSize = 20.sp,
-                color = Color.Gray
+                style = MaterialTheme.typography.bodyMedium,
+                color = CustomTheme.textOnSecondary,
+                modifier = Modifier.padding(top=8.dp, bottom = 8.dp)
             )
 
 
-            // Colocado en
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .clickable{showEditLocationModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Colocado en ${if (device.deviceType.toString() == "SENSOR_PROXIMIDAD") "Tinaco" else "Tubería"}",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = device.deviceLocation ?: "No location",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
 
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
+            RowItem(onClick = {showEditLocationModal=true}, item = device,valueText = { it.deviceLocation?: "No location" } ,title = "Colocado en ${if (device.deviceType!!.toString() == "SENSOR_PROXIMIDAD") "Tinaco" else "Tubería"}", unit = "")
 
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp,)
 
             if (showEditLocationModal) {
                 EditFieldModal(
@@ -159,44 +115,23 @@ fun DeviceItem(device: Device) {
                     onConfirm = { newLocation ->
                         deviceEdit = device.copy(deviceLocation = newLocation)
                         showEditLocationModal = false
-                        viewModel.updateDevice(context,deviceEdit)
+                        viewModel.updateDevice(context,deviceEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Dispositivo actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar dispositivo", ToastType.WARNING)
+
+                            }
+                        }
                     },
                     label = "Lugar del dispositivo"
                 )
             }
-            // Tipo de dispositivo
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .clickable{showEditDeviceTypeModal=true},
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Tipo de dispositivo",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = device.deviceType.toString() ?: "No type",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
 
-                }
-                Icon(
-                    imageVector = Icons.Filled.ArrowForward,
-                    contentDescription = "Ir",
-                    tint = Color.White
-                )
-            }
+            RowItem(onClick = {showEditDeviceTypeModal=true}, item = device,valueText = { it.deviceType.toString() ?: "No type" } ,title = "Tipo de dispositivo", unit = "")
 
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            Divider(color = CustomTheme.textOnPrimary, thickness = 1.dp,)
 
             if (showEditDeviceTypeModal) {
                 EditDropdownModal(
@@ -205,41 +140,54 @@ fun DeviceItem(device: Device) {
                     options = deviceTypes,
                     selectedOption = device.deviceType,
                     optionToText = { option ->
-                        option.name.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase()} },
+                        option?.name?.replace('_', ' ')?.lowercase()?.replaceFirstChar { it.uppercase()}
+                            .toString()
+                    },
                     onDismiss = { showEditDeviceTypeModal = false },
                     onConfirm = { newDeviceType ->
                         deviceEdit = device.copy(deviceType = newDeviceType)
                         showEditDeviceTypeModal = false
-                        viewModel.updateDevice(context, deviceEdit)
+                        viewModel.updateDevice(context, deviceEdit){
+                                success->
+                            if(success){
+                                toastViewModel.showToast("Dispositivo actualizado", ToastType.INFO)
+                            }else{
+                                toastViewModel.showToast("Error al actualizar dispositivo", ToastType.WARNING)
+
+                            }
+                        }
                     }
                 )
             }
 
-            // Eliminar y Divider
 
             Text(
                 text = "Eliminar",
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = CustomTheme.textOnPrimary,
                 modifier = Modifier.clickable{
                     showDeleteDialog=true
-                }
+                }.padding(top = 8.dp, bottom = 8.dp)
             )
+
             DeleteCardAlert(
                 title = "¿Estas seguro que quieres eliminar el dispositivo?",
-                text = "Esta acción no se puede deshacer y eliminara los registros relacionados a sus mediciones.",
+                text = "Esta acción no se puede deshacer y eliminara definitivamente el dispositivo.",
                 showDialog = showDeleteDialog,
                 onDismiss = { showDeleteDialog = false },
                 onConfirm = {
                     showDeleteDialog = false
-                    viewModel.deleteDevice(device.deviceId!!, context)
+                    viewModel.deleteDevice(device.deviceId!!, context){
+                            success->
+                        if(success){
+                            toastViewModel.showToast("Dispositivo eliminado con exito", ToastType.SUCCESS)
+                        }else{
+                            toastViewModel.showToast("Error al eliminar dispositivo", ToastType.ERROR)
+
+                        }
+                    }
                 }
-            )
-            Divider(
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
         }
     }

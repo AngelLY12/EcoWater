@@ -23,17 +23,59 @@ object UserApiService : UserApiRep {
                 if (response.isSuccessful) {
                     val authResponse = response.body()
                     callback(authResponse)
-                    Toast.makeText(context, "Usuario registrado", Toast.LENGTH_SHORT).show()
                 } else {
                     callback(null)
-                    Toast.makeText(context, "Correo ya registrado", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)
+            }
+        })
+    }
+
+    override fun getProfile(context: Context, callback: (User?) -> Unit) {
+        RetrofitInstance.getUserApi(context).getUserProfile().enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    callback(userResponse)
+                } else {
+                    callback(null)
+                    Toast.makeText(context, "Error al obtener perfil", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                callback(null)
+                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
+                Log.e("UserApiService", "Error de conexión", t)
+            }
+        })
+    }
+
+    fun updateProfile(user: User, context: Context, callback: (User?) -> Unit) {
+        Log.d("UserApiService", "Enviando datos al backend: ${user}")
+
+        RetrofitInstance.getUserApi(context).updateUser(user).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                Log.d("UserApiService", "Código de respuesta: ${response.code()}")
+                Log.d("UserApiService", "Respuesta del backend: ${response.body()}")
+
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                    Log.e("UserApiService", "Error: ${response.message()}")
+                    Toast.makeText(context, "Error al actualizar perfil: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                callback(null)
+                Log.e("UserApiService", "Fallo de conexión: ${t.message}", t)
             }
         })
     }
@@ -50,7 +92,6 @@ object UserApiService : UserApiRep {
             ) {
                 if(response.isSuccessful){
                     callback(response.body().toString())
-                    Toast.makeText(context, "Nuevo token registrado: ${response.body().toString()}", Toast.LENGTH_SHORT).show()
                 }else{
                     callback(null)
                     Log.d("TOKEN_FCM", "Hubo un inconveniente")
@@ -62,7 +103,6 @@ object UserApiService : UserApiRep {
                 t: Throwable
             ) {
                 callback(null)
-                Toast.makeText(context, "Fallo de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", "Error de conexión", t)            }
 
         })

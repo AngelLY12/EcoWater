@@ -7,6 +7,7 @@ import com.example.proyecto.model.auth.AuthRequest
 import com.example.proyecto.model.auth.AuthResponse
 import com.example.login.objects.RetrofitInstance
 import com.example.proyecto.data.interfaces.users.ApiAuthService
+import com.example.proyecto.model.auth.GoogleAuthRequest
 import com.example.proyecto.utils.JwtUtils
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +34,39 @@ object AuthApiService: ApiAuthService {
 
         })
     }
+
+    override fun authGoogle(
+        request: GoogleAuthRequest,
+        context: Context,
+        callback: (AuthResponse?) -> Unit
+    ) {
+        RetrofitInstance.getAuthApi().loginWithGoogle(request).enqueue(object : Callback<AuthResponse>{
+            override fun onResponse(
+                call: Call<AuthResponse?>,
+                response: Response<AuthResponse?>
+            ) {
+                if (response.isSuccessful) {
+                    val authResponse = response.body()
+                    val token = authResponse?.token
+                    saveToken(context, token)
+                    callback(authResponse)
+                } else {
+                    callback(null)
+
+                }
+
+            }
+
+            override fun onFailure(
+                call: Call<AuthResponse?>,
+                t: Throwable
+            ) {
+                callback(null)
+                Log.e("AUTH_ERROR", "Fallo de conexión: ${t.message}", t)            }
+
+        })
+    }
+
     fun saveToken(context: Context, token: String?) {
         val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         sharedPreferences.edit() {
@@ -53,14 +87,5 @@ object AuthApiService: ApiAuthService {
             token
         }
     }
-    /*
-    val sharedPrefs = EncryptedSharedPreferences.create(
-        "SecurePrefs",
-        MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-     */
 
 }

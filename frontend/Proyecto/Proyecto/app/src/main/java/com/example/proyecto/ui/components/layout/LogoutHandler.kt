@@ -1,5 +1,6 @@
 package com.example.proyecto.ui.components.layout
 
+import android.content.Context
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -11,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.proyecto.utils.GlobalEvent
@@ -23,6 +25,7 @@ fun LogoutHandler(
 ) {
     val coroutineScope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         GlobalEvent.authEvents.collect { event ->
@@ -39,9 +42,12 @@ fun LogoutHandler(
             confirmButton = {
                 TextButton(onClick = {
                     showDialog = false
+
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar("Sesión expirada. Por favor, inicia sesión de nuevo.")
                     }
+                    val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                    prefs.edit().clear().apply()
                     navController.navigate("login") {
                         popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = true

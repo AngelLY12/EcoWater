@@ -16,7 +16,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.1"
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,6 +47,8 @@ android {
 dependencies {
     implementation(libs.material3)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.accompanist.swiperefresh)
+    implementation (libs.google.accompanist.swiperefresh)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -81,6 +83,11 @@ dependencies {
     implementation (libs.mpandroidchart)
     implementation(libs.androidx.appcompat)
     implementation (libs.firebase.analytics)
+    implementation (libs.org.eclipse.paho.client.mqttv3)
+    implementation (libs.org.eclipse.paho.android.service)
+    implementation (libs.play.services.auth)
+
+
 
 
 

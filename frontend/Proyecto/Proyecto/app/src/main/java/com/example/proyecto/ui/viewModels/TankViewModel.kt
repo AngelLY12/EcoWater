@@ -11,6 +11,9 @@ import com.example.proyecto.data.services.TankApiService.updateTank
 
 import com.example.proyecto.model.tank.Tank
 import androidx.compose.runtime.State
+import com.example.proyecto.data.services.DeviceApiService
+import com.example.proyecto.data.services.TankApiService
+import com.example.proyecto.model.device.Device
 
 
 class TankViewModel () : ViewModel() {
@@ -37,33 +40,36 @@ class TankViewModel () : ViewModel() {
         }
     }
 
-    fun deleteTank(tankId: Long, context: Context) {
+    fun deleteTank(tankId: Long, context: Context, onResult: ((String) -> Unit)?=null) {
         _isLoading.value = true
 
-        deleteTank(tankId, context) { response ->
+        TankApiService.deleteTank(tankId, context) { response ->
             _isLoading.value = false
             if (response != null && response != "Failed") {
                 _tanks.value = _tanks.value.filter { it.tankId != tankId }
-                Toast.makeText(context,"Tanque eliminado correctamente", Toast.LENGTH_SHORT).show()
+                onResult?.invoke("Exito")
             } else {
-                Toast.makeText(context,"Error al eliminar", Toast.LENGTH_SHORT).show()
+                onResult?.invoke("Fallo")
 
             }
         }
     }
 
-    fun updateTank(context: Context, tank: Tank) {
+    fun updateTank(context: Context, tank: Tank, onResult: ((Boolean) -> Unit)?=null) {
         _isLoading.value = true
-        updateTank(context = context, tank = tank) { response ->
+        TankApiService.updateTank(context = context, tank = tank) { response ->
             _isLoading.value = false
-            if (response != null) {
+            if (true) {
                 updateTankInList(tank)
-                Toast.makeText(context,"Campo actualizado correctamente", Toast.LENGTH_SHORT).show()
+                onResult?.invoke(true)
             } else {
-                Toast.makeText(context,"Error al actualizar", Toast.LENGTH_SHORT).show()
+                onResult?.invoke(false)
+
             }
         }
     }
+
+
 
 
 }

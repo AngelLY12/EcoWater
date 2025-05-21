@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto.ui.theme.CustomTheme
 
 @Composable
 fun CardButton(text: String, icon: Int, onClick: () -> Unit) {
@@ -26,8 +28,8 @@ fun CardButton(text: String, icon: Int, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier.size(110.dp, 60.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFADD8E6),
-            contentColor = Color.Black
+            containerColor = CustomTheme.cardSecondary,
+            contentColor = CustomTheme.textOnPrimary
         ),
         shape = RoundedCornerShape(20.dp),
         elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -39,7 +41,8 @@ fun CardButton(text: String, icon: Int, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.labelSmall,
+                color = CustomTheme.textOnPrimary,
                 fontWeight = FontWeight.Normal
             )
             Spacer(modifier = Modifier.height(4.dp))

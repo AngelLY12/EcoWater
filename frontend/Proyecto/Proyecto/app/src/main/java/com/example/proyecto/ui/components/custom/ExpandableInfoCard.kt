@@ -21,6 +21,7 @@ import com.example.proyecto.model.device.Device
 import com.example.proyecto.model.tank.Tank
 import com.example.proyecto.ui.screens.devices.DeviceItem
 import com.example.proyecto.ui.screens.tanks.TankItem
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
 fun ExpandableInfoCard(
@@ -30,6 +31,7 @@ fun ExpandableInfoCard(
     isConnected: Boolean? = null,
     device: Device? = null,
     tank: Tank?=null,
+    toastViewModel: ToastViewModel
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -46,7 +48,6 @@ fun ExpandableInfoCard(
         InfoCard(
             name = name,
             imagePainter = imagePainter,
-            capacity = capacity,
             isConnected = isConnected,
             onClick = { expanded = !expanded }
         )
@@ -65,10 +66,10 @@ fun ExpandableInfoCard(
             )
         ) {
             if (device != null) {
-                DeviceItem(device)
+                DeviceItem(device, toastViewModel)
             }
             if(tank!=null){
-                TankItem(tank)
+                TankItem(tank, toastViewModel)
             }
         }
     }

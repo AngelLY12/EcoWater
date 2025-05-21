@@ -1,5 +1,6 @@
 package com.example.proyecto.ui.screens.Notifications
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,10 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun AddAlertItem(title: String, description: String, unit: String, threshold: String, alertType: String) {
-    val context= LocalContext.current
+fun AddAlertItem(title: String, description: String, unit: String, threshold: String, alertType: String, toastViewModel: ToastViewModel) {
     var showDialog by remember { mutableStateOf(false) }
 
     if(showDialog){
@@ -41,6 +43,7 @@ fun AddAlertItem(title: String, description: String, unit: String, threshold: St
             title = title,
             showForm = showDialog,
             onDismiss = {showDialog=false},
+            toastViewModel = toastViewModel
         )
 
     }
@@ -50,21 +53,22 @@ fun AddAlertItem(title: String, description: String, unit: String, threshold: St
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF0B4B75))
-    ) {
+        colors = CardDefaults.cardColors(containerColor = CustomTheme.cardPrimary),
+        border = BorderStroke(1.dp, CustomTheme.cardBorderSecondary)
+        ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.titleSmall.copy(color = Color.White))
-                Text(description, style = MaterialTheme.typography.bodySmall.copy(color = Color.White))
+                Text(title, style = MaterialTheme.typography.titleSmall,color = CustomTheme.textOnPrimary)
+                Text(description, style = MaterialTheme.typography.bodyMedium,color = CustomTheme.textOnSecondary)
             }
             IconButton(onClick = {
                 showDialog=true
 
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar", tint = Color.White)
+                Icon(Icons.Default.Add, contentDescription = "Agregar", tint = CustomTheme.textOnPrimary)
             }
         }
     }
@@ -72,6 +76,6 @@ fun AddAlertItem(title: String, description: String, unit: String, threshold: St
 
 @Composable
 fun SectionWithCheckbox(title: String) {
-    Text(title, style = MaterialTheme.typography.titleMedium.copy(color = Color.White))
+    Text(title, style = MaterialTheme.typography.titleMedium,color = CustomTheme.textOnPrimary)
     Spacer(modifier = Modifier.height(8.dp))
 }

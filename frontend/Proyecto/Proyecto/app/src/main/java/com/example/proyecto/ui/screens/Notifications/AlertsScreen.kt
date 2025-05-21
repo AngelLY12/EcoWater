@@ -34,11 +34,13 @@ import androidx.navigation.NavHostController
 import com.example.proyecto.R
 import com.example.proyecto.ui.components.custom.ExpandableInfoCard
 import com.example.proyecto.ui.components.layout.BottomNavigationBar
+import com.example.proyecto.ui.theme.CustomTheme
 import com.example.proyecto.ui.viewModels.AlertsViewModel
 import com.example.proyecto.ui.viewModels.TankViewModel
+import com.example.proyecto.ui.viewModels.ToastViewModel
 
 @Composable
-fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = viewModel()) {
+fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = viewModel(), toastViewModel: ToastViewModel) {
     val context= LocalContext.current
     val isLoading = viewModel.isLoading.value
     val alerts = viewModel.alerts.value
@@ -54,7 +56,7 @@ fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = 
         bottomBar = {
             BottomNavigationBar(navController = navController)
         },
-        containerColor = Color(0xFF043B64)
+        containerColor = CustomTheme.background
     ) { innerPadding ->
 
         Column(
@@ -70,9 +72,9 @@ fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = 
             ) {
                 Text(
                     text = "Alertas",
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = CustomTheme.textOnPrimary,
                 )
             }
 
@@ -83,7 +85,7 @@ fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = 
                     text = "Sin alertas en la lista",
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = Color.White,
+                    color = CustomTheme.textOnPrimary,
                 )
 
             }else{
@@ -91,6 +93,7 @@ fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = 
                     itemsIndexed(alerts, key = { _, alert -> alert.id }) { index, alert ->
                         AlertCard(
                             alert = alert,
+                            toastViewModel=toastViewModel
                         )
                     }
                 }
@@ -103,9 +106,9 @@ fun AlertsScreen(navController: NavHostController, viewModel: AlertsViewModel = 
                 onClick = { navController.navigate("addAlert") },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Icon(Icons.Default.AddCircle, contentDescription = "Agregar", tint = Color.White)
+                Icon(Icons.Default.AddCircle, contentDescription = "Agregar", tint = CustomTheme.textOnPrimary)
                 Spacer(Modifier.width(8.dp))
-                Text("Agregar nuevas alertas", color = Color.White)
+                Text("Agregar nuevas alertas", color = CustomTheme.textOnPrimary)
             }
         }
     }

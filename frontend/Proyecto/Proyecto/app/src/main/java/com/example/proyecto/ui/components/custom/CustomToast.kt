@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,11 +43,15 @@ fun CustomToast(
     val backgroundColor = when (type) {
         ToastType.SUCCESS -> Color(0xFF4CAF50)
         ToastType.ERROR -> Color(0xFFF44336)
+        ToastType.INFO -> Color(0xFF03A9F4)
+        ToastType.WARNING -> Color(0xFFFF9800)
     }
 
     val icon = when (type) {
         ToastType.SUCCESS -> Icons.Default.Check
         ToastType.ERROR -> Icons.Default.Warning
+        ToastType.INFO -> Icons.Default.Info
+        ToastType.WARNING -> Icons.Default.Warning
     }
 
     val iconTint = Color.White

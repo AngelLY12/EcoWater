@@ -46,8 +46,11 @@ import com.example.proyecto.data.services.AlertApiService
 import com.example.proyecto.model.alert.AlertRequest
 import com.example.proyecto.ui.components.custom.CustomDropdown
 import com.example.proyecto.ui.components.custom.CustomOutlinedTextField
-import com.example.proyecto.ui.theme.mainColor
-import com.example.proyecto.ui.theme.toogleChecked
+import com.example.proyecto.ui.components.custom.ToastType
+import com.example.proyecto.ui.theme.CustomTheme
+import com.example.proyecto.ui.theme.Green
+import com.example.proyecto.ui.viewModels.ToastViewModel
+
 
 @Composable
 fun FormAddAlert(
@@ -57,6 +60,7 @@ fun FormAddAlert(
     threshold: String,
     showForm: Boolean,
     onDismiss: () -> Unit,
+    toastViewModel: ToastViewModel
 ){
     var alertType by remember { mutableStateOf(alertType) }
     var enable by remember { mutableStateOf(false) }
@@ -83,18 +87,21 @@ fun FormAddAlert(
             title = {
                 Text(
                     text = title,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = mainColor
+                    color = CustomTheme.textOnPrimary
                 )
             },
             text = {
                 LazyColumn() {
                     item {
                         Text(text = "Modifica tu alerta",
-                            fontSize = 16.sp)
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = CustomTheme.textOnSecondary
+                        )
 
-                        Spacer(modifier = Modifier.padding(16.dp))
+                        Spacer(modifier = Modifier.padding(8.dp))
                     }
 
                     item {
@@ -103,10 +110,9 @@ fun FormAddAlert(
                             label = "Tipo de alerta",
                             selectedOption = alertType,
                             onOptionSelected = {alertType=it},
-                            whiteBg = true
                         )
 
-                        Spacer(modifier = Modifier.padding(16.dp))
+                        Spacer(modifier = Modifier.padding(8.dp))
                     }
 
 
@@ -116,18 +122,21 @@ fun FormAddAlert(
                             value = threshold.toString(),
                             onValueChange = {threshold=it},
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            whiteBg = true
 
                         )
+                        Spacer(modifier = Modifier.padding(8.dp))
+
                     }
+
 
                     item {
                         CustomOutlinedTextField(
                             value = unit,
                             label = "Unidad del umbral",
                             readOnly = true,
-                            whiteBg = true
                         )
+                        Spacer(modifier = Modifier.padding(8.dp))
+
                     }
 
                     item {
@@ -144,8 +153,8 @@ fun FormAddAlert(
                                 checked = enable,
                                 onCheckedChange = { enable = it },
                                 enabled = !isLoading,
-                                colors = SwitchDefaults.colors(
-                                    checkedIconColor = Color.White, checkedTrackColor = toogleChecked, uncheckedThumbColor = Color.White, uncheckedTrackColor = Color.Gray
+                                colors = SwitchDefaults.colors(checkedThumbColor = Color.White,
+                                    checkedIconColor = Color.White, checkedTrackColor = CustomTheme.toggleOn, uncheckedThumbColor = Color.White, uncheckedTrackColor = Color.Gray
                                 )
                             )
                         }
@@ -171,18 +180,10 @@ fun FormAddAlert(
                             AlertApiService.create(userAlertSettings, context){
                                 response->
                                 if(response!=null){
-                                    Toast.makeText(
-                                        context,
-                                        "Se ha agregado la alerta",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    toastViewModel.showToast("Se ha agregado la alerta", ToastType.SUCCESS)
 
                                 }else{
-                                    Toast.makeText(
-                                        context,
-                                        "Error al guardar la alerta",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    toastViewModel.showToast("Error al guardar la alerta", ToastType.SUCCESS)
                                 }
                             }
                             onDismiss()
@@ -191,8 +192,8 @@ fun FormAddAlert(
 
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = mainColor,
-                        contentColor = Color.White
+                        containerColor = CustomTheme.modalButton,
+                        contentColor = CustomTheme.textPrimary
                     ),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -204,7 +205,7 @@ fun FormAddAlert(
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Cancelar", color = mainColor)
+                    Text("Cancelar", color = CustomTheme.outLinedButton)
                 }
             }
 

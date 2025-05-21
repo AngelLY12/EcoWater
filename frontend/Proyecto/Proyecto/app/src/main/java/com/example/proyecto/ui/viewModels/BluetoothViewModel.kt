@@ -64,7 +64,7 @@ class BluetoothViewModel @Inject constructor(
                     _isDiscovering.value = false
                     discoveryJob?.cancel()
                     discoveryJob = viewModelScope.launch {
-                        delay(1000)
+                        delay(3000)
                         startDiscoveryInternal()
                     }
                 }
@@ -171,7 +171,7 @@ class BluetoothViewModel @Inject constructor(
 
     fun sendCredentials(ssid: String, password: String) {
         try {
-            val msg = "${ssid.trim()}|${password.trim()}\n"
+            val msg = "${ssid.trim()},${password.trim()}\n"
             bluetoothSocket?.outputStream?.apply {
                 write(msg.toByteArray())
                 flush()

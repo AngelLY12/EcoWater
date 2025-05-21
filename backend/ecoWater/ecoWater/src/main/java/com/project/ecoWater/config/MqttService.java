@@ -11,6 +11,7 @@ import com.project.ecoWater.notification.alert.MonitoringService;
 import com.project.ecoWater.sensor.app.SensorDataAppService;
 import com.project.ecoWater.sensor.domain.SensorData;
 import com.project.ecoWater.tank.infrastructure.TankMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -45,6 +46,10 @@ public class MqttService implements MqttCallback {
         this.deviceApplicationService = deviceApplicationService;
         this.waterConsumptionAppService = waterConsumptionAppService;
         this.waterTankLevelAppService = waterTankLevelAppService;
+    }
+
+    @PostConstruct
+    public void init() {
         connectAndSubscribe();
     }
 

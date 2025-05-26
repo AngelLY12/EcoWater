@@ -81,6 +81,28 @@ public class DeviceApplicationService {
         }
         return Optional.empty();
     }
+
+    @Transactional
+    public Optional<Device> updateStatus(Device device, String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + email));
+        UserDTO userDevice= UserMapper.userToUserDTO(user);
+        device.setUser(userDevice);
+        Optional<Device> existingDevice = deviceRepository.getDevice(device.getDeviceId());
+        if(existingDevice.isPresent()) {
+            Device updatedDevice = existingDevice.get();
+            if(device.getConnected()!=null) {
+                updatedDevice.setConnected(device.getConnected());
+            }
+            if(device.getLastSeen()!=null) {
+                updatedDevice.setLastSeen(device.getLastSeen());
+            }
+            Device updatedDeviceSaved = deviceRepository.saveDevice(updatedDevice);
+            return Optional.of(updatedDeviceSaved);
+        }
+        return Optional.empty();
+    }
+
     @Transactional
     public void deleteDevice(String deviceId, String email) {
         if(!deviceRepository.existsDeviceById(deviceId)) {

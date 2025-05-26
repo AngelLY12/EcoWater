@@ -16,23 +16,19 @@ public interface WaterConsumptionJpaRep extends JpaRepository<WaterConsumptionEn
     @Query("SELECT (SUM(c.flowRate), c.device.deviceLocation) FROM WaterConsumptionEntity c WHERE c.device.user.email = :email GROUP BY c.device.deviceLocation")
     List<WaterConsumptionEntity> findConsumptionByLocation(@Param("email") String email);
 
-    @Query("SELECT c FROM WaterConsumptionEntity c where c.device.user.email = :email")
+    @Query("SELECT c FROM WaterConsumptionEntity c where c.device.user.email = :email AND FUNCTION('DATE', c.startedDate) = CURRENT_DATE")
     List<WaterConsumptionEntity> findConsumptionByEmail(@Param("email") String email);
 
-    @Query("SELECT t FROM WaterConsumptionEntity t WHERE t.device.tank.user.email = :email AND t.device.tank.isMain= true ORDER BY t.startedDate DESC limit 1")
-    Optional<WaterConsumptionEntity> findTopLevelOfMainTankByEmail(@Param("email")String email);
+    @Query("SELECT c FROM WaterConsumptionEntity c WHERE c.device.user.email = :email AND c.startedDate BETWEEN :startDate AND :endDate")
+    List<WaterConsumptionEntity> findConsumptionByEmailAndDate(@Param("email") String email, @Param("startDate") LocalDateTime startDate,
+                                                               @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT t FROM WaterConsumptionEntity t WHERE t.device.tank.isMain = true AND t.device.tank.user.email = :email ORDER BY t.startedDate DESC")
-    List<WaterConsumptionEntity> findAllMainTankLevelsByUser(@Param("email") String email);
+    @Query("SELECT (SUM(c.totalConsumption)) FROM WaterConsumptionEntity c WHERE c.device.user.email = :email AND c.startedDate BETWEEN :start AND :end")
+    Double findByUserEmailAndStartedDateBetween(
+           @Param("email") String email,
+           @Param("start") LocalDateTime start,
+           @Param("end") LocalDateTime end
+    );
 
-    @Query("SELECT t FROM WaterConsumptionEntity t WHERE t.device.tank.isMain = true AND t.device.tank.user.email = :email ORDER BY t.startedDate ASC LIMIT 1")
-    Optional<WaterConsumptionEntity> findFirstMeasurementForMainTank(@Param("email") String email);
-    @Query("SELECT t FROM WaterConsumptionEntity t WHERE t.device.tank.isMain = true AND t.device.tank.user.email = :email AND DATE(t.startedDate) = :date ORDER BY t.startedDate DESC")
-    List<WaterConsumptionEntity> findMainTankLevelsByUserAndDate(@Param("email") String email, @Param("date") LocalDate date);
 
-    @Query("SELECT t FROM WaterConsumptionEntity t WHERE t.device.tank.isMain = true AND t.device.tank.user.email = :email " +
-            "AND t.startedDate BETWEEN :startDateTime AND :endDateTime ORDER BY t.startedDate DESC")
-    List<WaterConsumptionEntity> findMainTankLevelsByUserAndDateTime(@Param("email") String email,
-                                                                   @Param("startDateTime") LocalDateTime startDateTime,
-                                                                   @Param("endDateTime") LocalDateTime endDateTime);
 }

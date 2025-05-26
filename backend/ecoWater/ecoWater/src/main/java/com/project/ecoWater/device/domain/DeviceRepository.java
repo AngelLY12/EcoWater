@@ -11,4 +11,5 @@ public interface DeviceRepository {
     void deleteDevice(String deviceId, String email);
     boolean existsDeviceById(String deviceId);
     Optional<Device> updateDevice(Device device);
+    Optional<Device> updateStatus(Device device, String email);
 }

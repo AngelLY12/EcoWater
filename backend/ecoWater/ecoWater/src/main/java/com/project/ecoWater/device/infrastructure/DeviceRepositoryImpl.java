@@ -49,4 +49,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         DeviceEntity savedDeviceEntity = deviceJpaRepository.save(deviceEntity);
         return Optional.ofNullable(DeviceMapper.deviceEntityToDevice(savedDeviceEntity));
     }
+
+    @Override
+    public Optional<Device> updateStatus(Device device, String email) {
+        DeviceEntity deviceEntity= DeviceMapper.deviceToDeviceEntity(device);
+        DeviceEntity savedDeviceEntity = deviceJpaRepository.save(deviceEntity);
+        return Optional.ofNullable(DeviceMapper.deviceEntityToDevice(savedDeviceEntity));
+    }
 }

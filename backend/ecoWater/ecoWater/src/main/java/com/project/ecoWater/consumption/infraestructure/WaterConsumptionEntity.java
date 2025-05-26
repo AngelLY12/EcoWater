@@ -32,6 +32,6 @@ public class WaterConsumptionEntity {
 
     @Column
     private Float flowRate;
+    private Float totalConsumption;
     private Timestamp startedDate;
-    private Timestamp endedDate;
 }

@@ -21,6 +21,7 @@ public class MonitoringService {
     private final UserAlertSettingsRepository alertSettingsRepository;
     private final FirebaseNotificationService firebaseNotificationService;
     private final AlertProcessorService alertProcessorService;
+    
     public void checkTankLevel(String email, float currentLevel) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -37,6 +38,7 @@ public class MonitoringService {
         }
     }
     public void checkWaterConsumption(String email, float consumption) {
+        System.out.println("CONSUMO LOG EN SERVICE:" + consumption);
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

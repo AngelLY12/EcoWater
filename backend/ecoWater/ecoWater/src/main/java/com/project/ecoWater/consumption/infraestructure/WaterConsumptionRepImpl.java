@@ -39,8 +39,8 @@ public class WaterConsumptionRepImpl implements WaterConsumptionRepository {
     }
 
     @Override
-    public List<WaterConsumption> findConsumptionByLocation(String email) {
-        return waterConsumptionJpaRep.findConsumptionByLocation(email).stream().map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption).collect(Collectors.toList());
+    public List<WaterConsumption> findConsumptionByDate(String email,LocalDateTime startDate, LocalDateTime endDate) {
+        return waterConsumptionJpaRep.findConsumptionByEmailAndDate(email,startDate,endDate).stream().map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption).collect(Collectors.toList());
     }
 
     @Override
@@ -49,31 +49,8 @@ public class WaterConsumptionRepImpl implements WaterConsumptionRepository {
     }
 
     @Override
-    public Optional<WaterConsumption> findFirstMeasurementForMainTank(String email) {
-        return waterConsumptionJpaRep.findFirstMeasurementForMainTank(email).map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption);
+    public Double findByUserEmailAndStartedDateBetween(String email, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        return waterConsumptionJpaRep.findByUserEmailAndStartedDateBetween(email,startOfDay,endOfDay);
     }
 
-    @Override
-    public List<WaterConsumption> findAllMainTankLevelsByUser(String email) {
-        return waterConsumptionJpaRep.findAllMainTankLevelsByUser(email)
-                .stream()
-                .map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<WaterConsumption> findAllMainTankLevelsByDate(String email, LocalDate date) {
-        return waterConsumptionJpaRep.findMainTankLevelsByUserAndDate(email, date)
-                .stream()
-                .map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<WaterConsumption> findAllMainTankLevelsByDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return waterConsumptionJpaRep.findMainTankLevelsByUserAndDateTime(email, startDateTime, endDateTime)
-                .stream()
-                .map(WaterConsumptionMapper::waterConsumptionEntityToWaterConsumption)
-                .collect(Collectors.toList());
-    }
 }

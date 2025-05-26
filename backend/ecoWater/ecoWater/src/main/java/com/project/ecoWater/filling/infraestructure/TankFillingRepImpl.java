@@ -52,4 +52,22 @@ public class TankFillingRepImpl implements TankFillingRepository {
                 .map(TankFillingMapper::tankFillingEntityToTankFilling)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<TankFilling> findByEmailAndDate(String email, LocalDateTime startedDate) {
+        return tankFillingJpaRep
+                .findTankFillingByEmailAndDate(email,startedDate)
+                .stream()
+                .map(TankFillingMapper::tankFillingEntityToTankFilling)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TankFilling> findByEmailAndCurrent(String email) {
+        return tankFillingJpaRep
+                .findTankFillingByEmailAndCurrent(email)
+                .stream()
+                .map(TankFillingMapper::tankFillingEntityToTankFilling)
+                .collect(Collectors.toList());
+    }
 }

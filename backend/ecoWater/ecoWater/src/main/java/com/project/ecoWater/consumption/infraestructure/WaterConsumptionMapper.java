@@ -10,8 +10,8 @@ public class WaterConsumptionMapper {
         return WaterConsumption.builder()
                 .consumptionId(wcEntity.getConsumptionId())
                 .flowRate(wcEntity.getFlowRate())
+                .totalConsumption(wcEntity.getTotalConsumption())
                 .device(DeviceMapper.deviceEntityToDeviceDTO(wcEntity.getDevice()))
-                .endedDate(wcEntity.getEndedDate())
                 .startedDate(wcEntity.getStartedDate())
                 .build();
     }
@@ -21,8 +21,8 @@ public class WaterConsumptionMapper {
         return WaterConsumptionEntity.builder()
                 .consumptionId(wc.getConsumptionId())
                 .flowRate(wc.getFlowRate())
+                .totalConsumption(wc.getTotalConsumption())
                 .startedDate(wc.getStartedDate())
-                .endedDate(wc.getEndedDate())
                 .device(DeviceMapper.deviceDTOToDeviceEntity(wc.getDevice()))
                 .build();
     }

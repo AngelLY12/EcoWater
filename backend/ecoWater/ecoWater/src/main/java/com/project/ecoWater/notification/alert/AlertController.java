@@ -40,4 +40,16 @@ public class AlertController {
         return ResponseEntity.ok(updated);
     }
 
+    @DeleteMapping("/deleteAlert/{id}")
+    public ResponseEntity<Boolean> deleteAlert(@PathVariable Long id) {
+        boolean delete = userAlertSettingsService.deleteAlert(id);
+        return ResponseEntity.ok(delete);
+    }
+
+    @PatchMapping("/updateValue")
+    public ResponseEntity<Boolean> updateValue(@RequestBody Float value, @AuthenticationPrincipal UserDetails userDetails, @RequestBody Long id) {
+        boolean updated = userAlertSettingsService.updateThresholdValue(userDetails.getUsername(), id, value);
+        return ResponseEntity.ok(updated);
+    }
+
 }

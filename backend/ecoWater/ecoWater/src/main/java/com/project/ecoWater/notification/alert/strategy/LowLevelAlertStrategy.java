@@ -20,7 +20,7 @@ public class LowLevelAlertStrategy implements AlertStrategy {
     @Override
     public AlertDTO updateAlertState(UserAlertSettings settings, float value) {
         AlertDTO updatedSettings = AlertMapper.mapToDto(settings);
-        if (value > updatedSettings.getThreshold() && !updatedSettings.isWasSent()) {
+        if (value < updatedSettings.getThreshold() && !updatedSettings.isWasSent()) {
             updatedSettings.setWasSent(true);
         } else if (value >= updatedSettings.getThreshold() && updatedSettings.isWasSent()) {
             updatedSettings.setWasSent(false);

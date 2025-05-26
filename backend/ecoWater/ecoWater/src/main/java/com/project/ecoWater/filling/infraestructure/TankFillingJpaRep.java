@@ -19,4 +19,10 @@ public interface TankFillingJpaRep extends JpaRepository<TankFillingEntity, Long
     List<TankFillingEntity> findMainTankFillingsByUserAndDateTime(@Param("email") String email,
                                                                   @Param("startDateTime") LocalDateTime startDateTime,
                                                                   @Param("endDateTime") LocalDateTime endDateTime);
+
+    @Query("SELECT f FROM TankFillingEntity f WHERE f.tank.user.email = :email AND f.startedDate = :startedDate")
+    List<TankFillingEntity> findTankFillingByEmailAndDate(@Param("email")String email,@Param("startedDate") LocalDateTime startedDate);
+
+    @Query("SELECT f FROM TankFillingEntity f WHERE f.tank.user.email = :email AND  FUNCTION('DATE', f.startedDate) = CURRENT_DATE")
+    List<TankFillingEntity> findTankFillingByEmailAndCurrent(@Param("email")String email);
 }

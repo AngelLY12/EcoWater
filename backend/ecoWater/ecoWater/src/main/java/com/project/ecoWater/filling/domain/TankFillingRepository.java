@@ -12,4 +12,8 @@ public interface TankFillingRepository {
     List<TankFilling> findMainTankFillingsByUserAndDate(String email, LocalDate date);
     List<TankFilling> findMainTankFillingsByUserAndDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
+    List<TankFilling> findByEmailAndDate(String email, LocalDateTime startedDate);
+    List<TankFilling> findByEmailAndCurrent(String email);
+
+
 }

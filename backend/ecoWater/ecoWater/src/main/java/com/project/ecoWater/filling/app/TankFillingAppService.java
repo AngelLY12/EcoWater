@@ -105,4 +105,20 @@ public class TankFillingAppService extends TankService<TankFilling> {
         return tankFillingRepository.findMainTankFillingsByUserAndDateTime(email, startDateTime, endDateTime);
     }
 
+    public List<TankFilling> findByEmailAndDate(String email, LocalDateTime startedDate){
+        List<TankFilling> listFillings = tankFillingRepository.findByEmailAndDate(email, startedDate);
+        if(listFillings.isEmpty()) {
+            throw new IllegalArgumentException("El llenado con ID " + email + " y fecha " + startedDate + " no existe.");
+        }
+        return listFillings;
+    }
+    public List<TankFilling> findByEmailAndCurrent(String email){
+        List<TankFilling> list = tankFillingRepository.findByEmailAndCurrent(email);
+        if(list.isEmpty()) {
+            throw new IllegalArgumentException("El llenado con ID " + email + " no fue encontrado");
+        }
+        return list;
+
+    }
+
 }

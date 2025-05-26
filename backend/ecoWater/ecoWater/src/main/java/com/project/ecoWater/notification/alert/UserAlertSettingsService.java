@@ -55,5 +55,31 @@ public class UserAlertSettingsService {
         }
         return dtos;
     }
+    public boolean deleteAlert(Long id){
+        if(alertSettingsRepository.existsById(id)){
+            alertSettingsRepository.deleteById(id);
+        }
+        return false;
+    }
+
+    public boolean updateThresholdValue(String email, Long alertId, Float newThreshold) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Optional<UserAlertSettings> optionalSettings =
+                alertSettingsRepository.findByEmailAndId(email, alertId);
+
+        if (!optionalSettings.isPresent()) {
+            throw new IllegalArgumentException("Alert with ID " + alertId + " not found for this user");
+        }
+
+        UserAlertSettings settings = optionalSettings.get();
+        settings.setThreshold(newThreshold);
+
+        alertSettingsRepository.save(settings);
+        return true;
+    }
+
+
 
 }

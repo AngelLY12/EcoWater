@@ -2,12 +2,14 @@ package com.project.ecoWater.level.app;
 
 import com.project.ecoWater.level.domain.WaterTankLevel;
 import com.project.ecoWater.level.domain.WaterTankLevelRepository;
+import com.project.ecoWater.notification.alert.MonitoringService;
 import com.project.ecoWater.tank.app.TankDTO;
 import com.project.ecoWater.tank.domain.Tank;
 import com.project.ecoWater.tank.domain.TankRepository;
 import com.project.ecoWater.tank.domain.TankService;
 import com.project.ecoWater.tank.infrastructure.TankMapper;
 import com.project.ecoWater.user.domain.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -20,13 +22,21 @@ import java.util.Optional;
 public class WaterTankLevelAppService extends TankService<WaterTankLevel> {
     private final WaterTankLevelRepository waterTankLevelRepository;
     private final TankRepository tankRepository;
+    private final MonitoringService monitoringService;
 
-    public WaterTankLevelAppService(TankRepository tankRepository, UserRepository userRepository, WaterTankLevelRepository waterTankLevelRepository) {
+    public WaterTankLevelAppService(TankRepository tankRepository,
+                                    UserRepository userRepository,
+                                    WaterTankLevelRepository waterTankLevelRepository,
+                                    MonitoringService monitoringService
+
+    ) {
         super(tankRepository, userRepository);
         this.waterTankLevelRepository = waterTankLevelRepository;
         this.tankRepository = tankRepository;
+        this.monitoringService = monitoringService;
     }
 
+    @Transactional
     public WaterTankLevel save(WaterTankLevel waterTankLevel, String email) {
         validateAndAssignUser(waterTankLevel, email, entity -> {
             TankDTO tank= entity.getTank();
@@ -41,7 +51,9 @@ public class WaterTankLevelAppService extends TankService<WaterTankLevel> {
         }},"Level");
 
         waterTankLevel.setDateMeasurement(Timestamp.valueOf(LocalDateTime.now()));
-        return waterTankLevelRepository.save(waterTankLevel);
+        WaterTankLevel savedWaterTankLevel = waterTankLevelRepository.save(waterTankLevel);
+        monitoringService.checkTankLevel(email, savedWaterTankLevel.getFillPercentage());
+        return savedWaterTankLevel;
     }
 
     public Optional<WaterTankLevel> findByEmail(String email) {

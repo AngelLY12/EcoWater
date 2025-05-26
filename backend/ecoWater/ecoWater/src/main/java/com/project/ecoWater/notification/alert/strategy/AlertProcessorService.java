@@ -35,22 +35,36 @@ public class AlertProcessorService {
             log.warn("No strategy found for type: {}", type);
             return;
         }
+        log.info("🔔 Procesando alerta de tipo '{}' con valor '{}' para usuario '{}'", type, value, email);
 
         List<UserAlertSettings> settingsList = alertSettingsRepository
                 .findAllByUserAndAlertType(email, AlertType.valueOf(type.name()));
+        log.debug("Configuraciones de alerta recuperadas para '{}': {}", email, settingsList);
 
         for (UserAlertSettings settings : settingsList) {
-            AlertDTO updated =strategy.updateAlertState(settings, value);
-            alertSettingsRepository.save(AlertMapper.mapToEntity(updated));
-            if (strategy.shouldSendAlert(settings, value)) {
+            log.debug("Evaluando configuración: {}", settings);
+            boolean shouldSend = strategy.shouldSendAlert(settings, value);
+            log.debug("¿Se debe enviar alerta? {}", shouldSend);
+            if (shouldSend) {
+                log.info("✅ Enviando notificación para '{}' con tipo '{}' y valor '{}'", email, type, value);
+
                 notificationService.sendNotification(
                         email,
                         strategy.getTitle(),
                         strategy.getMessage(value),
                         strategy.getType()
                 );
+            }else{
+                log.info("❌ No se envió notificación para '{}' porque no se cumple la condición del umbral", email);
+
             }
+            AlertDTO updated =strategy.updateAlertState(settings, value);
+            alertSettingsRepository.save(AlertMapper.mapToEntity(updated));
+            log.debug("Estado de alerta actualizado y guardado: {}", updated);
         }
+        log.info("🔁 Proceso de alerta completado para '{}'", email);
+
 
     }
+
 }

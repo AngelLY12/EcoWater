@@ -124,4 +124,14 @@ public class TankFillingController {
             throw new RuntimeException(e);
         }
     }
+    @GetMapping("getTankFilling/{startedDate}")
+    public ResponseEntity<List<TankFilling>> getTankFillingByDate(@AuthenticationPrincipal UserDetails userDetails, @PathVariable LocalDateTime startedDate) {
+        List<TankFilling> list = tankFillingAppService.findByEmailAndDate(userDetails.getUsername(), startedDate);
+        return ResponseEntity.ok(list);
+    }
+    @GetMapping("getTankFillings")
+    public ResponseEntity<List<TankFilling>> getAllTankFillings(@AuthenticationPrincipal UserDetails userDetails) {
+        List<TankFilling> list = tankFillingAppService.findByEmailAndCurrent(userDetails.getUsername());
+        return ResponseEntity.ok(list);
+    }
 }

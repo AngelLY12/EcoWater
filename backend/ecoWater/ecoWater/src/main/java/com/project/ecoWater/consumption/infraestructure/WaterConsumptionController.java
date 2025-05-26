@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -52,9 +53,10 @@ public class WaterConsumptionController {
         }
     }
 
-    @GetMapping("/getConsumptionLocation")
-    public ResponseEntity<List<WaterConsumption>> getConsumptionLocation(@AuthenticationPrincipal UserDetails userDetails) {
-        List<WaterConsumption> consumption = waterConsumptionAppService.findConsumptionByLocation(userDetails.getUsername());
+    @GetMapping("/getConsumptionByDate")
+    public ResponseEntity<List<WaterConsumption>> getConsumptionLocation(@AuthenticationPrincipal UserDetails userDetails, @RequestParam LocalDateTime startDate,
+                                                                         @RequestParam LocalDateTime endDate) {
+        List<WaterConsumption> consumption = waterConsumptionAppService.findConsumptionByDate(userDetails.getUsername(), startDate,endDate);
         return ResponseEntity.ok(consumption);
     }
 }

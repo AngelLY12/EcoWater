@@ -11,11 +11,8 @@ public interface WaterConsumptionRepository {
     WaterConsumption save(WaterConsumption wc);
     WaterConsumption findById(Long id);
     List<WaterConsumption> findAll(String email);
-    List<WaterConsumption> findConsumptionByLocation(String email);
+    List<WaterConsumption> findConsumptionByDate(String email,  LocalDateTime startDate, LocalDateTime endDate);
     boolean existsById(Long id);
+    Double findByUserEmailAndStartedDateBetween(String email,LocalDateTime startOfDay,LocalDateTime endOfDay);
 
-    Optional<WaterConsumption> findFirstMeasurementForMainTank(String email);
-    List<WaterConsumption> findAllMainTankLevelsByUser(String email);
-    List<WaterConsumption> findAllMainTankLevelsByDate(String email, LocalDate date);
-    List<WaterConsumption> findAllMainTankLevelsByDateTime(String email, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

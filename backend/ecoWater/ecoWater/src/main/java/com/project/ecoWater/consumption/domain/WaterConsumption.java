@@ -14,6 +14,6 @@ public class WaterConsumption {
     private Long consumptionId;
     private DeviceDTO device;
     private Float flowRate;
+    private Float totalConsumption;
     private Timestamp startedDate;
-    private Timestamp endedDate;
 }

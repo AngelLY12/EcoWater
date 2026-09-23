@@ -1,56 +1,70 @@
+![Kotlin](https://img.shields.io/badge/kotlin-red)
+![Jetpack Compose](https://img.shields.io/badge/jetpack-compose)
+![Spring Boot](https://img.shields.io/badge/spring-boot-3)
+![PostgreSQL](https://img.shields.io/badge/postgresql-blue)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED)
+![Firebase](https://img.shields.io/badge/firebase-orange)
+
 # EcoWater
+Android application for household water monitoring and management, built with
+Kotlin and Jetpack Compose, with a Spring Boot REST API and PostgreSQL database.
 
+## Overview
 
-**EcoWater** es una aplicación diseñada para el control del agua, permitiendo el registro y monitoreo de datos relacionados a la misma, como los niveles de agua, llenado de tanque, y consumo. Este proyecto utiliza Spring Boot para el backend y Docker para la base de datos PostgreSQL.
+EcoWater is an Android application designed to monitor and manage household
+water usage and storage.
 
-## Requisitos
+The application allows users to monitor water tank levels, track water
+consumption, register tank filling events, and receive notifications related
+to the water system.
 
-Antes de ejecutar la aplicación, asegúrate de tener instalados los siguientes programas:
+The project is divided into an Android client and a Spring Boot backend,
+with PostgreSQL used for persistent data storage.
 
-- [Docker](https://docs.docker.com/get-docker/)
+## Features
 
+- User authentication
+- Water tank monitoring
+- Water level tracking
+- Water consumption monitoring
+- Tank filling registration
+- Historical water usage data
+- Water-related notifications
+- Firebase Cloud Messaging integration
+- REST API communication
+- PostgreSQL persistence
+- Containerized backend environment
 
-## Pasos para ejecutar el proyecto
+## Tech Stack
 
-### 1. Clonar el repositorio
+### Android
 
-Primero, clona el repositorio en tu máquina local:
+- Kotlin
+- Jetpack Compose
+- Android SDK
+- Material 3
 
-```bash
-git clone https://github.com/AngelLY12/EcoWater.git
-```
-### 2. Navegar a la carpeta del backend
-Este paso es para asegurarse de que te encuentras en la carpeta correcta, donde están los archivos del backend y el docker-compose.yml.
-```bash
-cd ecoWater
-```
-### 3. Configuración del archivo docker-compose.yml
-El archivo docker-compose.yml se encarga de configurar los contenedores de Docker para la aplicación y la base de datos. En este archivo, ya hemos configurado los servicios para que puedas levantar el backend y la base de datos PostgreSQL de forma sencilla.
-En dado caso de querer modificar algo seria principalmente las variables de la base de datos si es que las modificaste en application.properties.
-```bash
- SPRING_DATASOURCE_USERNAME: angel
-      SPRING_DATASOURCE_PASSWORD: 123
-POSTGRES_USER: angel
-      POSTGRES_PASSWORD: 123
-```
+### Backend
 
-### 4. Construir y ejecutar los contenedores Docker
-Para construir y ejecutar la aplicación y la base de datos en contenedores Docker, ejecuta el siguiente comando en la raíz del proyecto (donde se encuentra el archivo docker-compose.yml)
-```bash
-docker-compose up --build
-```
-Este comando hará lo siguiente:
+- Java
+- Spring Boot
+- Spring Data JPA
+- Spring Security
+- REST API
+- JWT authentication
 
-1. Construirá las imágenes de Docker si es necesario.
+### Database
 
-2.Levantará los contenedores de la aplicación Spring Boot y la base de datos PostgreSQL.
+- PostgreSQL
 
-3.Mapeará los puertos necesarios para acceder a la aplicación.
+### Services
 
-### Detener los contenedores
-Para detener los contenedores y liberar los recursos, ejecuta el siguiente comando:
-bash
-```bash
-docker-compose down
+- Firebase Authentication
+- Firebase Cloud Messaging
+
+### Infrastructure
+
+- Docker
+- Docker Compose
 ```
 Este comando detendrá y eliminará los contenedores, las redes y los volúmenes creados por Docker Compose.
